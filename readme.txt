@@ -1,1 +1,3 @@
-FIT2101 Readme for clim0100
+List of project artifacts created/updated:
+    -Project plan.pdf
+    -Analysis of Alternatives.pdf
