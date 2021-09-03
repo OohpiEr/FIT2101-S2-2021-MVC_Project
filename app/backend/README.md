@@ -7,3 +7,14 @@ controllers - This is where we will keep the JavaScript files that contain the f
 views - This is where we will keep all of the files that are responsible for displaying dynamic content to the user.
 
 models - This is where we will keep all files that are responsible for interfacing with our database.
+
+
+To Be Modified
+---
+MongoDB - Database
+username: Administrator
+password: yc8tiYg6KffJembQ
+For IP Access List
+IP address for server will later be updated
+
+Installed mongoose
