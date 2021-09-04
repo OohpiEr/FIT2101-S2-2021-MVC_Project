@@ -1,4 +1,4 @@
-module.exports ={
+/* module.exports ={
     pages:{
         analysis:{
             entry: 'src/analysis/main.js',
@@ -8,4 +8,4 @@ module.exports ={
             chunks: ['chunk-vendors', 'chunk-common', 'employee']
         }
     }
-}
+} */
