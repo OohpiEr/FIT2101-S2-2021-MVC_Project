@@ -5,7 +5,7 @@
         <Navigation />
       </div>
       <img alt="Donald Duck" src="./assets/Donald.png" style="width:300px;height:300px">
-      <HelloWorld msg="Welcome to Your Vue.js App"/>
+      <HelloWorld msg="CHANGE THIS"/>
     </div>
   </div>
 </template>

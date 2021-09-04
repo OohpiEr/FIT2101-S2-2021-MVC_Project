@@ -10,8 +10,8 @@
       <i class="fas fa-search"></i>
     </div>
       <ul>
-      <li>Login</li>
-      <li>Register</li>
+      <li><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" rel="noopener">Login</a></li>
+      <li><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" rel="noopener">Register</a></li>
     </ul>  
   </div>
 </template>
