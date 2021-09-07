@@ -35,8 +35,8 @@ export default new Router({
           component: AboutUs
         },
         {
-          path: "anlysis",
-          name: "anlysis",
+          path: "analysis",
+          name: "analysis",
           component: Analysis
         },
         {
