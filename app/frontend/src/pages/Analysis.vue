@@ -11,6 +11,7 @@
         <card type="chart">
           <template slot="header">
             <h2 class="card-title">{{ $t("COVID-19 Cases by Country") }}</h2>
+            <h3 class="card-title">{{ $t("Country Name") }}</h3>
           </template>
           <div class="chart-area">
             <line-chart
