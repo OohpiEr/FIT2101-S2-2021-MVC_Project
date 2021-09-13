@@ -1,10 +1,10 @@
 {
   "dashboard": {
-    "completedTasks": "المهام المكتملة",
-    "dailySales": "المبيعات اليومية",
+    "fullVaccinations": "المهام المكتملة",
+    "dailyCases": "المبيعات اليومية",
     "performance": "أداء",
     "simpleTable": "جدول بسيط",
-    "totalShipments": "مجموع الشحنات",
+    "totalCovidCases": "مجموع الشحنات",
     "chartCategories": [
       "حسابات",
       "المشتريات",
