@@ -490,6 +490,10 @@
         margin-bottom: 0;
     }
 
+    > .no-sidebar-content{
+      padding: 78px 30px 0px 0px;
+      min-height: calc(100vh - 70px);
+    }
 
     .header {
         margin-bottom: 50px;
@@ -757,3 +761,5 @@
   }
 
 }
+
+
