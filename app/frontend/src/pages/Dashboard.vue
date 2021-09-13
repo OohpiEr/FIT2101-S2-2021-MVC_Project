@@ -7,7 +7,7 @@
           <template slot="header">
             <div class="row">
               <div class="col-sm-6" :class="isRTL ? 'text-right' : 'text-left'">
-                <h5 class="card-category">{{$t('dashboard.totalShipments')}}</h5>
+                <h5 class="card-category">{{$t('dashboard.totalCovidCases')}}</h5>
                 <h2 class="card-title">{{$t('dashboard.performance')}}</h2>
               </div>
               <div class="col-sm-6">
@@ -36,7 +36,7 @@
                         :chart-data="bigLineChart.chartData"
                         :gradient-colors="bigLineChart.gradientColors"
                         :gradient-stops="bigLineChart.gradientStops"
-                        :extra-options="bigLineChart.extraOptions">
+                        :extra-options="bigLineChart.options">
             </line-chart>
           </div>
         </card>
@@ -46,7 +46,7 @@
       <div class="col-lg-4" :class="{'text-right': isRTL}">
         <card type="chart">
           <template slot="header">
-            <h5 class="card-category">{{$t('dashboard.totalShipments')}}</h5>
+            <h5 class="card-category">{{$t('dashboard.totalCovidCases')}}</h5>
             <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary "></i> 763,215</h3>
           </template>
           <div class="chart-area">
@@ -63,8 +63,8 @@
       <div class="col-lg-4" :class="{'text-right': isRTL}">
         <card type="chart">
           <template slot="header">
-            <h5 class="card-category">{{$t('dashboard.dailySales')}}</h5>
-            <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info "></i> 3,500€</h3>
+            <h5 class="card-category">{{$t('dashboard.dailyCases')}}</h5>
+            <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info "></i> 3,500</h3>
           </template>
           <div class="chart-area">
             <bar-chart style="height: 100%"
@@ -79,8 +79,8 @@
       <div class="col-lg-4" :class="{'text-right': isRTL}">
         <card type="chart">
           <template slot="header">
-            <h5 class="card-category">{{$t('dashboard.completedTasks')}}</h5>
-            <h3 class="card-title"><i class="tim-icons icon-send text-success "></i> 12,100K</h3>
+            <h5 class="card-category">{{$t('dashboard.fullVaccinations')}}</h5>
+            <h3 class="card-title"><i class="tim-icons icon-send text-success "></i> 12,100</h3>
           </template>
           <div class="chart-area">
             <line-chart style="height: 100%"
@@ -94,7 +94,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-6 col-md-12">
+      <!-- <div class="col-lg-6 col-md-12">
         <card type="tasks" :header-classes="{'text-right': isRTL}">
           <template slot="header">
             <h6 class="title d-inline">{{$t('dashboard.tasks', {count: 5})}}</h6>
@@ -114,7 +114,7 @@
             <task-list></task-list>
           </div>
         </card>
-      </div>
+      </div> -->
       <div class="col-lg-6 col-md-12">
         <card class="card" :header-classes="{'text-right': isRTL}">
           <h4 slot="header" class="card-title">{{$t('dashboard.simpleTable')}}</h4>
@@ -146,15 +146,28 @@
         bigLineChart: {
           allData: [
             [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
-            [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120],
-            [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130]
+            [280, 320, 305, 310, 295, 305, 290, 300, 280, 295, 270, 320],
+            [1060, 1080, 1065, 1130, 1080, 1105, 1090, 1130, 1070, 1115, 1060, 1130]
           ],
+          allLabels: [
+            ['Day1', 'Day2', 'Day3', 'Day4', 'Day5', 'Day6', 'Day7', 'Day8', 'Day9', 'Day10', 'Day11', 'Day12'],
+            ['Week1', 'Week2', 'Week3', 'Week4', 'Week5', 'Week6', 'Week7', 'Week8', 'Week9', 'Week10', 'Week11', 'Week12'],
+            ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
+            ],
           activeIndex: 0,
           chartData: {
             datasets: [{ }],
-            labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
           },
           extraOptions: chartConfigs.purpleChartOptions,
+          options: {...chartConfigs.purpleChartOptions, scales:{
+          ...chartConfigs.purpleChartOptions.scales,
+          yAxes:{
+            ...chartConfigs.purpleChartOptions.scales.yAxes,
+            ticks:{
+              ...chartConfigs.purpleChartOptions.scales.yAxes.ticks,
+              suggestedMin: 60
+            }}}},
+
           gradientColors: config.colors.primaryGradient,
           gradientStops: [1, 0.4, 0],
           categories: []
@@ -210,7 +223,7 @@
         blueBarChart: {
           extraOptions: chartConfigs.barChartOptions,
           chartData: {
-            labels: ['USA', 'GER', 'AUS', 'UK', 'RO', 'BR'],
+            labels: ['USA', 'GER', 'AUS', 'UK', 'CN', 'KR'],
             datasets: [{
               label: "Countries",
               fill: true,
@@ -255,11 +268,11 @@
             pointRadius: 4,
             data: this.bigLineChart.allData[index]
           }],
-          labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+          labels: this.bigLineChart.allLabels[index],
         }
         this.$refs.bigChart.updateGradients(chartData);
         this.bigLineChart.chartData = chartData;
-        this.bigLineChart.activeIndex = index;
+        this.bigLineChart.activeIndex = index;      
       }
     },
     mounted() {
