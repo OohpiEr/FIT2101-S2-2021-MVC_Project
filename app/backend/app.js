@@ -2,6 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const Post = require('./models/post');
+
+const userRoutes = require('./routes/user');
+
 const app = express();
 
 mongoose.connect("mongodb+srv://Administrator:yc8tiYg6KffJembQ@fit2101project.0m0cx.mongodb.net/userData?retryWrites=true&w=majority")
@@ -67,6 +70,9 @@ app.delete("/api/posts/:id",(req,res,next)=>{
     console.log(req.params.id);
     res.status(200).json({message:"Delete successfully"})
 })
+
+// routes with user will be directed to the routes/user.js
+app.use('/api/user',userRoutes);
 
 // exported for server.js
 module.exports = app;
