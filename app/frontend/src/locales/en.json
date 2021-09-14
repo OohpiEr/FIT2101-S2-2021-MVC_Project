@@ -1,14 +1,14 @@
 {
   "dashboard": {
-    "completedTasks": "Completed Tasks",
-    "dailySales": "Daily Sales",
-    "performance": "Performance",
-    "simpleTable": "Simple Table",
-    "totalShipments": "Total Shipments",
+    "fullVaccinations": "Full Vaccinations",
+    "dailyCases": "Daily Cases",
+    "performance": "Malaysia",
+    "simpleTable": "Covid in Countries",
+    "totalCovidCases": "Total Covid Cases",
     "chartCategories": [
-      "Accounts",
-      "Purchases",
-      "Sessions"
+      "Daily",
+      "Weekly",
+      "Monthly"
     ],
     "tasks": "Tasks({count})",
     "today": "Today",
@@ -18,62 +18,54 @@
       "somethingElse": "Something else"
     },
     "usersTable": {
-      "title": "Simple Table",
+      "title": "Covid in Countries",
       "columns": [
-        "Name",
         "Country",
-        "City",
-        "Salary"
+        "Daily Vaccinations",
+        "Total Vaccinations",
+        "Daily Covid Cases",
+        "Total Covid Cases"
       ],
       "data": [
         {
           "id": 1,
-          "name": "Dakota Rice",
-          "salary": "$36.738",
-          "country": "Niger",
-          "city": "Oud-Turnhout"
+          "total covid cases": "36,738",
+          "country": "Malaysia",
+          "total vaccinations": "37,378,200",
+          "daily vaccinations": "5,400",
+          "daily covid cases": "4,200"
         },
         {
           "id": 2,
-          "name": "Minerva Hooper",
-          "salary": "$23,789",
-          "country": "Curaçao",
-          "city": "Sinaai-Waas"
+          "total covid cases": "23,789",
+          "country": "China",
+          "total vaccinations": "60,876,251",
+          "daily vaccinations": "5,400",
+          "daily covid cases": "4,200"
         },
         {
           "id": 3,
-          "name": "Sage Rodriguez",
-          "salary": "$56,142",
-          "country": "Netherlands",
-          "city": "Baileux"
+          "total covid cases": "56,142",
+          "country": "Korea",
+          "total vaccinations": "5,923,132",
+          "daily vaccinations": "5,400",
+          "daily covid cases": "4,200"
         },
         {
           "id": 4,
-          "name": "Philip Chaney",
-          "salary": "$38,735",
-          "country": "Korea, South",
-          "city": "Overland Park"
+          "total covid cases": "380,735",
+          "country": "India",
+          "total vaccinations": "600,532",
+          "daily vaccinations": "5,400",
+          "daily covid cases": "4,200"
         },
         {
           "id": 5,
-          "name": "Doris Greene",
-          "salary": "$63,542",
-          "country": "Malawi",
-          "city": "Feldkirchen in Kärnten"
-        },
-        {
-          "id": 6,
-          "name": "Mason Porter",
-          "salary": "$98,615",
-          "country": "Chile",
-          "city": "Gloucester"
-        },
-        {
-          "id": 7,
-          "name": "Jon Porter",
-          "salary": "$78,615",
-          "country": "Portugal",
-          "city": "Gloucester"
+          "total covid cases": "63,542",
+          "country": "Singapore",
+          "total vaccinations": "2,345,102",
+          "daily vaccinations": "5,400",
+          "daily covid cases": "4,200"
         }
       ]
     },
