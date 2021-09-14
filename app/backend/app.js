@@ -32,45 +32,6 @@ app.use((req,res,next)=>{
     next();
 });
 
-// This is where the post request data will post to and listened by here
-app.post('/api/posts',(req,res,next)=>{
-    const post = new Post({
-        username: req.body.title,
-        password: req.body.content
-    });
-    post.save();
-    res.status(201).json({
-        message: 'Post added successfully!'
-    });
-});
-
-// '/api/post' is a filter for example, localhost:3000/posts, will get here
-app.get('/api/posts',(req,res,next)=>{
-    Post.find()
-        .then(documents => {
-            res.status(201).json({
-                message: 'Post fetched successfully!',
-                posts: documents        // transform of data at guide 54
-            });
-        });
-    const post = new Post({
-        username: 'Desmond', 
-        password: "Testing"
-    });
-    post.save();
-    console.log("success")
-});
-
-// :id is dynamic, need to perform HTTP request for delete
-app.delete("/api/posts/:id",(req,res,next)=>{
-    Post.deleteOne({_id : req.params.id})
-    .then(result => {
-        console.log(result);
-    })
-    console.log(req.params.id);
-    res.status(200).json({message:"Delete successfully"})
-})
-
 // routes with user will be directed to the routes/user.js
 app.use('/api/user',userRoutes);
 
