@@ -7,7 +7,7 @@ const Dashboard = () => import(/* webpackChunkName: "dashboard" */"@/pages/Dashb
 const AboutUs = () => import(/* webpackChunkName: "common" */ "@/pages/AboutUs.vue");
 const Analysis = () => import(/* webpackChunkName: "common" */ "@/pages/Analysis.vue");
 const Table = () => import(/* webpackChunkName: "common" */ "@/pages/Table.vue");
-const SignInPage = () => import(/* webpackChunkName: "common" */ "@/pages/SignInPage.vue");
+const SignUpPage = () => import(/* webpackChunkName: "common" */ "@/pages/SignUpPage.vue");
 
 Vue.use(Router);
 
@@ -43,14 +43,14 @@ export default new Router({
     },
     {
       path: '/',
-      name: 'sign-in',
-      redirect: '/sign-in',
+      name: 'sign-up',
+      redirect: '/sign-up',
       component: NoSidebarLayout,
       children: [
         {
-          path: 'sign-in',
-          name: 'sign-in',
-          component: SignInPage
+          path: 'sign-up',
+          name: 'sign-up',
+          component: SignUpPage
         }
       ]
     }

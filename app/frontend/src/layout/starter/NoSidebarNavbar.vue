@@ -5,7 +5,7 @@
   >
     <div class="container-fluid">
       <div class="navbar-wrapper">
-         <a class="navbar-brand" href="#sign-in">{{ routeName }}</a>
+         <a class="navbar-brand" href="#sign-up">{{ routeName }}</a>
       </div>
 
       <button
