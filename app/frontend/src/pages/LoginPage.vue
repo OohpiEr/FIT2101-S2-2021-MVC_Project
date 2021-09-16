@@ -60,20 +60,21 @@ export default {
   methods: {
     handleSubmit() {
       console.log("form submitted");
+
       const postinfo = {
-        useremail: this.user.useremail,
-        password: this.user.password,
-      };
-      axios
-        .post("http://localhost:3000/api/user/login", postinfo)
-        .then((response) => {
-          console.log(response);
+      useremail: this.user.email,
+      password: this.user.password,
+    };
+    axios
+      .post("http://localhost:3000/api/user/login", postinfo)
+      .then((response) => {
+        console.log(response);
           // TODO add feedback here -> SUCCESS (201)
-        })
-        .catch((error) => {
-          console.log(error);
+      })
+      .catch((error) => {
+        console.log(error.message);
           // TODO add feedback here -> ERROR (500 - email ady exists)
-        });
+      });
     },
   },
 };
