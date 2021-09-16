@@ -3,7 +3,7 @@
     <div class="col-sm"></div>
     <div class="col-md-4">
       <h3 class="text-center">Login</h3>
-      <form>
+      <form @submit.prevent="handleSubmit">
         <div class="row">
           <div class="col-md-12">
             <base-input
@@ -45,6 +45,8 @@
 
 
 <script>
+import axios from 'axios';
+
 export default {
   name: "login",
   data() {
@@ -54,6 +56,25 @@ export default {
         password: "",
       },
     };
+  },
+  methods: {
+    handleSubmit() {
+      console.log("form submitted");
+      const postinfo = {
+        useremail: this.user.useremail,
+        password: this.user.password,
+      };
+      axios
+        .post("http://localhost:3000/api/user/login", postinfo)
+        .then((response) => {
+          console.log(response);
+          // TODO add feedback here -> SUCCESS (201)
+        })
+        .catch((error) => {
+          console.log(error);
+          // TODO add feedback here -> ERROR (500 - email ady exists)
+        });
+    },
   },
 };
 </script>

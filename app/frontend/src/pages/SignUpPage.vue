@@ -86,6 +86,8 @@
 
 
 <script>
+import axios from 'axios';
+
 export default {
   name: "sign-up",
   data() {
@@ -102,6 +104,9 @@ export default {
   methods: {
     handleSubmit() {
       console.log("form submitted");
+
+      // TODO password validation
+
       const signup = {
         useremail: this.user.email,
         username: this.user.username,
@@ -112,9 +117,11 @@ export default {
         .post("http://localhost:3000/api/user/signup", signup)
         .then((response) => {
           console.log(response);
+          // TODO add feedback here -> SUCCESS (201)
         })
         .catch((error) => {
           console.log(error);
+          // TODO add feedback here -> ERROR (500 - email ady exists)
         });
     },
   },
