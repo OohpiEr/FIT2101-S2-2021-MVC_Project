@@ -1,4 +1,4 @@
-const axios = require('axios')
+const axios = require('axios');
 const url = 'https://api.covid19api.com';
 
 
@@ -7,7 +7,6 @@ export async function fetchCountryData(country)
 {
     const response = await axios.get(`${url}/total/country/${country}/status/confirmed`);
     return response.data;
-      
 }
 
 // Function returns the cases and dates in an arrays
