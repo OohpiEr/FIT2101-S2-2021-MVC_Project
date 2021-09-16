@@ -8,6 +8,7 @@ const AboutUs = () => import(/* webpackChunkName: "common" */ "@/pages/AboutUs.v
 const Analysis = () => import(/* webpackChunkName: "common" */ "@/pages/Analysis.vue");
 const Table = () => import(/* webpackChunkName: "common" */ "@/pages/Table.vue");
 const SignUpPage = () => import(/* webpackChunkName: "common" */ "@/pages/SignUpPage.vue");
+const LoginPage = () => import(/* webpackChunkName: "common" */ "@/pages/LoginPage.vue");
 
 Vue.use(Router);
 
@@ -51,6 +52,11 @@ export default new Router({
           path: 'sign-up',
           name: 'sign-up',
           component: SignUpPage
+        },
+        {
+          path: 'login',
+          name: 'login',
+          component: LoginPage
         }
       ]
     }
