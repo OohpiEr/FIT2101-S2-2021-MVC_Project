@@ -1,57 +1,81 @@
 const express = require("express");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const bodyParser = require('body-parser');
 
 const User = require("../models/user");
 const checkAuth = require("../middleware/check-auth");
 
 const router = express.Router();
 
-router.post("/signup", (req,res,next) => {
+const jsonParser = bodyParser.json();
+
+router.post("/signup",jsonParser, (req,res,next) => {
+    let user;
     bcrypt.hash(req.body.password, 10).then(hash => {
-        const user = new User({
-            useremail: req.body.email,
+        user = new User({
+            useremail: req.body.useremail,
             username: req.body.username,
             contact: req.body.contact,
             password: hash
-        });
+        }); 
+        console.log(user);
         user.save().then(result =>{
             res.status(201).json({
                 message: "User created",
                 result: result
             });
         }).catch(error => {
+            console.log(error);
             res.status(500).json({
                 error: error
             });
         });
-    });  
+    }); 
+    
+
 });
 
-router.post("/login", (req,res,next) => {
+router.get("/signup", (req,res,next) => {
+    res.status(200).json({
+        message: "GET success!"
+    })
+    next();
+});
+
+async function checkuser (password1,password2) {
+    const match = await bcrypt.compare(password1, password2);
+    console.log(password1,password2,match);
+    return match;
+}
+
+router.post("/login",jsonParser, (req,res,next) => {
     let fetchedUser;
-    User.findOne({ email: req.body.email }).then(user => {
+    User.findOne({ useremail: req.body.useremail })
+    .then(user => {
         if(!user){
             return res.status(401).json({
                 message: "Authentication failed"
             });
         }
         fetchedUser = user;
-        return bcrypt.compare(req.body.password, user.password);
-    }).then(result => {
+        return checkuser(req.body.password, user.password);
+    })
+    .then(result => { 
         if (!result) {
             return res.status(401).json({
                 message: "Authentication failed"
             });
         }
-        const token = jwt.sign({email: fetchedUser.useremail, userId: fetchedUser._id}, 'long_secret_key_that_should_be_used_for_authentication', {expiresIn: '1h'}); // secret key for encryption
+        const token = jwt.sign({useremail: fetchedUser.useremail, userId: fetchedUser._id}, 'long_secret_key_that_should_be_used_for_authentication', {expiresIn: '1h'}); // secret key for encryption
         res.status(200).json({
             token: token,
             useremail: fetchedUser.useremail,
             username: fetchedUser.username,
             contact: fetchedUser.contact
         });
-    }).catch(error => {
+    })
+    .catch(error => {
         return res.status(401).json({
             message: "Authentication failed"
         });
@@ -59,7 +83,7 @@ router.post("/login", (req,res,next) => {
 });
 
 // Testing request to mongodb database
-router.get("",(req,res,next) => {
+router.get("/jii",(req,res,next) => {
     User.find()
         .then(userinfo => {
             res.status(201).json({
