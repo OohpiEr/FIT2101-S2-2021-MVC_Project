@@ -3,7 +3,7 @@ const url = 'https://api.covid19api.com';
 
 
 // Get detailed covid data for a country (can be modified to include time intervals)
-export async function fetchCountryData(country)
+ export async function fetchCountryData(country)
 {
     const response = await axios.get(`${url}/total/country/${country}/status/confirmed`);
     return response.data;
@@ -12,7 +12,7 @@ export async function fetchCountryData(country)
 
 // Function returns the cases and dates in an arrays
 // the cases for date[i] corresponds to cases[i]
-export async function fetchCountryCases(country)
+ export async function fetchCountryCases(country)
 {
     let response = await fetchCountryData(country);
     //console.log(response)
@@ -31,15 +31,26 @@ export async function fetchCountryCases(country)
 }
 
 // Get general information for all the countries
-export async function fetchCountries()
+ export async function fetchCountries()
 {
     const response = await axios.get(`${url}/summary`);
-    return response.data.Countries;
+    let countries = []
+    for(let i = 0; i < response.data.Countries.length; i++)
+    {
+        let data = {
+            Country: response.data.Countries[i].Country,
+            TotalConfirmed: response.data.Countries[i].TotalConfirmed,
+            TotalDeaths: response.data.Countries[i].TotalDeaths,
+            TotalRecovered: response.data.Countries[i].TotalRecovered
+        }
+        countries.push(data)
+    }
+    return countries
 }
 
 
 // General world wide covid data summary
-export async function fetchGlobal()
+ export async function fetchGlobal()
 {
     const response = await axios.get(`${url}/summary`);
     return response.data.Global;
