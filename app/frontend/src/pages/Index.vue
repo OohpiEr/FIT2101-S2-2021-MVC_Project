@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div><img src="frontend/public/img/data_analysis.jpg"></div>
+    <img style="width: 400px" src="img/data_analysis.jpg">
 
     <div style="color: white">
       2101_Data_Analytics: A versatile widget for variant Data Visualisation and
