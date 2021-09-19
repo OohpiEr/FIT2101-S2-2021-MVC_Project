@@ -2,12 +2,32 @@
   <div class="row">
     <div class="col-sm"></div>
     <div class="col-md-4">
+      <modal :show.sync="modal">
+        <h6 slot="header" class="modal-title" id="modal-title-default">
+          Sign Up Success!
+        </h6>
+        <p>
+          Proceed to Log In?
+        </p>
+
+        <template slot="footer">
+          <base-button type="primary">Proceed</base-button>
+          <base-button
+            type="secondary"
+            class="ml-auto"
+            @click="modals.modal1 = false"
+            >Close
+          </base-button>
+        </template>
+      </modal>
+
+
       <h3 class="text-center">Sign Up</h3>
       <form @submit.prevent="handleSubmit">
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
-              <label for="user.password">Username</label>
+              <label for="user.username">Username</label>
               <input
                 v-model="user.username"
                 placeholder="mike123"
@@ -23,7 +43,7 @@
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
-              <label for="user.password">Email address</label>
+              <label for="user.email">Email address</label>
               <input
                 type="email"
                 placeholder="mike@email.com"
@@ -37,18 +57,22 @@
           </div>
         </div>
 
-
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
-              <label for="user.password">Phone Number</label>
+              <label for="user.phone">Phone</label>
               <input
+                type="tel"
                 v-model="user.phone"
                 v-bind:class="{
                   'form-control': true,
+                  'is-invalid': !validatePhone(),
                 }"
                 required
               />
+              <div class="invalid-feedback">
+                Phone number must be a valid format
+              </div>
             </div>
           </div>
         </div>
@@ -108,9 +132,13 @@
 
 <script>
 import axios from "axios";
+import { Modal } from "@/components";
 
 export default {
   name: "sign-up",
+  components: {
+    Modal,
+  },
   data() {
     return {
       user: {
@@ -120,48 +148,48 @@ export default {
         password: "",
         confirmPassword: "",
       },
-      valid: false,
       submitted: false,
+      modal: false,
     };
   },
   methods: {
     handleSubmit() {
-      console.log("form submitted");
-
-      // TODO password validation
-
-      // const signup = {
-      //   useremail: this.user.email,
-      //   username: this.user.username,
-      //   contact: this.user.phone,
-      //   password: this.user.password,
-      // };
-      // axios
-      //   .post("http://localhost:3000/api/user/signup", signup)
-      //   .then((response) => {
-      //     console.log(response);
-      //     // TODO add feedback here -> SUCCESS (201)
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //     // TODO add feedback here -> ERROR (500 - email ady exists)
-      //   });
-    },
-    validate: function () {
-      if (this.confirmPassword()) {
-        this.valid = true;
+      if (this.validatePhone() && this.confirmPassword()) {
+        this.submit();
+      } else {
+        console.log("form denied");
       }
     },
+    // validate: function () {
+    //   if (this.confirmPassword()) {
+    //     this.valid = true;
+    //   }
+    // },
     confirmPassword: function () {
       return this.user.password == this.user.confirmPassword;
     },
+    validatePhone: function () {
+      let phone = Math.floor(Number(this.user.phone));
+      return phone >= 0;
+    },
     submit: function () {
-      this.validate();
-      if (this.valid) {
-        //THIS IS WHERE YOU SUBMIT DATA TO SERVER
-        this.submitted = true;
-      }
-    }, //end submit
+      const signup = {
+        useremail: this.user.email,
+        username: this.user.username,
+        contact: this.user.phone,
+        password: this.user.password,
+      };
+      axios
+        .post("http://localhost:3000/api/user/signup", signup)
+        .then((response) => {
+          console.log(response);
+          this.modal = true;
+        })
+        .catch((error) => {
+          console.log(error);
+          // TODO add feedback here -> ERROR (500 - email ady exists)
+        });
+    },
   },
 };
 </script>
