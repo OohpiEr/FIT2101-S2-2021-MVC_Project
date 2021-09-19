@@ -6,21 +6,15 @@
         <h6 slot="header" class="modal-title" id="modal-title-default">
           Sign Up Success!
         </h6>
-        <p>
-          Proceed to Log In?
-        </p>
+        <p>Proceed to Log In?</p>
 
         <template slot="footer">
           <base-button type="primary">Proceed</base-button>
-          <base-button
-            type="secondary"
-            class="ml-auto"
-            @click="modals.modal1 = false"
+          <base-button type="secondary" class="ml-auto" @click="modal = false"
             >Close
           </base-button>
         </template>
       </modal>
-
 
       <h3 class="text-center">Sign Up</h3>
       <form @submit.prevent="handleSubmit">
@@ -43,16 +37,17 @@
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
-              <label for="user.email">Email address</label>
+              <label for="user.email">Email</label>
               <input
                 type="email"
-                placeholder="mike@email.com"
                 v-model="user.email"
                 v-bind:class="{
                   'form-control': true,
+                  'is-invalid': emailExist,
                 }"
                 required
               />
+              <div class="invalid-feedback">Email already exist</div>
             </div>
           </div>
         </div>
@@ -150,6 +145,7 @@ export default {
       },
       submitted: false,
       modal: false,
+      emailExist: false,
     };
   },
   methods: {
@@ -160,11 +156,6 @@ export default {
         console.log("form denied");
       }
     },
-    // validate: function () {
-    //   if (this.confirmPassword()) {
-    //     this.valid = true;
-    //   }
-    // },
     confirmPassword: function () {
       return this.user.password == this.user.confirmPassword;
     },
@@ -183,11 +174,13 @@ export default {
         .post("http://localhost:3000/api/user/signup", signup)
         .then((response) => {
           console.log(response);
+          this.emailExist = false;
           this.modal = true;
         })
         .catch((error) => {
           console.log(error);
           // TODO add feedback here -> ERROR (500 - email ady exists)
+          this.emailExist = true;
         });
     },
   },
