@@ -35,11 +35,9 @@ import * as chartConfigs from "@/components/Charts/config";
 import TaskList from "./Dashboard/TaskList";
 import UserTable from "./Dashboard/UserTable";
 import config from "@/config";
-import * as covid_api from "../../../backend/api.js"
+import * as covid_api from "../api.js";
 // just testing if the function works after being imported
-covid_api.fetchCountryCases("Malaysia").then((data) =>{
-  console.log(data)
-})
+
 export default {
   components: {
     LineChart,
