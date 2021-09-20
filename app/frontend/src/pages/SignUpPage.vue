@@ -2,17 +2,20 @@
   <div class="row">
     <div class="col-sm"></div>
     <div class="col-md-4">
+
       <modal :show.sync="modal">
-        <h6 slot="header" class="modal-title" id="modal-title-default">
+        <h3 slot="header" class="modal-title" id="modal-title-default">
           Sign Up Success!
-        </h6>
-        <p>Proceed to Log In?</p>
+        </h3>
 
         <template slot="footer">
-          <base-button type="primary">Proceed</base-button>
-          <base-button type="secondary" class="ml-auto" @click="modal = false"
+          <div class="col text-center button">
+            <base-button type="primary" @click="$router.push('login')">Proceed to Log In</base-button>
+          </div>
+          
+          <!-- <base-button type="secondary" class="ml-auto" @click="modal = false"
             >Close
-          </base-button>
+          </base-button> -->
         </template>
       </modal>
 
@@ -128,11 +131,13 @@
 <script>
 import axios from "axios";
 import { Modal } from "@/components";
+import router from "../router/starterRouter";
 
 export default {
   name: "sign-up",
   components: {
     Modal,
+    router,
   },
   data() {
     return {
