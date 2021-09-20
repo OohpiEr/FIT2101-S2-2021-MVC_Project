@@ -1,0 +1,111 @@
+<template>
+  <div class="row">
+    <div class="col-sm"></div>
+    <div class="col-md-4">
+      <h3 class="text-center">Login</h3>
+      <form @submit.prevent="handleSubmit">
+        <base-alert v-if="loginFail" type="warning">
+          Invalid email address or password.
+        </base-alert>
+        <base-alert v-if="loginSuccess" type="success">
+          Login successful!
+        </base-alert>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="user.email">Email</label>
+              <input
+                type="email"
+                v-model="user.email"
+                v-bind:class="{
+                  'form-control': true,
+                  'is-invalid': loginFail,
+                }"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="user.email">Password</label>
+              <input
+                type="password"
+                v-model="user.password"
+                v-bind:class="{
+                  'form-control': true,
+                  'is-invalid': loginFail,
+                }"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col text-center button">
+            <button class="btn" slot="footer" type="primary" fill>Login</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-sm"></div>
+  </div>
+</template>
+
+
+
+<script>
+import axios from "axios";
+import { BaseAlert } from "@/components";
+import router from "../router/starterRouter";
+
+export default {
+  name: "login",
+  components: {
+    BaseAlert,
+    router,
+  },
+  data() {
+    return {
+      user: {
+        email: "",
+        password: "",
+      },
+      loginFail: false,
+      loginSuccess: false,
+    };
+  },
+  methods: {
+    handleSubmit() {
+      console.log("form submitted");
+
+      const postinfo = {
+        useremail: this.user.email,
+        password: this.user.password,
+      };
+      axios
+        .post("http://localhost:3000/api/user/login", postinfo)
+        .then((response) => {
+          console.log(response);
+          this.loginFail = false;
+          this.loginSuccess = true;
+          setTimeout(() => {  router.push("dashboard"); }, 500);
+        })
+        .catch((error) => {
+          console.log(error.message);
+          if (!this.loginFail) {
+            this.loginFail = true;
+          }
+        });
+    },
+  },
+};
+</script>
+
+
+
+<style></style>
