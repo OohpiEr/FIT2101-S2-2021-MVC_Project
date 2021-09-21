@@ -111,7 +111,6 @@
           <pie-chart style = "height: 100%"
                        ref="piechart"
                        chart-id= "my-pie-chart"
-                       :data="pieChart.chartData"
                        :chart-data="pieChart.chartData"
                        :options="pieChart.chartOptions">
           </pie-chart>
@@ -280,21 +279,15 @@
         this.$refs.bigChart.updateGradients(chartData);
         this.bigLineChart.chartData = chartData;
         this.bigLineChart.activeIndex = index;      
-      },
-
-      initPieChart(){
-        this.$refs.piechart.updateGradients(this.pieChart.chartData)
       }
     },
     
     async created(){
       let response = await covid_api.fetchGlobal();
-      console.log(response)
       this.pieChart.chartData.datasets.labels = Object.keys(response).slice(0,4)
       this.pieChart.chartData.datasets.data = Object.values(response).slice(0,4)
       this.$refs.piechart.updateGradients(this.pieChart.chartData)
-      this.initPieChart()
-      console.log(this.pieChart.chartData.datasets.data)
+
     },
 
     mounted() {
@@ -304,7 +297,6 @@
         this.$rtl.enableRTL();
       }
       this.initBigChart(0);
-      this.initPieChart();
     },
     beforeDestroy() {
       if (this.$rtl.isRTL) {

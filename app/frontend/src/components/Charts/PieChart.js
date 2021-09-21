@@ -17,14 +17,13 @@ export default {
     }
   },
   mounted() {
-    // this.chartData is created in the mixin.
-    // If you want to pass options please create a local options object
-    this.renderChart(this.chartData, this.options)
-  },
-  watch: {
-    chartData () {
-      this.$data._chart.update()
-    }
+    this.$watch('chartData', (newVal, oldVal) => {
+      if (!oldVal) {
+        this.renderChart(
+          this.chartData,
+          this.options
+        );
+      }
+    }, { immediate: true });
   }
-  
 };
