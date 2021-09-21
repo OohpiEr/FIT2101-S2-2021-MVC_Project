@@ -8,8 +8,12 @@ const Dashboard = () => import(/* webpackChunkName: "dashboard" */"@/pages/Dashb
 const AboutUs = () => import(/* webpackChunkName: "common" */ "@/pages/AboutUs.vue");
 const Analysis = () => import(/* webpackChunkName: "common" */ "@/pages/Analysis.vue");
 const Table = () => import(/* webpackChunkName: "common" */ "@/pages/Table.vue");
+const Profile = () => import(/* webpackChunkName: "common" */ "@/pages/Profile.vue");
 const SignUpPage = () => import(/* webpackChunkName: "common" */ "@/pages/SignUpPage.vue");
+
 const Index = () => import(/* webpackChunkName: "common" */ "@/pages/Index.vue");
+const LoginPage = () => import(/* webpackChunkName: "common" */ "@/pages/LoginPage.vue");
+
 
 Vue.use(Router);
 
@@ -40,13 +44,18 @@ export default new Router({
           path: "table",
           name: "table",
           component: Table
+        },
+        {
+          path: "profile",
+          name: "profile",
+          component: Profile
         }
       ]
     },
     {
       path: '/',
-      name: 'sign-up',
-      redirect: '/sign-up',
+      name: 'notLoggedIn',
+      redirect: '/landing-page',
       component: NoSidebarLayout,
       children: [
         {
@@ -58,6 +67,11 @@ export default new Router({
           path: "index",
           name: "index",
           component: Index
+        },
+        {
+          path: 'login',
+          name: 'login',
+          component: LoginPage
         }
       ]
     }

@@ -3,7 +3,7 @@
     <div class="main-panel">
       <top-navbar></top-navbar>
 
-      <dashboard-content></dashboard-content>
+      <no-sidebar-content></no-sidebar-content>
 
       <content-footer></content-footer>
     </div>
@@ -14,13 +14,13 @@
 <script>
   import TopNavbar from "./NoSidebarNavbar.vue";
   import ContentFooter from "./SampleFooter.vue";
-  import DashboardContent from "./NoSidebarContent.vue";
+  import NoSidebarContent from "./NoSidebarContent.vue";
   import MobileMenu from "./MobileMenu";
   export default {
     components: {
       TopNavbar,
       ContentFooter,
-      DashboardContent,
+      NoSidebarContent,
       MobileMenu
     }
   };
