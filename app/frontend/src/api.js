@@ -40,17 +40,60 @@ const url = 'https://api.covid19api.com';
             Country: response.data.Countries[i].Country,
             TotalConfirmed: response.data.Countries[i].TotalConfirmed,
             TotalDeaths: response.data.Countries[i].TotalDeaths,
-            TotalRecovered: response.data.Countries[i].TotalRecovered
+            NewConfirmed: response.data.Countries[i].NewConfirmed,
+            NewDeaths: response.data.Countries[i].NewDeaths
         }
         countries.push(data)
     }
     return countries
 }
 
+// Sorts the countries from highest to lowest total Cases
+export async function sortedByTotalCases(){
+    let response = await fetchCountries()
+    response.sort(function (a, b) {
+        return b.TotalConfirmed - a.TotalConfirmed;
+      });
+    return response
+}
 
+// Sorts the countries from highest to lowest total deaths
+ export async function sortedByTotalDeaths(){
+    let response = await fetchCountries()
+    response.sort(function (a, b) {
+        return b.TotalDeaths - a.TotalDeaths;
+      });
+    return response
+}
+
+// Sorts the countries from highest to lowest new cases
+ export async function sortedByNewCases(){
+    let response = await fetchCountries()
+    response.sort(function (a, b) {
+        return b.NewConfirmed - a.NewConfirmed;
+      });
+    return response
+}
+
+// Sorts the countries from highest to lowest new deaths
+ export async function sortedByNewDeaths(){
+    let response = await fetchCountries()
+    response.sort(function (a, b) {
+        return b.NewDeaths - a.NewDeaths;
+      });
+    return response
+}
 // General world wide covid data summary
- export async function fetchGlobal()
+  export async function fetchGlobal()
 {
     const response = await axios.get(`${url}/summary`);
     return response.data.Global;
 }
+
+/* 1) Global Data - Can be shown in a piechart Example: (WorldWide Deaths, Cases, New Deaths and New Cases)
+   2) Most Total Deaths - 
+   3) Most new Deaths (for the day)
+   4) Most Total Cases
+   5) Most new Cases (for the day)
+   6) Least number of cases (for the day?)
+*/
