@@ -109,8 +109,10 @@
             <h6 class="title d-inline">{{$t('dashboard.pie')}}</h6>
           </template>
           <pie-chart style = "height: 100%"
+                       ref="piechart"
                        chart-id= "my-pie-chart"
                        :data="pieChart.chartData"
+                       :chart-data="pieChart.chartData"
                        :options="pieChart.chartOptions">
           </pie-chart>
         </card>
@@ -126,6 +128,7 @@
   import TaskList from './Dashboard/TaskList';
   import UserTable from './Dashboard/UserTable';
   import config from '@/config';
+  import * as covid_api from "../api.js";
 
   export default {
     components: {
@@ -226,16 +229,17 @@
           chartOptions:{
             hoverBorderWidth:20,
             circumfurence: 10
-          },
+          },         
           chartData: {
+            labels: ["New Confirmed Cases", "Total Confirmed Cases", "New Deaths", 
+            "Total Deaths"],
             hoverBackgroundColor: "red",
             hoverBorderWidth: 10,
-            labels: ["Green", "Red", "Blue", "Yellow", "Yes"],
             datasets: [
               {
                 label: "Data One",
                 backgroundColor: ["#41B883", "#E46651", "#00D8FF", "#ffd700", "#03083c"],
-                data: [1, 10, 5, 8, 15]
+                data: [329335, 228760024, 4335, 4697077]
               }
             ]
           }
@@ -276,8 +280,23 @@
         this.$refs.bigChart.updateGradients(chartData);
         this.bigLineChart.chartData = chartData;
         this.bigLineChart.activeIndex = index;      
+      },
+
+      initPieChart(){
+        this.$refs.piechart.updateGradients(this.pieChart.chartData)
       }
     },
+    
+    async created(){
+      let response = await covid_api.fetchGlobal();
+      console.log(response)
+      this.pieChart.chartData.datasets.labels = Object.keys(response).slice(0,4)
+      this.pieChart.chartData.datasets.data = Object.values(response).slice(0,4)
+      this.$refs.piechart.updateGradients(this.pieChart.chartData)
+      this.initPieChart()
+      console.log(this.pieChart.chartData.datasets.data)
+    },
+
     mounted() {
       this.i18n = this.$i18n;
       if (this.enableRTL) {
@@ -285,6 +304,7 @@
         this.$rtl.enableRTL();
       }
       this.initBigChart(0);
+      this.initPieChart();
     },
     beforeDestroy() {
       if (this.$rtl.isRTL) {
