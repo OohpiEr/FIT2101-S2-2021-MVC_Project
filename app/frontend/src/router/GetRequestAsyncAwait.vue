@@ -21,17 +21,7 @@ export default {
         .catch((error) => {
             console.log(error);
         }); 
-        /*
-        const postinfo = {
-            useremail: "testing111@gmail.com",
-            password: "secret"
-        }
-        axios.post("http://localhost:3000/api/user/login",postinfo).then(response => {
-            console.log(response);
-        }).catch(error => {
-            console.log(error);
-        });
-        */
+        
     }
 }
 </script>
