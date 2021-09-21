@@ -88,11 +88,11 @@
                 <p class="d-lg-none">Log out</p>
               </a>
               <li class="nav-link">
-                <a href="#" class="nav-item dropdown-item">Profile</a>
+                <a href="#/profile" class="nav-item dropdown-item">Profile</a>
               </li>
-              <li class="nav-link">
+              <!-- <li class="nav-link">
                 <a href="#" class="nav-item dropdown-item">Settings</a>
-              </li>
+              </li> -->
               <div class="dropdown-divider"></div>
               <li class="nav-link">
                 <a href="#" class="nav-item dropdown-item">Log out</a>

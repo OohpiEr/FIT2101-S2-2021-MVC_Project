@@ -1,83 +1,27 @@
 <template>
     <div class="row">
       <div class="col-12">
-        <card :title="table1.title">
-          <div class="table-responsive">
-            <base-table :data="table1.data"
-                        :columns="table1.columns"
-                        thead-classes="text-primary">
-            </base-table>
-          </div>
-        </card>
-      </div>
-
-      <div class="col-12">
-        <card class="card-plain">
-          <div class="table-full-width table-responsive">
-            <base-table :title="table2.title" :sub-title="table2.subTitle" :data="table2.data"
-                         :columns="table2.columns">
-
-            </base-table>
-          </div>
-        </card>
+         <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th v-for = "col in table1.columns"scope="col">{{col}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="country, index in table1.data">
+          <td v-for = "data in country">{{data}}</td>
+        </tr>
+      </tbody>
+    </table>
       </div>
 
     </div>
 </template>
 <script>
 import { BaseTable } from "@/components";
-const tableColumns = ["Name", "Country", "City", "Salary"];
-const tableData = [
-  {
-    id: 1,
-    name: "Dakota Rice",
-    salary: "$36.738",
-    country: "Niger",
-    city: "Oud-Turnhout",
-  },
-  {
-    id: 2,
-    name: "Minerva Hooper",
-    salary: "$23,789",
-    country: "Curaçao",
-    city: "Sinaai-Waas"
-  },
-  {
-    id: 3,
-    name: "Sage Rodriguez",
-    salary: "$56,142",
-    country: "Netherlands",
-    city: "Baileux"
-  },
-  {
-    id: 4,
-    name: "Philip Chaney",
-    salary: "$38,735",
-    country: "Korea, South",
-    city: "Overland Park"
-  },
-  {
-    id: 5,
-    name: "Doris Greene",
-    salary: "$63,542",
-    country: "Malawi",
-    city: "Feldkirchen in Kärnten"
-  },
-  {
-    id: 6,
-    name: 'Mason Porter',
-    salary: '$98,615',
-    country: 'Chile',
-    city: 'Gloucester'
-  },
-  {
-    id: 7,
-    name: 'Jon Porter',
-    salary: '$78,615',
-    country: 'Portugal',
-    city: 'Gloucester'
-  }
-];
+import * as covid_api from "../api.js";
+const tableColumns = ["Country", "Total Confirmed", "Total Deaths", "New Confirmed", "New Deaths"];
+
 
 export default {
   components: {
@@ -86,17 +30,17 @@ export default {
   data() {
     return {
       table1: {
-        title: "Simple Table",
-        columns: [...tableColumns],
-        data: [...tableData]
-      },
-      table2: {
-        title: "Table on Plain Background",
-        columns: [...tableColumns],
-        data: [...tableData]
+        title: "Countries",
+        columns: [... tableColumns],
+        data: []
       }
     };
-  }
+  },
+  async created(){
+    let response = await covid_api.fetchCountries();
+    console.log(response)
+    this.table1.data = [...response]
+  },
 };
 </script>
 <style>
