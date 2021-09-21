@@ -36,7 +36,7 @@
                         :chart-data="bigLineChart.chartData"
                         :gradient-colors="bigLineChart.gradientColors"
                         :gradient-stops="bigLineChart.gradientStops"
-                        :extra-options="bigLineChart.options">
+                        :extra-options="bigLineChart.extraOptions">
             </line-chart>
           </div>
         </card>
@@ -159,15 +159,6 @@
             datasets: [{ }],
           },
           extraOptions: chartConfigs.purpleChartOptions,
-          options: {...chartConfigs.purpleChartOptions, scales:{
-          ...chartConfigs.purpleChartOptions.scales,
-          yAxes:{
-            ...chartConfigs.purpleChartOptions.scales.yAxes,
-            ticks:{
-              ...chartConfigs.purpleChartOptions.scales.yAxes.ticks,
-              suggestedMin: 60
-            }}}},
-
           gradientColors: config.colors.primaryGradient,
           gradientStops: [1, 0.4, 0],
           categories: []
