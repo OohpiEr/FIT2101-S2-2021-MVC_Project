@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div class="row">
       <div class="col-12">
         <card type="chart">
@@ -94,27 +93,6 @@
       </div>
     </div>
     <div class="row">
-      <!-- <div class="col-lg-6 col-md-12">
-        <card type="tasks" :header-classes="{'text-right': isRTL}">
-          <template slot="header">
-            <h6 class="title d-inline">{{$t('dashboard.tasks', {count: 5})}}</h6>
-            <p class="card-category d-inline">{{$t('dashboard.today')}}</p>
-            <base-dropdown menu-on-right=""
-                           tag="div"
-                           title-classes="btn btn-link btn-icon"
-                           aria-label="Settings menu"
-                           :class="{'float-left': isRTL}">
-              <i slot="title" class="tim-icons icon-settings-gear-63"></i>
-              <a class="dropdown-item" href="#pablo">{{$t('dashboard.dropdown.action')}}</a>
-              <a class="dropdown-item" href="#pablo">{{$t('dashboard.dropdown.anotherAction')}}</a>
-              <a class="dropdown-item" href="#pablo">{{$t('dashboard.dropdown.somethingElse')}}</a>
-            </base-dropdown>
-          </template>
-          <div class="table-full-width table-responsive">
-            <task-list></task-list>
-          </div>
-        </card>
-      </div> -->
       <div class="col-lg-6 col-md-12">
         <card class="card" :header-classes="{'text-right': isRTL}">
           <h4 slot="header" class="card-title">{{$t('dashboard.simpleTable')}}</h4>
@@ -124,20 +102,38 @@
         </card>
       </div>
     </div>
+    <div class="row">
+      <div class="col-lg-6 col-md-12">
+        <card type="chart">
+          <template slot="header">
+            <h6 class="title d-inline">{{$t('dashboard.pie')}}</h6>
+          </template>
+          <pie-chart style = "height: 100%"
+                       ref="piechart"
+                       chart-id= "my-pie-chart"
+                       :chart-data="pieChart.chartData"
+                       :options="pieChart.chartOptions">
+          </pie-chart>
+        </card>
+      </div>
+    </div>
   </div>
 </template>
 <script>
   import LineChart from '@/components/Charts/LineChart';
   import BarChart from '@/components/Charts/BarChart';
+  import PieChart from '@/components/Charts/PieChart';
   import * as chartConfigs from '@/components/Charts/config';
   import TaskList from './Dashboard/TaskList';
   import UserTable from './Dashboard/UserTable';
   import config from '@/config';
+  import * as covid_api from "../api.js";
 
   export default {
     components: {
       LineChart,
       BarChart,
+      PieChart,
       TaskList,
       UserTable
     },
@@ -227,6 +223,25 @@
           },
           gradientColors: config.colors.primaryGradient,
           gradientStops: [1, 0.4, 0],
+        },
+        pieChart:{
+          chartOptions:{
+            hoverBorderWidth:20,
+            circumfurence: 10
+          },         
+          chartData: {
+            labels: ["New Confirmed Cases", "Total Confirmed Cases", "New Deaths", 
+            "Total Deaths"],
+            hoverBackgroundColor: "red",
+            hoverBorderWidth: 10,
+            datasets: [
+              {
+                label: "Data One",
+                backgroundColor: ["#41B883", "#E46651", "#00D8FF", "#ffd700", "#03083c"],
+                data: [329335, 228760024, 4335, 4697077]
+              }
+            ]
+          }
         }
       }
     },
@@ -266,6 +281,15 @@
         this.bigLineChart.activeIndex = index;      
       }
     },
+    
+    async created(){
+      let response = await covid_api.fetchGlobal();
+      this.pieChart.chartData.datasets.labels = Object.keys(response).slice(0,4)
+      this.pieChart.chartData.datasets.data = Object.values(response).slice(0,4)
+      this.$refs.piechart.updateGradients(this.pieChart.chartData)
+
+    },
+
     mounted() {
       this.i18n = this.$i18n;
       if (this.enableRTL) {
