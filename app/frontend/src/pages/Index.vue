@@ -17,14 +17,14 @@
 
     <div class="subsc-table-container" style="">
       <p class="font-40 color_white" style="">Choose your plan</p>
-      <table class="subsc-table" style="">
+      <table class="subsc-table">
         <tr>
           <th></th>
           <th class="center-align subsc-th">Basic</th>
         </tr>
         <tbody>
         <p class="margin-top-40px">
-            <tr>
+            <tr >
               <td>Monthly Price</td>
               <td class="center-align">RM 200</td>
             </tr>
@@ -49,6 +49,10 @@ export default {
 </script>
 
 <style scoped>
+td {
+  padding-bottom: 15px;
+  border-bottom: 1px solid white;
+}
 .subsc-th{
   background-color:lightseagreen; padding: 30px 0; width: 150px
 }
