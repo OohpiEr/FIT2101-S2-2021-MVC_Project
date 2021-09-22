@@ -168,7 +168,7 @@ export default {
       let phone = Math.floor(Number(this.user.phone));
       return phone >= 0;
     },
-    submit: function () {
+    async submit() {
       const signup = {
         useremail: this.user.email,
         username: this.user.username,
@@ -195,11 +195,6 @@ export default {
 
 
 <style scoped>
-base-input {
-  display: block;
-  padding: 10px 6px;
-}
-
 .button {
   padding: 15px;
 }

@@ -80,7 +80,7 @@ export default {
     };
   },
   methods: {
-    handleSubmit() {
+    async handleSubmit() {
       console.log("form submitted");
 
       const postinfo = {
@@ -93,7 +93,12 @@ export default {
           console.log(response);
           this.loginFail = false;
           this.loginSuccess = true;
-          setTimeout(() => {  router.push("dashboard"); }, 500);
+          localStorage.setItem('token', response.data.token)
+          localStorage.setItem('userdata',JSON.stringify(response.data) )
+          
+          setTimeout(() => {
+            router.push("dashboard");
+          }, 200);
         })
         .catch((error) => {
           console.log(error.message);
@@ -101,6 +106,7 @@ export default {
             this.loginFail = true;
           }
         });
+
     },
   },
 };
@@ -108,4 +114,8 @@ export default {
 
 
 
-<style></style>
+<style>
+.button {
+  padding: 15px;
+}
+</style>
