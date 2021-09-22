@@ -20,7 +20,7 @@
 <script>
 import { BaseTable } from "@/components";
 import * as covid_api from "../api.js";
-const tableColumns = ["Country", "Total Confirmed", "Total Deaths", "Total Recovered"];
+const tableColumns = ["Country", "Total Confirmed", "Total Deaths", "New Confirmed", "New Deaths"];
 
 
 export default {
