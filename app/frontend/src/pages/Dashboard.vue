@@ -52,6 +52,7 @@
         </card>
       </div>
     </div>
+
     <div class="row">
       <div class="col-lg-4" :class="{ 'text-right': isRTL }">
         <card type="chart">
@@ -74,26 +75,12 @@
           </div>
         </card>
       </div>
+
       <div class="col-lg-4" :class="{ 'text-right': isRTL }">
-        <card type="chart">
-          <template slot="header">
-            <h5 class="card-category">{{ $t("dashboard.dailyCases") }}</h5>
-            <h3 class="card-title">
-              <i class="tim-icons icon-delivery-fast text-info"></i> 3,500
-            </h3>
-          </template>
-          <div class="chart-area">
-            <bar-chart
-              style="height: 100%"
-              chart-id="blue-bar-chart"
-              :chart-data="blueBarChart.chartData"
-              :gradient-stops="blueBarChart.gradientStops"
-              :extra-options="blueBarChart.extraOptions"
-            >
-            </bar-chart>
-          </div>
-        </card>
+        <daily-new-cases></daily-new-cases>
+
       </div>
+
       <div class="col-lg-4" :class="{ 'text-right': isRTL }">
         <card type="chart">
           <template slot="header">
@@ -117,6 +104,8 @@
         </card>
       </div>
     </div>
+
+    <!-- Covid in Countries table -->
     <div class="row">
       <div class="col-lg-6 col-md-12">
         <card class="card" :header-classes="{ 'text-right': isRTL }">
@@ -129,6 +118,8 @@
         </card>
       </div>
     </div>
+
+    <!-- global covid data piechart -->
     <div class="row">
       <div class="col-lg-6 col-md-12">
         <card type="chart">
@@ -149,11 +140,11 @@
   </div>
 </template>
 <script>
-import axios from "axios";
 import LineChart from "@/components/Charts/LineChart";
 import BarChart from "@/components/Charts/BarChart";
 import PieChart from "@/components/Charts/PieChart";
 import * as chartConfigs from "@/components/Charts/config";
+import DailyNewCases from "./Dashboard/DailyNewCases";
 import TaskList from "./Dashboard/TaskList";
 import UserTable from "./Dashboard/UserTable";
 import config from "@/config";
@@ -166,6 +157,7 @@ export default {
     PieChart,
     TaskList,
     UserTable,
+    DailyNewCases,
   },
   data() {
     return {
@@ -287,25 +279,7 @@ export default {
         ],
         gradientStops: [1, 0.4, 0],
       },
-      blueBarChart: {
-        extraOptions: chartConfigs.barChartOptions,
-        chartData: {
-          labels: ["USA", "GER", "AUS", "UK", "CN", "KR"],
-          datasets: [
-            {
-              label: "Countries",
-              fill: true,
-              borderColor: config.colors.info,
-              borderWidth: 2,
-              borderDash: [],
-              borderDashOffset: 0.0,
-              data: [53, 20, 10, 80, 100, 45],
-            },
-          ],
-        },
-        gradientColors: config.colors.primaryGradient,
-        gradientStops: [1, 0.4, 0],
-      },
+
       pieChart: {
         chartOptions: {
           hoverBorderWidth: 20,
@@ -381,8 +355,7 @@ export default {
     this.pieChart.chartData.datasets.labels = Object.keys(response).slice(0, 4);
     this.pieChart.chartData.datasets.data = Object.values(response).slice(0, 4);
     this.$refs.piechart.updateGradients(this.pieChart.chartData);
-
-    
+    // console.log(response)
   },
 
   mounted() {
