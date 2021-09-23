@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import DashboardLayout from '../layout/starter/SampleLayout.vue';
 import NoSidebarLayout from '../layout/starter/NoSidebarLayout.vue';
+import NoSidebarNavbar from "../layout/starter/NoSidebarNavbar";
 
 const Dashboard = () => import(/* webpackChunkName: "dashboard" */"@/pages/Dashboard.vue");
 const AboutUs = () => import(/* webpackChunkName: "common" */ "@/pages/AboutUs.vue");
@@ -9,7 +10,10 @@ const Analysis = () => import(/* webpackChunkName: "common" */ "@/pages/Analysis
 const Table = () => import(/* webpackChunkName: "common" */ "@/pages/Table.vue");
 const Profile = () => import(/* webpackChunkName: "common" */ "@/pages/Profile.vue");
 const SignUpPage = () => import(/* webpackChunkName: "common" */ "@/pages/SignUpPage.vue");
+
+const Landing = () => import(/* webpackChunkName: "common" */ "@/pages/Landing.vue");
 const LoginPage = () => import(/* webpackChunkName: "common" */ "@/pages/LoginPage.vue");
+
 
 Vue.use(Router);
 
@@ -58,6 +62,11 @@ export default new Router({
           path: 'sign-up',
           name: 'sign-up',
           component: SignUpPage
+        },
+        {
+          path: "Landing",
+          name: "Welcome",
+          component: Landing
         },
         {
           path: 'login',

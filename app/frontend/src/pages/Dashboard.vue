@@ -63,7 +63,7 @@
         <card type="chart">
           <template slot="header">
             <h5 class="card-category">{{$t('dashboard.dailyCases')}}</h5>
-            <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info "></i> 3,500</h3>
+            <h3 class="card-title" id="blueBarChartCard"><i class="tim-icons icon-delivery-fast text-info"></i></h3>
           </template>
           <div class="chart-area">
             <bar-chart style="height: 100%"
@@ -137,7 +137,9 @@
   import UserTable from './Dashboard/UserTable';
   import config from '@/config';
   import * as covid_api from "../api.js";
+  
   const tableColumns = ["Country Code", "Country", "Total Confirmed", "Total Deaths", "New Confirmed", "New Deaths"];
+
   export default {
     components: {
       LineChart,
@@ -146,7 +148,7 @@
       TaskList,
       UserTable
     },
-    
+
     data() {
       return {
         bigLineChart: {
@@ -220,15 +222,14 @@
         blueBarChart: {
           extraOptions: chartConfigs.barChartOptions,
           chartData: {
-            labels: ['USA', 'GER', 'AUS', 'UK', 'CN', 'KR'],
+            labels: [],
             datasets: [{
-              label: "Countries",
               fill: true,
               borderColor: config.colors.info,
               borderWidth: 2,
               borderDash: [],
               borderDashOffset: 0.0,
-              data: [53, 20, 10, 80, 100, 45],
+              data: [],
             }]
           },
           gradientColors: config.colors.primaryGradient,
@@ -236,11 +237,17 @@
         },
         pieChart:{
           chartOptions:{
+            legend: {
+                labels: {
+                    fontColor: "white",
+                    fontSize: 15
+                }
+            },
             hoverBorderWidth:20,
             circumfurence: 10,
             responsive: true,
             maintainAspectRatio: false
-          },         
+          },
           chartData: {
             labels: [],
             hoverBackgroundColor: "red",
@@ -294,10 +301,13 @@
         }
         this.$refs.bigChart.updateGradients(chartData);
         this.bigLineChart.chartData = chartData;
-        this.bigLineChart.activeIndex = index;      
+        this.bigLineChart.activeIndex = index;
+      },
+      displayBarChartTotalNumber(number){
+        let blueBarChartCardRef = document.getElementById("blueBarChartCard");
+        blueBarChartCardRef.insertAdjacentText("beforeend", number);
       }
     },
-    
     async created(){
       let response = await covid_api.fetchGlobal();
       this.pieChart.chartData = {...this.pieChart.chartData,
@@ -311,6 +321,26 @@
       this.table_widget.data = total_deaths.slice(0,5);
 
 
+      let response_most_new_deaths = await covid_api.sortedByNewDeaths();
+      let new_deaths_country_list = [];
+      let new_deaths_number_list = [];
+      response_most_new_deaths.forEach((index) => {
+        new_deaths_country_list.push(index["CountryCode"])
+        new_deaths_number_list.push(index["NewDeaths"])
+      });
+      let  totalNewCases = new_deaths_number_list.reduce((partial_sum, a) => partial_sum + a,0);
+      this.blueBarChart.chartData = {
+        labels:  new_deaths_country_list.slice(0,5),
+        datasets: [{
+          data: new_deaths_number_list,
+          fill: true,
+          borderColor: config.colors.info,
+          borderWidth: 2,
+          borderDash: [],
+          borderDashOffset: 0.0,
+        }]
+      }
+      this.displayBarChartTotalNumber(totalNewCases);
     },
 
     mounted() {
