@@ -19,21 +19,17 @@ router.post("/signup",jsonParser, (req,res,next) => {
             contact: req.body.contact,
             password: hash
         }); 
-        console.log(user);
         user.save().then(result =>{
             res.status(201).json({
                 message: "User created",
                 result: result
             });
         }).catch(error => {
-            console.log(error);
             res.status(500).json({
                 error: error
             });
         });
     }); 
-    
-
 });
 
 router.get("/signup", (req,res,next) => {
@@ -99,10 +95,9 @@ router.get("/jii",(req,res,next) => {
         contact: ''+Math.floor(Math.random() * (99999999 - 10000000) + 10000000),
         password: "" + Math.random()
     });
-    user.save().catch(error => {
-        console.log("Email already exists!!!!!!")
-    });
-    console.log("success!")
+    //user.save().catch(error => {
+    //    console.log("Email already exists!!!!!!")
+    //});
 })
 
 // To be developed for updating 
