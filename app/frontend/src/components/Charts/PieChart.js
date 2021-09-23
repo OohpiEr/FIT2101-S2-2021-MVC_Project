@@ -4,7 +4,10 @@ export default {
   name: 'pie-chart',
   extends: Doughnut,
   mixins: [mixins.reactiveProp],
-  props: ["options"],
+  props: {
+    chartData:{type:Object},
+    options:{type:Object}}
+    ,
   data() {
     return {
       ctx: null
@@ -19,6 +22,9 @@ export default {
   mounted() {
     this.$watch('chartData', (newVal, oldVal) => {
       if (!oldVal) {
+        if (this.$data._chart) {
+          this.$data._chart.destroy();
+        }
         this.renderChart(
           this.chartData,
           this.options
