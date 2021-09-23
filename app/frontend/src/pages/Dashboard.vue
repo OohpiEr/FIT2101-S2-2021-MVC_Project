@@ -262,9 +262,9 @@
           }
         },
         mostNewDeathsChart: {
-          extraOptions: chartConfigs.barChartOptions,
+          extraOptions: chartConfigs.blueChartOptions,
           chartData: {
-            labels: ['USA', 'GER', 'AUS', 'UK', 'CN', 'KR'],
+            labels: [],
             datasets: [{
               label: "Countries",
               fill: true,
@@ -272,7 +272,7 @@
               borderWidth: 2,
               borderDash: [],
               borderDashOffset: 0.0,
-              data: [53, 20, 10, 80, 100, 45],
+              data: [],
             }]
           },
           gradientColors: config.colors.primaryGradient,
@@ -324,20 +324,32 @@
           backgroundColor: ["#41B883", "#E46651", "#00D8FF", "#ffd700", "#03083c"],
           data: Object.values(response).slice(0,4)}]
       }
+      // console.log(response)
 
       let response_most_new_deaths = await covid_api.sortedByNewDeaths();
       let new_deaths_country_list = [];
       let new_deaths_number_list = [];
       response_most_new_deaths.forEach((index) => {
-        new_deaths_country_list.push(index["Country"])
+        new_deaths_country_list.push(index["CountryCode"])
         new_deaths_number_list.push(index["NewDeaths"])
       });
-      console.log(new_deaths_country_list);
-      console.log(new_deaths_number_list);
+      console.log(new_deaths_country_list.length);
+      console.log(new_deaths_number_list.length);
       this.mostNewDeathsChart.chartData = {...this.mostNewDeathsChart.chartData,
-      labels:  new_deaths_country_list,
-      datasets: [{...this.mostNewDeathsChart.chartData.datasets,
-      data: new_deaths_number_list}]}
+      labels:  new_deaths_country_list.slice(0,5),
+      datasets: [{...this.mostNewDeathsChart.chartData.datasets.slice(0,5),
+      data: new_deaths_number_list,
+      fill: true,
+      borderColor: config.colors.info,
+      borderWidth: 2,
+      borderDash: [],
+      borderDashOffset: 0.0,}]}
+      this.mostNewDeathsChart.extraOptions = {
+        ...this.mostNewDeathsChart.extraOptions,
+        extraOptions: chartConfigs.barChartOptions,
+        gradientColors: config.colors.primaryGradient,
+        gradientStops: [1, 0.4, 0],
+      }
     },
 
     mounted() {
