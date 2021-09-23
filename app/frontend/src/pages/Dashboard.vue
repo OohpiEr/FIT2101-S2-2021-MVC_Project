@@ -63,7 +63,7 @@
         <card type="chart">
           <template slot="header">
             <h5 class="card-category">{{$t('dashboard.dailyCases')}}</h5>
-            <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info "></i> 3,500</h3>
+            <h3 class="card-title" id="blueBarChartCard"><i class="tim-icons icon-delivery-fast text-info"></i></h3>
           </template>
           <div class="chart-area">
             <bar-chart style="height: 100%"
@@ -116,22 +116,6 @@
           </pie-chart>
         </card>
       </div>
-    </div>
-    <div class="col-lg-4" :class="{'text-right': isRTL}">
-      <card type="chart">
-        <template slot="header">
-          <h5 class="card-category">{{$t('dashboard.dailyCases')}}</h5>
-          <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info "></i> 3,500</h3>
-        </template>
-        <div class="chart-area">
-          <bar-chart style="height: 100%"
-                     chart-id="most-new-deaths"
-                     :chart-data="mostNewDeathsChart.chartData"
-                     :gradient-stops="mostNewDeathsChart.gradientStops"
-                     :extra-options="mostNewDeathsChart.extraOptions">
-          </bar-chart>
-        </div>
-      </card>
     </div>
   </div>
 </template>
@@ -227,15 +211,14 @@
         blueBarChart: {
           extraOptions: chartConfigs.barChartOptions,
           chartData: {
-            labels: ['USA', 'GER', 'AUS', 'UK', 'CN', 'KR'],
+            labels: [],
             datasets: [{
-              label: "Countries",
               fill: true,
               borderColor: config.colors.info,
               borderWidth: 2,
               borderDash: [],
               borderDashOffset: 0.0,
-              data: [53, 20, 10, 80, 100, 45],
+              data: [],
             }]
           },
           gradientColors: config.colors.primaryGradient,
@@ -260,23 +243,6 @@
               }
             ]
           }
-        },
-        mostNewDeathsChart: {
-          extraOptions: chartConfigs.blueChartOptions,
-          chartData: {
-            labels: [],
-            datasets: [{
-              label: "Countries",
-              fill: true,
-              borderColor: config.colors.info,
-              borderWidth: 2,
-              borderDash: [],
-              borderDashOffset: 0.0,
-              data: [],
-            }]
-          },
-          gradientColors: config.colors.primaryGradient,
-          gradientStops: [1, 0.4, 0],
         }
       }
     },
@@ -314,6 +280,10 @@
         this.$refs.bigChart.updateGradients(chartData);
         this.bigLineChart.chartData = chartData;
         this.bigLineChart.activeIndex = index;
+      },
+      displayBarChartTotalNumber(number){
+        let blueBarChartCardRef = document.getElementById("blueBarChartCard");
+        blueBarChartCardRef.insertAdjacentText("beforeend", number);
       }
     },
     async created(){
@@ -324,8 +294,6 @@
           backgroundColor: ["#41B883", "#E46651", "#00D8FF", "#ffd700", "#03083c"],
           data: Object.values(response).slice(0,4)}]
       }
-      // console.log(response)
-
       let response_most_new_deaths = await covid_api.sortedByNewDeaths();
       let new_deaths_country_list = [];
       let new_deaths_number_list = [];
@@ -333,23 +301,19 @@
         new_deaths_country_list.push(index["CountryCode"])
         new_deaths_number_list.push(index["NewDeaths"])
       });
-      console.log(new_deaths_country_list.length);
-      console.log(new_deaths_number_list.length);
-      this.mostNewDeathsChart.chartData = {...this.mostNewDeathsChart.chartData,
-      labels:  new_deaths_country_list.slice(0,5),
-      datasets: [{...this.mostNewDeathsChart.chartData.datasets.slice(0,5),
-      data: new_deaths_number_list,
-      fill: true,
-      borderColor: config.colors.info,
-      borderWidth: 2,
-      borderDash: [],
-      borderDashOffset: 0.0,}]}
-      this.mostNewDeathsChart.extraOptions = {
-        ...this.mostNewDeathsChart.extraOptions,
-        extraOptions: chartConfigs.barChartOptions,
-        gradientColors: config.colors.primaryGradient,
-        gradientStops: [1, 0.4, 0],
+      let  totalNewCases = new_deaths_number_list.reduce((partial_sum, a) => partial_sum + a,0);
+      this.blueBarChart.chartData = {
+        labels:  new_deaths_country_list.slice(0,5),
+        datasets: [{
+          data: new_deaths_number_list,
+          fill: true,
+          borderColor: config.colors.info,
+          borderWidth: 2,
+          borderDash: [],
+          borderDashOffset: 0.0,
+        }]
       }
+      this.displayBarChartTotalNumber(totalNewCases);
     },
 
     mounted() {
