@@ -108,11 +108,11 @@
           <template slot="header">
             <h6 class="title d-inline">{{$t('dashboard.pie')}}</h6>
           </template>
-          <pie-chart style = "height: 100%"
-                       ref="piechart"
-                       chart-id= "my-pie-chart"
-                       :chart-data="pieChart.chartData"
-                       :options="pieChart.chartOptions">
+          <pie-chart  style = "height: 100%"
+                      ref="piechart"
+                      chart-id= "my-pie-chart"
+                      :chartData="pieChart.chartData"
+                      :options="pieChart.chartOptions">
           </pie-chart>
         </card>
       </div>
@@ -128,7 +128,7 @@
   import UserTable from './Dashboard/UserTable';
   import config from '@/config';
   import * as covid_api from "../api.js";
-
+  
   export default {
     components: {
       LineChart,
@@ -137,6 +137,7 @@
       TaskList,
       UserTable
     },
+    
     data() {
       return {
         bigLineChart: {
@@ -227,18 +228,19 @@
         pieChart:{
           chartOptions:{
             hoverBorderWidth:20,
-            circumfurence: 10
+            circumfurence: 10,
+            responsive: true,
+            maintainAspectRatio: false
           },         
           chartData: {
-            labels: ["New Confirmed Cases", "Total Confirmed Cases", "New Deaths", 
-            "Total Deaths"],
+            labels: [],
             hoverBackgroundColor: "red",
             hoverBorderWidth: 10,
             datasets: [
               {
                 label: "Data One",
                 backgroundColor: ["#41B883", "#E46651", "#00D8FF", "#ffd700", "#03083c"],
-                data: [329335, 228760024, 4335, 4697077]
+                data: []
               }
             ]
           }
@@ -284,9 +286,12 @@
     
     async created(){
       let response = await covid_api.fetchGlobal();
-      this.pieChart.chartData.datasets.labels = Object.keys(response).slice(0,4)
-      this.pieChart.chartData.datasets.data = Object.values(response).slice(0,4)
-      this.$refs.piechart.updateGradients(this.pieChart.chartData)
+      this.pieChart.chartData = {...this.pieChart.chartData,
+        labels: Object.keys(response).slice(0,4),
+        datasets: [{...this.pieChart.chartData.datasets,
+          backgroundColor: ["#41B883", "#E46651", "#00D8FF", "#ffd700", "#03083c"],
+          data: Object.values(response).slice(0,4)}]
+      }
 
     },
 
