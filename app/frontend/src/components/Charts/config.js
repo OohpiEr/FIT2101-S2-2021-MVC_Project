@@ -30,7 +30,8 @@ export let blueChartOptions = {
         suggestedMin: 60,
         suggestedMax: 125,
         padding: 20,
-        fontColor: "#2380f7"
+        fontColor: "white",
+        fontSize: 15
       }
     }],
 
@@ -43,7 +44,8 @@ export let blueChartOptions = {
       },
       ticks: {
         padding: 20,
-        fontColor: "#2380f7"
+        fontColor: "white",
+        fontSize: 15
       }
     }]
   }
@@ -70,10 +72,10 @@ export let purpleChartOptions = {
         zeroLineColor: "transparent",
       },
       ticks: {
-        suggestedMin: 60,
         suggestedMax: 125,
         padding: 20,
-        fontColor: "#9a9a9a"
+        fontColor: "white",
+        fontSize: 15
       }
     }],
 
@@ -86,7 +88,8 @@ export let purpleChartOptions = {
       },
       ticks: {
         padding: 20,
-        fontColor: "#9a9a9a"
+        fontColor: "white",
+        fontSize: 15
       }
     }]
   }
@@ -116,7 +119,8 @@ export let orangeChartOptions = {
         suggestedMin: 50,
         suggestedMax: 110,
         padding: 20,
-        fontColor: "#ff8a76"
+        fontColor: "white",
+        fontSize: 15
       }
     }],
 
@@ -129,7 +133,8 @@ export let orangeChartOptions = {
       },
       ticks: {
         padding: 20,
-        fontColor: "#ff8a76"
+        fontColor: "white",
+        fontSize: 15
       }
     }]
   }
@@ -159,7 +164,8 @@ export let greenChartOptions = {
         suggestedMin: 50,
         suggestedMax: 125,
         padding: 20,
-        fontColor: "#9e9e9e"
+        fontColor: "white",
+        fontSize: 15
       }
     }],
 
@@ -172,7 +178,8 @@ export let greenChartOptions = {
       },
       ticks: {
         padding: 20,
-        fontColor: "#9e9e9e"
+        fontColor: "white",
+        fontSize: 15
       }
     }]
   }
@@ -202,7 +209,8 @@ export let barChartOptions = {
         suggestedMin: 60,
         suggestedMax: 120,
         padding: 20,
-        fontColor: "#9e9e9e"
+        fontColor: "white",
+        fontSize: 15
       }
     }],
     xAxes: [{
@@ -214,7 +222,8 @@ export let barChartOptions = {
       },
       ticks: {
         padding: 20,
-        fontColor: "#9e9e9e"
+        fontColor: "white",
+        fontSize: 15
       }
     }]
   }

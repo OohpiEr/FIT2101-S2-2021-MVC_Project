@@ -38,15 +38,13 @@
             </div>
           </template>
           <div class="chart-area">
-            <line-chart
-              style="height: 100%"
-              ref="bigChart"
-              chart-id="big-line-chart"
-              :chart-data="bigLineChart.chartData"
-              :gradient-colors="bigLineChart.gradientColors"
-              :gradient-stops="bigLineChart.gradientStops"
-              :extra-options="bigLineChart.options"
-            >
+            <line-chart style="height: 100%"
+                        ref="bigChart"
+                        chart-id="big-line-chart"
+                        :chart-data="bigLineChart.chartData"
+                        :gradient-colors="bigLineChart.gradientColors"
+                        :gradient-stops="bigLineChart.gradientStops"
+                        :extra-options="bigLineChart.extraOptions">
             </line-chart>
           </div>
         </card>
@@ -118,27 +116,6 @@
       </div>
     </div>
     <div class="row">
-      <!-- <div class="col-lg-6 col-md-12">
-        <card type="tasks" :header-classes="{'text-right': isRTL}">
-          <template slot="header">
-            <h6 class="title d-inline">{{$t('dashboard.tasks', {count: 5})}}</h6>
-            <p class="card-category d-inline">{{$t('dashboard.today')}}</p>
-            <base-dropdown menu-on-right=""
-                           tag="div"
-                           title-classes="btn btn-link btn-icon"
-                           aria-label="Settings menu"
-                           :class="{'float-left': isRTL}">
-              <i slot="title" class="tim-icons icon-settings-gear-63"></i>
-              <a class="dropdown-item" href="#pablo">{{$t('dashboard.dropdown.action')}}</a>
-              <a class="dropdown-item" href="#pablo">{{$t('dashboard.dropdown.anotherAction')}}</a>
-              <a class="dropdown-item" href="#pablo">{{$t('dashboard.dropdown.somethingElse')}}</a>
-            </base-dropdown>
-          </template>
-          <div class="table-full-width table-responsive">
-            <task-list></task-list>
-          </div>
-        </card>
-      </div> -->
       <div class="col-lg-6 col-md-12">
         <card class="card" :header-classes="{ 'text-right': isRTL }">
           <h4 slot="header" class="card-title">
@@ -388,48 +365,31 @@
   </div>
 </template>
 <script>
-import LineChart from "@/components/Charts/LineChart";
-import BarChart from "@/components/Charts/BarChart";
-import * as chartConfigs from "@/components/Charts/config";
-import TaskList from "./Dashboard/TaskList";
-import UserTable from "./Dashboard/UserTable";
-import config from "@/config";
-import Doughnut from "@/components/Charts/Doughnut";
-import * as covid_api from "../api.js";
+  import LineChart from '@/components/Charts/LineChart';
+  import BarChart from '@/components/Charts/BarChart';
+  import PieChart from '@/components/Charts/PieChart';
+  import * as chartConfigs from '@/components/Charts/config';
+  import TaskList from './Dashboard/TaskList';
+  import UserTable from './Dashboard/UserTable';
+  import config from '@/config';
+  import * as covid_api from "../api.js";
+  const tableColumns = ["Country Code", "Country", "Total Confirmed", "Total Deaths", "New Confirmed", "New Deaths"];
+  export default {
+    components: {
+      LineChart,
+      BarChart,
+      PieChart,
+      TaskList,
+      UserTable
+    },
 
-export default {
-  components: {
-    LineChart,
-    BarChart,
-    TaskList,
-    UserTable,
-    Doughnut,
-  },
-  data() {
-    return {
-      bigLineChart: {
-        allData: [
-          [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
-          [280, 320, 305, 310, 295, 305, 290, 300, 280, 295, 270, 320],
-          [
-            1060, 1080, 1065, 1130, 1080, 1105, 1090, 1130, 1070, 1115, 1060,
-            1130,
-          ],
-        ],
-        allLabels: [
-          [
-            "Day1",
-            "Day2",
-            "Day3",
-            "Day4",
-            "Day5",
-            "Day6",
-            "Day7",
-            "Day8",
-            "Day9",
-            "Day10",
-            "Day11",
-            "Day12",
+    data() {
+      return {
+        bigLineChart: {
+          allData: [
+            [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
+            [280, 320, 305, 310, 295, 305, 290, 300, 280, 295, 270, 320],
+            [1060, 1080, 1065, 1130, 1080, 1105, 1090, 1130, 1070, 1115, 1060, 1130]
           ],
           [
             "Week1",
@@ -477,6 +437,10 @@ export default {
               },
             },
           },
+          extraOptions: chartConfigs.purpleChartOptions,
+          gradientColors: config.colors.primaryGradient,
+          gradientStops: [1, 0.4, 0],
+          categories: []
         },
 
         gradientColors: config.colors.primaryGradient,
@@ -552,11 +516,44 @@ export default {
               borderDash: [],
               borderDashOffset: 0.0,
               data: [53, 20, 10, 80, 100, 45],
-            },
-          ],
+            }]
+          },
+          gradientColors: config.colors.primaryGradient,
+          gradientStops: [1, 0.4, 0],
         },
-        gradientColors: config.colors.primaryGradient,
-        gradientStops: [1, 0.4, 0],
+        pieChart:{
+          chartOptions:{
+            hoverBorderWidth:20,
+            circumfurence: 10,
+            responsive: true,
+            maintainAspectRatio: false
+          },
+          chartData: {
+            labels: [],
+            hoverBackgroundColor: "red",
+            hoverBorderWidth: 10,
+            datasets: [
+              {
+                label: "Data One",
+                backgroundColor: ["#41B883", "#E46651", "#00D8FF", "#ffd700", "#03083c"],
+                data: []
+              }
+            ]
+          }
+        },
+        table_widget: {
+        title: "Countries with the most total deaths",
+        columns: [... tableColumns],
+        data: []
+      }
+      }
+    },
+    computed: {
+      enableRTL() {
+        return this.$route.query.enableRTL;
+      },
+      isRTL() {
+        return this.$rtl.isRTL;
       },
       country: "All Countries",
     };
@@ -601,6 +598,29 @@ export default {
     onChangeCountry(event) {
       console.log(this.country);
       alert(this.country);
+    },
+    async created(){
+      let response = await covid_api.fetchGlobal();
+      this.pieChart.chartData = {...this.pieChart.chartData,
+        labels: Object.keys(response).slice(0,4),
+        datasets: [{...this.pieChart.chartData.datasets,
+          backgroundColor: ["#41B883", "#E46651", "#00D8FF", "#ffd700", "#03083c"],
+          data: Object.values(response).slice(0,4)}]
+      }
+
+      let total_deaths = await covid_api.sortedByTotalDeaths();
+      this.table_widget.data = total_deaths.slice(0,5);
+
+
+    },
+
+    mounted() {
+      this.i18n = this.$i18n;
+      if (this.enableRTL) {
+        this.i18n.locale = 'ar';
+        this.$rtl.enableRTL();
+      }
+      this.initBigChart(0);
     },
   },
   mounted() {

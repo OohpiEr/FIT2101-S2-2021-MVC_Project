@@ -10,7 +10,7 @@
       "Weekly",
       "Monthly"
     ],
-    "tasks": "Tasks({count})",
+    "pie": "Global Covid Data",
     "today": "Today",
     "dropdown": {
       "action": "Action",
