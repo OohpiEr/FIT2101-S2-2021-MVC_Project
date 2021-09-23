@@ -144,7 +144,7 @@ import LineChart from "@/components/Charts/LineChart";
 import BarChart from "@/components/Charts/BarChart";
 import PieChart from "@/components/Charts/PieChart";
 import * as chartConfigs from "@/components/Charts/config";
-import DailyNewCases from "./Dashboard/DailyNewCases";
+import DailyNewCases from "./Dashboard/DailyNewCases.vue";
 import TaskList from "./Dashboard/TaskList";
 import UserTable from "./Dashboard/UserTable";
 import config from "@/config";
