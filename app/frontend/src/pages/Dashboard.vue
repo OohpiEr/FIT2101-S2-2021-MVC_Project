@@ -95,10 +95,19 @@
     <div class="row">
       <div class="col-lg-6 col-md-12">
         <card class="card" :header-classes="{'text-right': isRTL}">
-          <h4 slot="header" class="card-title">{{$t('dashboard.simpleTable')}}</h4>
-          <div class="table-responsive">
-            <user-table></user-table>
-          </div>
+          <h4 slot="header" class="card-title">{{table_widget.title}}</h4>
+          <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th v-for = "col in table_widget.columns"scope="col">{{col}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="country, index in table_widget.data">
+          <td v-for = "data in country">{{data}}</td>
+        </tr>
+      </tbody>
+    </table>
         </card>
       </div>
     </div>
@@ -128,7 +137,7 @@
   import UserTable from './Dashboard/UserTable';
   import config from '@/config';
   import * as covid_api from "../api.js";
-  
+  const tableColumns = ["Country Code", "Country", "Total Confirmed", "Total Deaths", "New Confirmed", "New Deaths"];
   export default {
     components: {
       LineChart,
@@ -244,7 +253,12 @@
               }
             ]
           }
-        }
+        },
+        table_widget: {
+        title: "Countries with the most total deaths",
+        columns: [... tableColumns],
+        data: []
+      }
       }
     },
     computed: {
@@ -292,6 +306,10 @@
           backgroundColor: ["#41B883", "#E46651", "#00D8FF", "#ffd700", "#03083c"],
           data: Object.values(response).slice(0,4)}]
       }
+
+      let total_deaths = await covid_api.sortedByTotalDeaths();
+      this.table_widget.data = total_deaths.slice(0,5);
+
 
     },
 
