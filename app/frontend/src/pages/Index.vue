@@ -1,18 +1,18 @@
 <template>
   <div>
-    <img class="data_image float-left" src="img/data_analysis.jpg">
+    <img class="data_image float-left" src="img/data_analysis.jpg" />
 
     <div class="color_white font-40" style="padding-top: 50px">
-      2101_Data_Analytics:<br> A versatile widget for variant Data Visualisation and
-      Analytics
+      2101_Data_Analytics:<br />
+      A versatile widget for variant Data Visualisation and Analytics
     </div>
 
     <div class="color_white margin-top-40px float-left" style="font-size: 20px">
       2101_Data_Analytics is a versatile widget based on a multi-layered MVC
       that displays different types of data from different sources and produce
-      appropriate analysis and predictions. <br>Unlike some other services, our
-      product adds value to our target group without collecting and utilising
-      users’ data for commercial purposes.
+      appropriate analysis and predictions. <br />Unlike some other services,
+      our product adds value to our target group without collecting and
+      utilising users’ data for commercial purposes.
     </div>
 
     <div class="subsc-table-container" style="">
@@ -23,12 +23,12 @@
           <th class="center-align subsc-th">Basic</th>
         </tr>
         <tbody>
-        <p class="margin-top-40px">
-            <tr >
+          <p class="margin-top-40px">
+            <tr>
               <td>Monthly Price</td>
               <td class="center-align">RM 200</td>
             </tr>
-        </p>
+          </p>
         </tbody>
       </table>
       <div class="button-container">
@@ -53,13 +53,19 @@ td {
   padding-bottom: 15px;
   border-bottom: 1px solid white;
 }
-.subsc-th{
-  background-color:lightseagreen; padding: 30px 0; width: 150px
+.subsc-th {
+  background-color: lightseagreen;
+  padding: 30px 0;
+  width: 150px;
 }
-.register-button{
-  width:400px; background-color: lightseagreen; color:white; border:none; padding:10px 0;
+.register-button {
+  width: 400px;
+  background-color: lightseagreen;
+  color: white;
+  border: none;
+  padding: 10px 0;
 }
-.center-part{
+.center-part {
   margin: 0;
   position: absolute;
   top: 50%;
@@ -67,24 +73,33 @@ td {
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
-.button-container{
-  display: inline-block; width:100%; position: relative; margin-top:120px;
+.button-container {
+  display: inline-block;
+  width: 100%;
+  position: relative;
+  margin-top: 120px;
 }
-.center-align{
+.center-align {
   text-align: center;
 }
-.data_image {width: 700px; height: 380px; margin-right: 50px}
+.data_image {
+  width: 700px;
+  height: 380px;
+  margin-right: 50px;
+}
 .color_white {
-  color: white
+  color: white;
 }
-.abs{position: absolute}
+.abs {
+  position: absolute;
+}
 .float-left {
-  float:left;
+  float: left;
 }
-.font-40{
-  font-size:40px;
+.font-40 {
+  font-size: 40px;
 }
-.margin-top-40px{
+.margin-top-40px {
   margin-top: 40px;
 }
 .subsc-table-container {
@@ -94,7 +109,9 @@ td {
   display: inline-block;
   width: 100%;
 }
-.subsc-table{
-  font-size: 30px; margin:auto; width:50%;
+.subsc-table {
+  font-size: 30px;
+  margin: auto;
+  width: 50%;
 }
 </style>
