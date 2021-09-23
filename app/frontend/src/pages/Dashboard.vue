@@ -38,13 +38,15 @@
             </div>
           </template>
           <div class="chart-area">
-            <line-chart style="height: 100%"
-                        ref="bigChart"
-                        chart-id="big-line-chart"
-                        :chart-data="bigLineChart.chartData"
-                        :gradient-colors="bigLineChart.gradientColors"
-                        :gradient-stops="bigLineChart.gradientStops"
-                        :extra-options="bigLineChart.extraOptions">
+            <line-chart
+              style="height: 100%"
+              ref="bigChart"
+              chart-id="big-line-chart"
+              :chart-data="bigLineChart.chartData"
+              :gradient-colors="bigLineChart.gradientColors"
+              :gradient-stops="bigLineChart.gradientStops"
+              :extra-options="bigLineChart.extraOptions"
+            >
             </line-chart>
           </div>
         </card>
@@ -56,7 +58,7 @@
           <template slot="header">
             <h5 class="card-category">{{ $t("dashboard.totalCovidCases") }}</h5>
             <h3 class="card-title">
-              <i class="tim-icons icon-bell-55 text-primary"></i> 763,215
+              <i class="tim-icons icon-bell-55 text-primary "></i> 763,215
             </h3>
           </template>
           <div class="chart-area">
@@ -77,7 +79,7 @@
           <template slot="header">
             <h5 class="card-category">{{ $t("dashboard.dailyCases") }}</h5>
             <h3 class="card-title">
-              <i class="tim-icons icon-delivery-fast text-info"></i> 3,500
+              <i class="tim-icons icon-delivery-fast text-info "></i> 3,500
             </h3>
           </template>
           <div class="chart-area">
@@ -99,7 +101,7 @@
               {{ $t("dashboard.fullVaccinations") }}
             </h5>
             <h3 class="card-title">
-              <i class="tim-icons icon-send text-success"></i> 12,100
+              <i class="tim-icons icon-send text-success "></i> 12,100
             </h3>
           </template>
           <div class="chart-area">
@@ -118,19 +120,49 @@
     <div class="row">
       <div class="col-lg-6 col-md-12">
         <card class="card" :header-classes="{ 'text-right': isRTL }">
-          <h4 slot="header" class="card-title">
-            {{ $t("dashboard.simpleTable") }}
-          </h4>
-          <div class="table-responsive">
-            <user-table></user-table>
-          </div>
+          <h4 slot="header" class="card-title">{{ table_widget.title }}</h4>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th v-for="col in table_widget.columns" scope="col">
+                  {{ col }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(country, index) in table_widget.data">
+                <td v-for="data in country">{{ data }}</td>
+              </tr>
+            </tbody>
+          </table>
         </card>
       </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 col-md-12">
+        <card type="chart">
+          <template slot="header">
+            <h6 class="title d-inline">{{ $t("dashboard.pie") }}</h6>
+          </template>
+          <pie-chart
+            style="height: 100%"
+            ref="piechart"
+            chart-id="my-pie-chart"
+            :chartData="pieChart.chartData"
+            :options="pieChart.chartOptions"
+          >
+          </pie-chart>
+        </card>
+      </div>
+
       <div class="col-lg-6 col-md-12">
         <card class="card" :header-classes="{ 'text-right': isRTL }">
-          <h3 class="center-text">12,333 cases</h3>
+          <h3 class="center-text">
+            <div>{{ newCases }}</div>
+            <div>New Cases</div>
+          </h3>
           <h4 slot="header" class="card-title">
-            Confirmed cases of country from total cases of {{ country }}
+            New confirmed cases of {{ country }} from Global
           </h4>
           <select
             id="country"
@@ -138,7 +170,7 @@
             v-model="country"
             @change="onChangeCountry($event)"
           >
-            <option>All Countries</option>
+            <option value="Global">Global</option>
             <option value="Afghanistan">Afghanistan</option>
             <option value="Albania">Albania</option>
             <option value="Algeria">Algeria</option>
@@ -357,7 +389,13 @@
             <option value="Zimbabwe">Zimbabwe</option>
           </select>
           <div class="chart-area">
-            <doughnut></doughnut>
+            <pie-chart
+              style="height: 100%"
+              ref="doughnut"
+              chart-id="my-doughnut"
+              :chartData="doughnut.chartData"
+              :options="doughnut.chartOptions"
+            ></pie-chart>
           </div>
         </card>
       </div>
@@ -365,31 +403,67 @@
   </div>
 </template>
 <script>
-  import LineChart from '@/components/Charts/LineChart';
-  import BarChart from '@/components/Charts/BarChart';
-  import PieChart from '@/components/Charts/PieChart';
-  import * as chartConfigs from '@/components/Charts/config';
-  import TaskList from './Dashboard/TaskList';
-  import UserTable from './Dashboard/UserTable';
-  import config from '@/config';
-  import * as covid_api from "../api.js";
-  const tableColumns = ["Country Code", "Country", "Total Confirmed", "Total Deaths", "New Confirmed", "New Deaths"];
-  export default {
-    components: {
-      LineChart,
-      BarChart,
-      PieChart,
-      TaskList,
-      UserTable
-    },
+import LineChart from "@/components/Charts/LineChart";
+import BarChart from "@/components/Charts/BarChart";
+import PieChart from "@/components/Charts/PieChart";
+import * as chartConfigs from "@/components/Charts/config";
+import TaskList from "./Dashboard/TaskList";
+import UserTable from "./Dashboard/UserTable";
+import config from "@/config";
+import * as covid_api from "../api.js";
 
-    data() {
-      return {
-        bigLineChart: {
-          allData: [
-            [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
-            [280, 320, 305, 310, 295, 305, 290, 300, 280, 295, 270, 320],
-            [1060, 1080, 1065, 1130, 1080, 1105, 1090, 1130, 1070, 1115, 1060, 1130]
+const tableColumns = [
+  "Country Code",
+  "Country",
+  "Total Confirmed",
+  "Total Deaths",
+  "New Confirmed",
+  "New Deaths"
+];
+export default {
+  components: {
+    LineChart,
+    BarChart,
+    PieChart,
+    TaskList,
+    UserTable
+  },
+
+  data() {
+    return {
+      bigLineChart: {
+        allData: [
+          [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
+          [280, 320, 305, 310, 295, 305, 290, 300, 280, 295, 270, 320],
+          [
+            1060,
+            1080,
+            1065,
+            1130,
+            1080,
+            1105,
+            1090,
+            1130,
+            1070,
+            1115,
+            1060,
+            1130
+          ]
+        ],
+        allLabels: [
+          [
+            "Day1",
+            "Day2",
+            "Day3",
+            "Day4",
+            "Day5",
+            "Day6",
+            "Day7",
+            "Day8",
+            "Day9",
+            "Day10",
+            "Day11",
+            "Day12"
           ],
           [
             "Week1",
@@ -403,7 +477,7 @@
             "Week9",
             "Week10",
             "Week11",
-            "Week12",
+            "Week12"
           ],
           [
             "JAN",
@@ -417,35 +491,17 @@
             "SEP",
             "OCT",
             "NOV",
-            "DEC",
-          ],
+            "DEC"
+          ]
         ],
         activeIndex: 0,
         chartData: {
-          datasets: [{}],
+          datasets: [{}]
         },
         extraOptions: chartConfigs.purpleChartOptions,
-        options: {
-          ...chartConfigs.purpleChartOptions,
-          scales: {
-            ...chartConfigs.purpleChartOptions.scales,
-            yAxes: {
-              ...chartConfigs.purpleChartOptions.scales.yAxes,
-              ticks: {
-                ...chartConfigs.purpleChartOptions.scales.yAxes.ticks,
-                suggestedMin: 60,
-              },
-            },
-          },
-          extraOptions: chartConfigs.purpleChartOptions,
-          gradientColors: config.colors.primaryGradient,
-          gradientStops: [1, 0.4, 0],
-          categories: []
-        },
-
         gradientColors: config.colors.primaryGradient,
         gradientStops: [1, 0.4, 0],
-        categories: [],
+        categories: []
       },
       purpleLineChart: {
         extraOptions: chartConfigs.purpleChartOptions,
@@ -466,12 +522,12 @@
               pointHoverRadius: 4,
               pointHoverBorderWidth: 15,
               pointRadius: 4,
-              data: [80, 100, 70, 80, 120, 80],
-            },
-          ],
+              data: [80, 100, 70, 80, 120, 80]
+            }
+          ]
         },
         gradientColors: config.colors.primaryGradient,
-        gradientStops: [1, 0.2, 0],
+        gradientStops: [1, 0.2, 0]
       },
       greenLineChart: {
         extraOptions: chartConfigs.greenChartOptions,
@@ -492,16 +548,16 @@
               pointHoverRadius: 4,
               pointHoverBorderWidth: 15,
               pointRadius: 4,
-              data: [90, 27, 60, 12, 80],
-            },
-          ],
+              data: [90, 27, 60, 12, 80]
+            }
+          ]
         },
         gradientColors: [
           "rgba(66,134,121,0.15)",
           "rgba(66,134,121,0.0)",
-          "rgba(66,134,121,0)",
+          "rgba(66,134,121,0)"
         ],
-        gradientStops: [1, 0.4, 0],
+        gradientStops: [1, 0.4, 0]
       },
       blueBarChart: {
         extraOptions: chartConfigs.barChartOptions,
@@ -515,47 +571,72 @@
               borderWidth: 2,
               borderDash: [],
               borderDashOffset: 0.0,
-              data: [53, 20, 10, 80, 100, 45],
-            }]
-          },
-          gradientColors: config.colors.primaryGradient,
-          gradientStops: [1, 0.4, 0],
+              data: [53, 20, 10, 80, 100, 45]
+            }
+          ]
         },
-        pieChart:{
-          chartOptions:{
-            hoverBorderWidth:20,
-            circumfurence: 10,
-            responsive: true,
-            maintainAspectRatio: false
-          },
-          chartData: {
-            labels: [],
-            hoverBackgroundColor: "red",
-            hoverBorderWidth: 10,
-            datasets: [
-              {
-                label: "Data One",
-                backgroundColor: ["#41B883", "#E46651", "#00D8FF", "#ffd700", "#03083c"],
-                data: []
-              }
-            ]
-          }
+        gradientColors: config.colors.primaryGradient,
+        gradientStops: [1, 0.4, 0]
+      },
+      pieChart: {
+        chartOptions: {
+          hoverBorderWidth: 20,
+          circumfurence: 10,
+          responsive: true,
+          maintainAspectRatio: false
         },
-        table_widget: {
+        chartData: {
+          labels: [],
+          hoverBackgroundColor: "red",
+          hoverBorderWidth: 10,
+          datasets: [
+            {
+              label: "Data One",
+              backgroundColor: [
+                "#41B883",
+                "#E46651",
+                "#00D8FF",
+                "#ffd700",
+                "#03083c"
+              ],
+              data: []
+            }
+          ]
+        }
+      },
+      doughnut: {
+        chartOptions: {
+          hoverBorderWidth: 20,
+          circumfurence: 10,
+          responsive: true,
+          maintainAspectRatio: false
+        },
+        chartData: {
+          labels: [],
+          hoverBackgroundColor: "red",
+          hoverBorderWidth: 10,
+          datasets: [
+            {
+              label: "Data One",
+              backgroundColor: [
+                "#41B883",
+                "#E46651",
+                "#00D8FF",
+                "#ffd700",
+                "#03083c"
+              ],
+              data: []
+            }
+          ]
+        }
+      },
+      table_widget: {
         title: "Countries with the most total deaths",
-        columns: [... tableColumns],
+        columns: [...tableColumns],
         data: []
-      }
-      }
-    },
-    computed: {
-      enableRTL() {
-        return this.$route.query.enableRTL;
       },
-      isRTL() {
-        return this.$rtl.isRTL;
-      },
-      country: "All Countries",
+      country: "Global",
+      newCases: 0
     };
   },
   computed: {
@@ -567,7 +648,7 @@
     },
     bigLineChartCategories() {
       return this.$t("dashboard.chartCategories");
-    },
+    }
   },
   methods: {
     initBigChart(index) {
@@ -586,43 +667,114 @@
             pointHoverRadius: 4,
             pointHoverBorderWidth: 15,
             pointRadius: 4,
-            data: this.bigLineChart.allData[index],
-          },
+            data: this.bigLineChart.allData[index]
+          }
         ],
-        labels: this.bigLineChart.allLabels[index],
+        labels: this.bigLineChart.allLabels[index]
       };
       this.$refs.bigChart.updateGradients(chartData);
       this.bigLineChart.chartData = chartData;
       this.bigLineChart.activeIndex = index;
     },
-    onChangeCountry(event) {
-      console.log(this.country);
-      alert(this.country);
-    },
-    async created(){
-      let response = await covid_api.fetchGlobal();
-      this.pieChart.chartData = {...this.pieChart.chartData,
-        labels: Object.keys(response).slice(0,4),
-        datasets: [{...this.pieChart.chartData.datasets,
-          backgroundColor: ["#41B883", "#E46651", "#00D8FF", "#ffd700", "#03083c"],
-          data: Object.values(response).slice(0,4)}]
+    async onChangeCountry(event) {
+      try {
+        if (this.country == "Global") {
+          const globalCovid = await covid_api.fetchGlobal();
+          let chartData = {
+            ...this.doughnut.chartData,
+            labels: ["NewConfirmed"],
+            datasets: [
+              {
+                ...this.doughnut.chartData.datasets,
+                backgroundColor: [
+                  "#41B883",
+                  "#E46651",
+                  "#00D8FF",
+                  "#ffd700",
+                  "#03083c"
+                ],
+                data: [
+                  globalCovid.NewConfirmed
+                ]
+              }
+            ]
+          };
+          this.$refs.doughnut.refresh(chartData);
+          this.newCases = globalCovid.NewConfirmed;
+        }
+        else {
+          const countryCovid = await covid_api.getCountry(this.country);
+          const globalCovid = await covid_api.fetchGlobal();
+          let chartData = {
+            ...this.doughnut.chartData,
+            labels: ["Others", this.country],
+            datasets: [
+              {
+                ...this.doughnut.chartData.datasets,
+                backgroundColor: [
+                  "#41B883",
+                  "#E46651",
+                  "#00D8FF",
+                  "#ffd700",
+                  "#03083c"
+                ],
+                data: [
+                  globalCovid.NewConfirmed - countryCovid.NewConfirmed,
+                  countryCovid.NewConfirmed
+                ]
+              }
+            ]
+          };
+          this.$refs.doughnut.refresh(chartData);
+          this.newCases = countryCovid.NewConfirmed;
+        }
+      } catch (e) {
+        console.log(e)
       }
-
-      let total_deaths = await covid_api.sortedByTotalDeaths();
-      this.table_widget.data = total_deaths.slice(0,5);
-
-
-    },
-
-    mounted() {
-      this.i18n = this.$i18n;
-      if (this.enableRTL) {
-        this.i18n.locale = 'ar';
-        this.$rtl.enableRTL();
-      }
-      this.initBigChart(0);
-    },
+    }
   },
+
+  async created() {
+    let response = await covid_api.fetchGlobal();
+    this.pieChart.chartData = {
+      ...this.pieChart.chartData,
+      labels: Object.keys(response).slice(0, 4),
+      datasets: [
+        {
+          ...this.pieChart.chartData.datasets,
+          backgroundColor: [
+            "#41B883",
+            "#E46651",
+            "#00D8FF",
+            "#ffd700",
+            "#03083c"
+          ],
+          data: Object.values(response).slice(0, 4)
+        }
+      ]
+    };
+    this.doughnut.chartData = {
+      ...this.doughnut.chartData,
+      labels: ["NewConfirmed"],
+      datasets: [
+        {
+          ...this.doughnut.chartData.datasets,
+          backgroundColor: [
+            "#41B883",
+            "#E46651",
+            "#00D8FF",
+            "#ffd700",
+            "#03083c"
+          ],
+          data: [response.NewConfirmed]
+        }
+      ]
+    };
+    this.newCases = response.NewConfirmed;
+    let total_deaths = await covid_api.sortedByTotalDeaths();
+    this.table_widget.data = total_deaths.slice(0, 5);
+  },
+
   mounted() {
     this.i18n = this.$i18n;
     if (this.enableRTL) {
@@ -636,26 +788,21 @@
       this.i18n.locale = "en";
       this.$rtl.disableRTL();
     }
-  },
-  async mounted () {
-    this.loaded = false
-    try {
-      const {covidData} = await covid_api.fetchCountries()
-      this.chartData = covidData
-      this.loaded = true
-    } catch(e) {
-      console.log(e)
-    }
   }
 };
 </script>
+
 <style>
 .center-text {
   position: absolute;
   top: 62%; /* position the top  edge of the element at the middle of the parent */
   left: 50%; /* position the left edge of the element at the middle of the parent */
 
-  transform: translate(-50%,-50%); /* This is a shorthand of
+  transform: translate(
+    -50%,
+    -50%
+  ); /* This is a shorthand of
                                          translateX(-50%) and translateY(-50%) */
+  text-align: center;
 }
 </style>

@@ -6,7 +6,7 @@ export default {
   mixins: [mixins.reactiveProp],
   props: {
     chartData:{type:Object},
-    options:{type:Object}}
+    options:{ responsive: true, maintainAspectRatio: false }}
     ,
   data() {
     return {
@@ -17,6 +17,9 @@ export default {
     updateGradients(chartData) {
       if(!chartData) return;
       const ctx = this.ctx || document.getElementById(this.chartId).getContext('2d');
+    },
+    refresh(chartData){
+      this.renderChart(chartData,this.options)
     }
   },
   mounted() {
@@ -31,5 +34,5 @@ export default {
         );
       }
     }, { immediate: true });
-  }
+  },
 };
