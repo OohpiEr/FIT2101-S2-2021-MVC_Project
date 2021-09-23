@@ -35,6 +35,7 @@ export async function fetchCountries()
     for(let i = 0; i < response.data.Countries.length; i++)
     {
         let data = {
+            CountryCode: response.data.Countries[i].CountryCode,
             Country: response.data.Countries[i].Country,
             TotalConfirmed: response.data.Countries[i].TotalConfirmed,
             TotalDeaths: response.data.Countries[i].TotalDeaths,
@@ -52,7 +53,6 @@ export async function fetchCountries()
     for(let i = 0; i< response.length; i++)
     {
       if(country.toLowerCase() == response[i].Country.toLowerCase()){
-        console.log(response[i])
         return response[i]
       }
     }
