@@ -117,6 +117,22 @@
         </card>
       </div>
     </div>
+    <div class="col-lg-4" :class="{'text-right': isRTL}">
+      <card type="chart">
+        <template slot="header">
+          <h5 class="card-category">{{$t('dashboard.dailyCases')}}</h5>
+          <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info "></i> 3,500</h3>
+        </template>
+        <div class="chart-area">
+          <bar-chart style="height: 100%"
+                     chart-id="most-new-deaths"
+                     :chart-data="mostNewDeathsChart.chartData"
+                     :gradient-stops="mostNewDeathsChart.gradientStops"
+                     :extra-options="mostNewDeathsChart.extraOptions">
+          </bar-chart>
+        </div>
+      </card>
+    </div>
   </div>
 </template>
 <script>
@@ -128,7 +144,7 @@
   import UserTable from './Dashboard/UserTable';
   import config from '@/config';
   import * as covid_api from "../api.js";
-  
+
   export default {
     components: {
       LineChart,
@@ -137,7 +153,7 @@
       TaskList,
       UserTable
     },
-    
+
     data() {
       return {
         bigLineChart: {
@@ -231,7 +247,7 @@
             circumfurence: 10,
             responsive: true,
             maintainAspectRatio: false
-          },         
+          },
           chartData: {
             labels: [],
             hoverBackgroundColor: "red",
@@ -244,6 +260,23 @@
               }
             ]
           }
+        },
+        mostNewDeathsChart: {
+          extraOptions: chartConfigs.barChartOptions,
+          chartData: {
+            labels: ['USA', 'GER', 'AUS', 'UK', 'CN', 'KR'],
+            datasets: [{
+              label: "Countries",
+              fill: true,
+              borderColor: config.colors.info,
+              borderWidth: 2,
+              borderDash: [],
+              borderDashOffset: 0.0,
+              data: [53, 20, 10, 80, 100, 45],
+            }]
+          },
+          gradientColors: config.colors.primaryGradient,
+          gradientStops: [1, 0.4, 0],
         }
       }
     },
@@ -280,10 +313,9 @@
         }
         this.$refs.bigChart.updateGradients(chartData);
         this.bigLineChart.chartData = chartData;
-        this.bigLineChart.activeIndex = index;      
+        this.bigLineChart.activeIndex = index;
       }
     },
-    
     async created(){
       let response = await covid_api.fetchGlobal();
       this.pieChart.chartData = {...this.pieChart.chartData,
@@ -293,6 +325,19 @@
           data: Object.values(response).slice(0,4)}]
       }
 
+      let response_most_new_deaths = await covid_api.sortedByNewDeaths();
+      let new_deaths_country_list = [];
+      let new_deaths_number_list = [];
+      response_most_new_deaths.forEach((index) => {
+        new_deaths_country_list.push(index["Country"])
+        new_deaths_number_list.push(index["NewDeaths"])
+      });
+      console.log(new_deaths_country_list);
+      console.log(new_deaths_number_list);
+      this.mostNewDeathsChart.chartData = {...this.mostNewDeathsChart.chartData,
+      labels:  new_deaths_country_list,
+      datasets: [{...this.mostNewDeathsChart.chartData.datasets,
+      data: new_deaths_number_list}]}
     },
 
     mounted() {
