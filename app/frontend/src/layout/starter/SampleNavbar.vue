@@ -107,6 +107,7 @@
 <script>
 import { CollapseTransition } from "vue2-transitions";
 import Modal from "@/components/Modal";
+import store from "@/store";
 
 export default {
   components: {
@@ -153,6 +154,7 @@ export default {
     logout() {
       localStorage.removeItem('token');
       localStorage.removeItem('userdata');
+      store.token = null;
       this.$router.push('landing')
     },
   },

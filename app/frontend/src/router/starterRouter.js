@@ -9,10 +9,10 @@ const AboutUs = () => import(/* webpackChunkName: "common" */ "@/pages/AboutUs.v
 const Analysis = () => import(/* webpackChunkName: "common" */ "@/pages/Analysis.vue");
 const Table = () => import(/* webpackChunkName: "common" */ "@/pages/Table.vue");
 const Profile = () => import(/* webpackChunkName: "common" */ "@/pages/Profile.vue");
-const SignUpPage = () => import(/* webpackChunkName: "common" */ "@/pages/SignUpPage.vue");
-const Landing = () => import(/* webpackChunkName: "common" */ "@/pages/Landing.vue");
-const LoginPage = () => import(/* webpackChunkName: "common" */ "@/pages/LoginPage.vue");
-const NotFoundPage = () => import(/* webpackChunkName: "common" */ "@/pages/NotFoundPage.vue");
+const SignUpPage = () => import(/* webpackChunkName: "unauthorized" */ "@/pages/SignUpPage.vue");
+const Landing = () => import(/* webpackChunkName: "unauthorized" */ "@/pages/Landing.vue");
+const LoginPage = () => import(/* webpackChunkName: "unauthorized" */ "@/pages/LoginPage.vue");
+const NotFoundPage = () => import(/* webpackChunkName: "unauthorized" */ "@/pages/NotFoundPage.vue");
 
 
 Vue.use(Router);
