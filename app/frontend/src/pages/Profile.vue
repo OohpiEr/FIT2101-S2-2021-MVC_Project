@@ -20,22 +20,29 @@
     data() {
       return {
         model: {
-          company: 'Creative Code Inc.',
-          email: 'mike@email.com',
-          username: 'michael23',
-          firstName: 'Mike',
-          lastName: 'Andrew',
-          address: 'Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09',
-          city: 'Melbourne',
-          country: 'Australia',
-          about: 'Lamborghini Mercy, Your chick she so thirsty, I\'m in that two seat Lambo.'
+          phone: '',
+          email: '',
+          username: '',
+          firstName: '',
+          lastName: '',
+          address: '',
+          city: '',
+          country: '',
+          about: ''
         },
         user: {
-          fullName: 'Mike Andrew',
-          title: 'Ceo/Co-Founder',
-          description: `Do not be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...`,
+          fullName: '',
+          title: '',
+          description: '',
         }
       }
+    },
+    created(){
+      let userdata = JSON.parse(localStorage.userdata)
+      this.model.username = userdata.username
+      this.user.username = userdata.username
+      this.model.email = userdata.useremail
+      this.model.phone = userdata.contact
     }
   }
 </script>

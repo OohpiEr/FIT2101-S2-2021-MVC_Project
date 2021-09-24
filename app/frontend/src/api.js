@@ -40,7 +40,8 @@ export async function fetchCountries()
             TotalConfirmed: response.data.Countries[i].TotalConfirmed,
             TotalDeaths: response.data.Countries[i].TotalDeaths,
             NewConfirmed: response.data.Countries[i].NewConfirmed,
-            NewDeaths: response.data.Countries[i].NewDeaths
+            NewDeaths: response.data.Countries[i].NewDeaths,
+            CountryCode: response.data.Countries[i].CountryCode
         }
         countries.push(data)
     }
@@ -105,6 +106,6 @@ export async function sortedByNewDeaths(){
    2) Most Total Deaths - 
    3) Most new Deaths (for the day)
    4) Most Total Cases
-   5) Most new Cases (for the day)
+   5) Most new Cases (for the day) - tian ru :)
    6) Least number of cases (for the day?)
 */

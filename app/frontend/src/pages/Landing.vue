@@ -33,7 +33,7 @@
       </table>
       <div class="button-container">
         <div class="center-part">
-          <button class="register-button">Register</button>
+          <button class="register-button" @click="$router.push('sign-up')">Register</button>
         </div>
       </div>
     </div>

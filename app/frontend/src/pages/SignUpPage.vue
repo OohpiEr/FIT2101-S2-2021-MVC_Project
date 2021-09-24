@@ -2,7 +2,6 @@
   <div class="row">
     <div class="col-sm"></div>
     <div class="col-md-4">
-
       <modal :show.sync="modal">
         <h3 slot="header" class="modal-title" id="modal-title-default">
           Sign Up Success!
@@ -10,9 +9,11 @@
 
         <template slot="footer">
           <div class="col text-center button">
-            <base-button type="primary" @click="$router.push('login')">Proceed to Log In</base-button>
+            <base-button type="primary" @click="$router.push('login')"
+              >Proceed to Log In</base-button
+            >
           </div>
-          
+
           <!-- <base-button type="secondary" class="ml-auto" @click="modal = false"
             >Close
           </base-button> -->
@@ -43,6 +44,7 @@
               <label for="user.email">Email</label>
               <input
                 type="email"
+                placeholder="mike123@gmail.com"
                 v-model="user.email"
                 v-bind:class="{
                   'form-control': true,
@@ -61,6 +63,7 @@
               <label for="user.phone">Phone</label>
               <input
                 type="tel"
+                placeholder="0123456789"
                 v-model="user.phone"
                 v-bind:class="{
                   'form-control': true,
@@ -121,6 +124,14 @@
           </div>
         </div>
       </form>
+
+      <div class="row">
+        <div class="col text-right">
+          <p>Already have an account? <router-link to="/login">Login.</router-link></p>
+         
+          <!-- <base-button class="btn" slot="footer" type="primary" fill>Sign Up</base-button> -->
+        </div>
+      </div>
     </div>
     <div class="col-sm"></div>
   </div>
@@ -168,7 +179,7 @@ export default {
       let phone = Math.floor(Number(this.user.phone));
       return phone >= 0;
     },
-    submit: function () {
+    async submit() {
       const signup = {
         useremail: this.user.email,
         username: this.user.username,
@@ -195,11 +206,6 @@ export default {
 
 
 <style scoped>
-base-input {
-  display: block;
-  padding: 10px 6px;
-}
-
 .button {
   padding: 15px;
 }
