@@ -24,9 +24,6 @@ const router =  new Router({
       name: 'home',
       redirect: '/dashboard',
       component: DashboardLayout,
-      meta:{
-        requiresAuth: true
-      },
       children: [
         {
           path: 'dashboard',

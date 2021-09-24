@@ -54,110 +54,55 @@
     </div>
 
     <div class="row">
+      <!-- Most new deaths barchart -->
       <div class="col-lg-4" :class="{ 'text-right': isRTL }">
-        <card type="chart">
-          <template slot="header">
-            <h5 class="card-category">{{ $t("dashboard.totalCovidCases") }}</h5>
-            <h3 class="card-title">
-              <i class="tim-icons icon-bell-55 text-primary"></i> 763,215
-            </h3>
-          </template>
-          <div class="chart-area">
-            <line-chart
-              style="height: 100%"
-              chart-id="purple-line-chart"
-              :chart-data="purpleLineChart.chartData"
-              :gradient-colors="purpleLineChart.gradientColors"
-              :gradient-stops="purpleLineChart.gradientStops"
-              :extra-options="purpleLineChart.extraOptions"
-            >
-            </line-chart>
-          </div>
-        </card>
+        <most-new-deaths></most-new-deaths>
       </div>
 
+      <!-- Daily new cases barchart -->
       <div class="col-lg-4" :class="{ 'text-right': isRTL }">
         <daily-new-cases></daily-new-cases>
-
-      </div>
-
-      <div class="col-lg-4" :class="{ 'text-right': isRTL }">
-        <card type="chart">
-          <template slot="header">
-            <h5 class="card-category">
-              {{ $t("dashboard.fullVaccinations") }}
-            </h5>
-            <h3 class="card-title">
-              <i class="tim-icons icon-send text-success"></i> 12,100
-            </h3>
-          </template>
-          <div class="chart-area">
-            <line-chart
-              style="height: 100%"
-              chart-id="green-line-chart"
-              :chart-data="greenLineChart.chartData"
-              :gradient-stops="greenLineChart.gradientStops"
-              :extra-options="greenLineChart.extraOptions"
-            >
-            </line-chart>
-          </div>
-        </card>
       </div>
     </div>
 
     <!-- Covid in Countries table -->
     <div class="row">
       <div class="col-lg-6 col-md-12">
-        <card class="card" :header-classes="{ 'text-right': isRTL }">
-          <h4 slot="header" class="card-title">
-            {{ $t("dashboard.simpleTable") }}
-          </h4>
-          <div class="table-responsive">
-            <user-table></user-table>
-          </div>
-        </card>
+        <total-new-deaths></total-new-deaths>
       </div>
     </div>
 
     <!-- global covid data piechart -->
     <div class="row">
       <div class="col-lg-6 col-md-12">
-        <card type="chart">
-          <template slot="header">
-            <h6 class="title d-inline">{{ $t("dashboard.pie") }}</h6>
-          </template>
-          <pie-chart
-            style="height: 100%"
-            ref="piechart"
-            chart-id="my-pie-chart"
-            :chart-data="pieChart.chartData"
-            :options="pieChart.chartOptions"
-          >
-          </pie-chart>
-        </card>
+        <global-data></global-data>
+      </div>
+
+      <div class="col-lg-6 col-md-12">
+        <new-global-cases></new-global-cases>>
       </div>
     </div>
   </div>
 </template>
 <script>
 import LineChart from "@/components/Charts/LineChart";
-import BarChart from "@/components/Charts/BarChart";
-import PieChart from "@/components/Charts/PieChart";
 import * as chartConfigs from "@/components/Charts/config";
-import DailyNewCases from "./Dashboard/DailyNewCases.vue";
-import TaskList from "./Dashboard/TaskList";
-import UserTable from "./Dashboard/UserTable";
 import config from "@/config";
 import * as covid_api from "../api.js";
+import DailyNewCases from "./Dashboard/DailyNewCases.vue";
+import MostNewDeaths from "./Dashboard/mostNewDeaths.vue";
+import NewGlobalCases from "./Dashboard/newGlobalCases.vue";
+import TotalNewDeaths from "./Dashboard/totalNewDeaths.vue";
+import GlobalData from "./Dashboard/globalData.vue";
 
 export default {
   components: {
     LineChart,
-    BarChart,
-    PieChart,
-    TaskList,
-    UserTable,
     DailyNewCases,
+    MostNewDeaths,
+    NewGlobalCases,
+    TotalNewDeaths,
+    GlobalData,
   },
   data() {
     return {
@@ -223,94 +168,9 @@ export default {
         gradientStops: [1, 0.4, 0],
         categories: [],
       },
-      purpleLineChart: {
-        extraOptions: chartConfigs.purpleChartOptions,
-        chartData: {
-          labels: ["JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
-          datasets: [
-            {
-              label: "Data",
-              fill: true,
-              borderColor: config.colors.primary,
-              borderWidth: 2,
-              borderDash: [],
-              borderDashOffset: 0.0,
-              pointBackgroundColor: config.colors.primary,
-              pointBorderColor: "rgba(255,255,255,0)",
-              pointHoverBackgroundColor: config.colors.primary,
-              pointBorderWidth: 20,
-              pointHoverRadius: 4,
-              pointHoverBorderWidth: 15,
-              pointRadius: 4,
-              data: [80, 100, 70, 80, 120, 80],
-            },
-          ],
-        },
-        gradientColors: config.colors.primaryGradient,
-        gradientStops: [1, 0.2, 0],
-      },
-      greenLineChart: {
-        extraOptions: chartConfigs.greenChartOptions,
-        chartData: {
-          labels: ["JUL", "AUG", "SEP", "OCT", "NOV"],
-          datasets: [
-            {
-              label: "My First dataset",
-              fill: true,
-              borderColor: config.colors.danger,
-              borderWidth: 2,
-              borderDash: [],
-              borderDashOffset: 0.0,
-              pointBackgroundColor: config.colors.danger,
-              pointBorderColor: "rgba(255,255,255,0)",
-              pointHoverBackgroundColor: config.colors.danger,
-              pointBorderWidth: 20,
-              pointHoverRadius: 4,
-              pointHoverBorderWidth: 15,
-              pointRadius: 4,
-              data: [90, 27, 60, 12, 80],
-            },
-          ],
-        },
-        gradientColors: [
-          "rgba(66,134,121,0.15)",
-          "rgba(66,134,121,0.0)",
-          "rgba(66,134,121,0)",
-        ],
-        gradientStops: [1, 0.4, 0],
-      },
-
-      pieChart: {
-        chartOptions: {
-          hoverBorderWidth: 20,
-          circumfurence: 10,
-        },
-        chartData: {
-          labels: [
-            "New Confirmed Cases",
-            "Total Confirmed Cases",
-            "New Deaths",
-            "Total Deaths",
-          ],
-          hoverBackgroundColor: "red",
-          hoverBorderWidth: 10,
-          datasets: [
-            {
-              label: "Data One",
-              backgroundColor: [
-                "#41B883",
-                "#E46651",
-                "#00D8FF",
-                "#ffd700",
-                "#03083c",
-              ],
-              data: [329335, 228760024, 4335, 4697077],
-            },
-          ],
-        },
-      },
     };
   },
+
   computed: {
     enableRTL() {
       return this.$route.query.enableRTL;
@@ -350,12 +210,33 @@ export default {
     },
   },
 
-  async created() {
-    let response = await covid_api.fetchGlobal();
-    this.pieChart.chartData.datasets.labels = Object.keys(response).slice(0, 4);
-    this.pieChart.chartData.datasets.data = Object.values(response).slice(0, 4);
-    this.$refs.piechart.updateGradients(this.pieChart.chartData);
-    // console.log(response)
+  async created(){
+    let response = await covid_api.fetchCountryCases("Malaysia")
+    console.log("here", response)
+    const cases = response.Cases;
+    const dates = response.Dates;
+
+    this.bigLineChart.allData[0] = cases.slice(-12)
+    this.bigLineChart.allLabels[0] = dates.slice(-12)
+
+    let weeklyCases = []
+    let weeklyDates = []
+    for(let i=cases.length; i>=0; i-=7){
+      weeklyCases.push(cases[i])
+      weeklyDates.push(dates[i])
+    }
+    this.bigLineChart.allData[1] = weeklyCases.slice(-12)
+    this.bigLineChart.allLabels[1] = weeklyDates.slice(-12)
+
+    let monthlyCases = []
+    let monthlyDates = []
+    for(let i=cases.length; i>=0; i-=30){
+      monthlyCases.push(cases[i])
+      monthlyDates.push(dates[i])
+    }
+    this.bigLineChart.allData[2] = monthlyCases.slice(-12)
+    this.bigLineChart.allLabels[2] = monthlyDates.slice(-12)
+    this.initBigChart(0)
   },
 
   mounted() {

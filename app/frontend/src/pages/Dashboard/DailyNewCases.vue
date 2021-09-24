@@ -2,7 +2,7 @@
   <div>
     <card type="chart" :key="chartData.key">
       <template slot="header">
-        <h5 class="card-category">daily new cases</h5>
+        <h5 class="card-category">{{$t('dashboard.dailyCases')}}</h5>
         <h3 class="card-title">
           <i class="tim-icons icon-world text-info"></i> Total: {{totalNewCases}}
         </h3>
@@ -25,6 +25,7 @@
 
 <script>
 import BarChart from "@/components/Charts/BarChart";
+import * as chartConfigs from "@/components/Charts/config";
 import config from "@/config";
 import * as covid_api from "../../api.js";
 
@@ -112,9 +113,7 @@ export default {
   },
 
   async created() {
-    let countries = await covid_api.sortedByNewCases();
-    let globalData = await covid_api.fetchGlobal();
-    console.log(globalData);
+    let response = await covid_api.sortedByNewCases();
     for (let i = 0; i < 6; i++) {
       this.totalNewCases = globalData.TotalConfirmed;
       this.chartData.labels.push(countries[i].CountryCode);
