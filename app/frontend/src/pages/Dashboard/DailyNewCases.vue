@@ -4,7 +4,7 @@
       <template slot="header">
         <h5 class="card-category">{{$t('dashboard.dailyCases')}}</h5>
         <h3 class="card-title">
-          <i class="tim-icons icon-delivery-fast text-info"></i> 3,500
+          <i class="tim-icons icon-world text-info"></i> Total: {{totalNewCases}}
         </h3>
       </template>
       <div class="chart-area">
@@ -29,13 +29,68 @@ import * as chartConfigs from "@/components/Charts/config";
 import config from "@/config";
 import * as covid_api from "../../api.js";
 
+let countryNameFull = []
+
 export default {
   components: {
     BarChart,
   },
   data() {
     return {
-      extraOptions: chartConfigs.barChartOptions,
+      extraOptions: {
+        maintainAspectRatio: false,
+        legend: {
+          display: false,
+        },
+        responsive: true,
+        tooltips: {
+          backgroundColor: "#f5f5f5",
+          titleFontColor: "#333",
+          bodyFontColor: "#666",
+          bodySpacing: 4,
+          xPadding: 12,
+          mode: "nearest",
+          intersect: 0,
+          position: "nearest",
+          callbacks: {
+            title: function (tooltipItem, data) {
+              return countryNameFull[tooltipItem[0].index];
+            },
+          },
+        },
+        scales: {
+          yAxes: [
+            {
+              gridLines: {
+                drawBorder: false,
+                color: "rgba(29,140,248,0.1)",
+                zeroLineColor: "transparent",
+              },
+              ticks: {
+                suggestedMin: 60,
+                suggestedMax: 120,
+                padding: 20,
+                fontColor: "white",
+                fontSize: 15,
+              },
+            },
+          ],
+          xAxes: [
+            {
+              gridLines: {
+                drawBorder: false,
+                color: "rgba(29,140,248,0.1)",
+                zeroLineColor: "transparent",
+              },
+              ticks: {
+                padding: 20,
+                fontColor: "white",
+                fontSize: 15,
+              },
+            },
+          ],
+        },
+      },
       chartData: {
         key: false,
         labels: [],
@@ -53,15 +108,17 @@ export default {
       },
       gradientColors: config.colors.primaryGradient,
       gradientStops: [1, 0.4, 0],
+      totalNewCases: 0,
     };
   },
-
 
   async created() {
     let response = await covid_api.sortedByNewCases();
     for (let i = 0; i < 6; i++) {
-      this.chartData.labels.push(response[i].CountryCode);
-      this.chartData.datasets[0].data.push(response[i].NewConfirmed);
+      this.totalNewCases = globalData.TotalConfirmed;
+      this.chartData.labels.push(countries[i].CountryCode);
+      this.chartData.datasets[0].data.push(countries[i].NewConfirmed);
+      countryNameFull.push(countries[i].Country);
     }
     this.chartData.key
       ? (this.chartData.key = false)
