@@ -408,13 +408,10 @@
               {{ $t("Most Total Cases (by Country)") }}
             </h5>
             <h3 class="card-title" id="mostCases">
-              <!-- icon need to be change later, also dummy value -->
               <i class="tim-icons icon-chart-bar-32 text-info"></i>
             </h3>
           </template>
           <div class="chart-area">
-            <!-- dummmy values for now, waiting for data to be bind from the API -->
-            <!-- blue-bar-chart, blueBarChart.charData (ignore these, these are previous data) -->
             <bar-chart
               style="height: 100%"
               chart-id="most-total-cases-bar-chart"
@@ -667,32 +664,24 @@ export default {
       country: "Global",
       newCases: 0,
 
-      displayBarChartGeneralized(number) {
-        let barChart = document.getElementById("mostCases");
-        barChart.insertAdjacentText("beforeend", number);
-      },
-
       mostTotalCasesBarChart: {
         extraOptions: chartConfigs.barChartOptions,
         totalCases: "",
         chartData: {
-          // dummy values, waiting for data from the API
+          // gets labels from the api (asynchronously)
           labels: [],
-          // []
-          //mostTotalCasesBarChartData.x_axis
+          // dummy values :
           //["Malaysia", "Thailand","Indonesia","Vietnam","Italy","USA","Australia"]
           datasets: [
             {
-              //label: "Countries",
               fill: true,
               borderColor: config.colors.info,
               borderWidth: 2,
               borderDash: [],
               borderDashOffset: 0.0,
-              // dummy values, waiting for data from the API
+              // gets data from the api (asynchronously)
               data: [],
-              // []
-              // mostTotalCasesBarChartData.y_axis
+              // dummy values :
               // [10000, 9500, 8790, 7314, 5821, 3145, 1987]
             },
           ],
@@ -700,12 +689,6 @@ export default {
         gradientColors: config.colors.primaryGradient,
         gradientStops: [1, 0.4, 0],
       },
-      // mostTotalCasesData: {
-      //   title: "Countries",
-      //   data: [],
-      //   x_axis: [], // [] // this.data.map((object) => object.Country)
-      //   y_axis: [], // [] // this.data.map((object) => object.TotalConfirmed)
-      // },
     };
   },
 
@@ -749,6 +732,11 @@ export default {
     displayBarChartTotalNumber(number) {
       let blueBarChartCardRef = document.getElementById("blueBarChartCard");
       blueBarChartCardRef.insertAdjacentText("beforeend", number);
+    },
+
+    displayBarChartMostCases(number) {
+      let barChart = document.getElementById("mostCases");
+      barChart.insertAdjacentText("beforeend", number);
     },
 
     async onChangeCountry(event) {
@@ -874,25 +862,15 @@ export default {
     };
     this.displayBarChartTotalNumber(totalNewCases);
 
-    // ------------------
-    let most_cases_api = await covid_api.sortedByTotalCases();
-    let mostCases = most_cases_api.slice(0, 5);
+    // most total cases (by country) (in descending order)
+    let most_cases_api = await covid_api.sortedByTotalCases(); // will comes in array of objects
+    let mostCases = most_cases_api.slice(0, 5); // only take top 5
 
-    let countryNames = mostCases.map((object) => object.Country); // [...response]
+    let countryNames = mostCases.map((object) => object.Country);
     let countryCases = mostCases.map((object) => object.TotalConfirmed);
     let totalCases = countryCases.reduce((acc, x) => acc + x, 0);
 
-    // this.mostTotalCasesBarChart.chartData = {
-    //   ...this.mostTotalCasesBarChart.chartData,
-    //   labels: countryNames,
-    //   datasets: [
-    //     {
-    //       ...this.mostTotalCasesBarChart.chartData.datasets,
-    //       data: countryCases,
-    //     },
-    //   ],
-    // };
-
+    // update the labels and the data
     this.mostTotalCasesBarChart.chartData = {
       labels: countryNames,
       datasets: [
@@ -907,37 +885,16 @@ export default {
       ],
     };
 
-    this.displayBarChartGeneralized(totalCases);
+    this.displayBarChartMostCases(totalCases);
     this.mostTotalCasesBarChart.totalCases = totalCases;
 
-    console.log(countryNames);
-    console.log(countryCases);
-    console.log(totalCases);
+    // for debugging purpose (in case something go wrong)
+    //console.log(countryNames);
+    //console.log(countryCases);
+    //console.log(totalCases);
 
-    // this.mostTotalCasesBarChartData.x_axis = mostCases.map(
-    //   (object) => object.Country
-    // ); // [...response]
-    // this.mostTotalCasesBarChartData.y_axis = mostCases.map(
-    //   (object) => object.TotalConfirmed
-    // );
-
-    //let countryNames = mostCases.map((object) => object.Country); // [...response]
-    //let countryCases = mostCases.map((object) => object.TotalConfirmed);
-
-    //this.mostTotalCasesBarChartData.x_axis = countryNames;
-    //this.mostTotalCasesBarChartData.y_axis = countryCases;
-
-    //console.log(response);
-
-    //console.log(this.mostTotalCasesBarChartData.x_axis);
-    //console.log(this.mostTotalCasesBarChartData.y_axis);
-    //console.log(mostCases);
-    console.log(most_cases_api[0]);
-    //console.log(response[0].Country);
-    //console.log(response[0].TotalConfirmed);
-    //console.log(response);
-    //console.log(this.mostTotalCasesBarChartData.x_axis);
-    //this.mostTotalCasesBarChartData.data = [...most_cases_api];
+    //console.log(most_cases_api);
+    //console.log(most_cases_api[0]);
   },
 
   mounted() {
@@ -954,38 +911,7 @@ export default {
       this.$rtl.disableRTL();
     }
   },
-  // async created_2() {
-  //   //let response = await covid_api.fetchCountries();
-  //   let response_2 = await covid_api.sortedByTotalCases();
-  //   let mostCases = response_2.slice(0, 5);
-
-  //   // this.mostTotalCasesBarChartData.x_axis = mostCases.map(
-  //   //   (object) => object.Country
-  //   // ); // [...response]
-  //   // this.mostTotalCasesBarChartData.y_axis = mostCases.map(
-  //   //   (object) => object.TotalConfirmed
-  //   // );
-
-  //   let countryNames = mostCases.map((object) => object.Country); // [...response]
-  //   let countryCases = mostCases.map((object) => object.TotalConfirmed);
-
-  //   this.mostTotalCasesBarChartData.x_axis = [...countryNames];
-  //   this.mostTotalCasesBarChartData.y_axis = [...countryCases];
-
-  //   //console.log(response);
-
-  //   console.log(this.mostTotalCasesBarChartData.x_axis);
-  //   console.log(this.mostTotalCasesBarChartData.y_axis);
-  //   //console.log(mostCases);
-  //   console.log(response_2[0]);
-  //   //console.log(response[0].Country);
-  //   //console.log(response[0].TotalConfirmed);
-  //   //console.log(response);
-  //   //console.log(this.mostTotalCasesBarChartData.x_axis);
-  //   this.mostTotalCasesBarChartData.data = [...response_2];
-  // },
 };
-//};
 </script>
 
 <style>
