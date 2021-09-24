@@ -2,7 +2,6 @@
   <div class="row">
     <div class="col-sm"></div>
     <div class="col-md-4">
-
       <modal :show.sync="modal">
         <h3 slot="header" class="modal-title" id="modal-title-default">
           Sign Up Success!
@@ -10,9 +9,11 @@
 
         <template slot="footer">
           <div class="col text-center button">
-            <base-button type="primary" @click="$router.push('login')">Proceed to Log In</base-button>
+            <base-button type="primary" @click="$router.push('login')"
+              >Proceed to Log In</base-button
+            >
           </div>
-          
+
           <!-- <base-button type="secondary" class="ml-auto" @click="modal = false"
             >Close
           </base-button> -->
@@ -123,6 +124,14 @@
           </div>
         </div>
       </form>
+
+      <div class="row">
+        <div class="col text-right">
+          <p>Already have an account? <router-link to="/login">Login.</router-link></p>
+         
+          <!-- <base-button class="btn" slot="footer" type="primary" fill>Sign Up</base-button> -->
+        </div>
+      </div>
     </div>
     <div class="col-sm"></div>
   </div>
