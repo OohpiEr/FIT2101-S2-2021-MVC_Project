@@ -11,7 +11,7 @@ const Table = () => import(/* webpackChunkName: "common" */ "@/pages/Table.vue")
 const Profile = () => import(/* webpackChunkName: "common" */ "@/pages/Profile.vue");
 const SignUpPage = () => import(/* webpackChunkName: "common" */ "@/pages/SignUpPage.vue");
 
-const Index = () => import(/* webpackChunkName: "common" */ "@/pages/Index.vue");
+const Landing = () => import(/* webpackChunkName: "common" */ "@/pages/Landing.vue");
 const LoginPage = () => import(/* webpackChunkName: "common" */ "@/pages/LoginPage.vue");
 
 
@@ -64,9 +64,9 @@ export default new Router({
           component: SignUpPage
         },
         {
-          path: "index",
-          name: "index",
-          component: Index
+          path: "Landing",
+          name: "Welcome",
+          component: Landing
         },
         {
           path: 'login',

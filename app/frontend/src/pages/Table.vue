@@ -19,13 +19,8 @@
 <script>
 import { BaseTable } from "@/components";
 import * as covid_api from "../api.js";
-const tableColumns = [
-  "Country",
-  "Total Confirmed",
-  "Total Deaths",
-  "New Confirmed",
-  "New Deaths",
-];
+const tableColumns = ["Country Code", "Country", "Total Confirmed", "Total Deaths", "New Confirmed", "New Deaths"];
+
 
 export default {
   components: {
@@ -42,8 +37,7 @@ export default {
   },
   async created() {
     let response = await covid_api.fetchCountries();
-    console.log(response);
-    this.table1.data = [...response];
+    this.table1.data = [...response]
   },
 };
 </script>
