@@ -25,10 +25,10 @@
 
 <script>
 import BarChart from "@/components/Charts/BarChart";
-import * as chartConfigs from "@/components/Charts/config";
-// import chartConfigs from "@/pages/Dashboard/dailyNewCases";
 import config from "@/config";
 import * as covid_api from "../../api.js";
+
+let countryNameFull = []
 
 export default {
   components: {
@@ -36,7 +36,63 @@ export default {
   },
   data() {
     return {
-      extraOptions: chartConfigs.barChartOptions,
+      extraOptions: {
+        maintainAspectRatio: false,
+        legend: {
+          display: false,
+        },
+        responsive: true,
+        tooltips: {
+          backgroundColor: "#f5f5f5",
+          titleFontColor: "#333",
+          bodyFontColor: "#666",
+          bodySpacing: 4,
+          xPadding: 12,
+          mode: "nearest",
+          intersect: 0,
+          position: "nearest",
+          callbacks: {
+            title: function (tooltipItem, data) {
+              console.log(data);
+              console.log(tooltipItem);
+              console.log(countryNameFull);
+              return countryNameFull[tooltipItem[0].index];
+            },
+          },
+        },
+        scales: {
+          yAxes: [
+            {
+              gridLines: {
+                drawBorder: false,
+                color: "rgba(29,140,248,0.1)",
+                zeroLineColor: "transparent",
+              },
+              ticks: {
+                suggestedMin: 60,
+                suggestedMax: 120,
+                padding: 20,
+                fontColor: "white",
+                fontSize: 15,
+              },
+            },
+          ],
+          xAxes: [
+            {
+              gridLines: {
+                drawBorder: false,
+                color: "rgba(29,140,248,0.1)",
+                zeroLineColor: "transparent",
+              },
+              ticks: {
+                padding: 20,
+                fontColor: "white",
+                fontSize: 15,
+              },
+            },
+          ],
+        },
+      },
       chartData: {
         key: false,
         labels: [],
@@ -57,13 +113,13 @@ export default {
     };
   },
 
-
   async created() {
     let response = await covid_api.sortedByNewCases();
-    console.log(response);
+    // console.log(response);
     for (let i = 0; i < 6; i++) {
       this.chartData.labels.push(response[i].CountryCode);
       this.chartData.datasets[0].data.push(response[i].NewConfirmed);
+      countryNameFull.push(response[i].Country);
     }
     this.chartData.key
       ? (this.chartData.key = false)
