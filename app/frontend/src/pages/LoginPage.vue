@@ -62,6 +62,7 @@
 import axios from "axios";
 import { BaseAlert } from "@/components";
 import router from "../router/starterRouter";
+import store from "@/store";
 
 export default {
   name: "login",
@@ -94,7 +95,11 @@ export default {
           this.loginFail = false;
           this.loginSuccess = true;
           localStorage.setItem('token', response.data.token)
-          localStorage.setItem('userdata',JSON.stringify(response.data) )
+          localStorage.setItem('userdata',JSON.stringify(response.data))
+          store.user.username = response.data.username; 
+          store.user.email = response.data.useremail; 
+          store.token = response.data.token; 
+
           
           setTimeout(() => {
             router.push("dashboard");

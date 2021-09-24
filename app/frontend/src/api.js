@@ -3,15 +3,13 @@ const url = 'https://api.covid19api.com';
 
 
 // Get detailed covid data for a country (can be modified to include time intervals)
- export async function fetchCountryData(country)
+export async function fetchCountryData(country)
 {
     const response = await axios.get(`${url}/total/country/${country}/status/confirmed`);
     return response.data;
 }
 
-// Function returns the cases and dates in an arrays
-// the cases for date[i] corresponds to cases[i]
- export async function fetchCountryCases(country)
+export async function fetchCountryCases(country)
 {
     let response = await fetchCountryData(country);
     //console.log(response)
@@ -30,13 +28,14 @@ const url = 'https://api.covid19api.com';
 }
 
 // Get general information for all the countries
- export async function fetchCountries()
+export async function fetchCountries()
 {
     const response = await axios.get(`${url}/summary`);
     let countries = []
     for(let i = 0; i < response.data.Countries.length; i++)
     {
         let data = {
+            CountryCode: response.data.Countries[i].CountryCode,
             Country: response.data.Countries[i].Country,
             TotalConfirmed: response.data.Countries[i].TotalConfirmed,
             TotalDeaths: response.data.Countries[i].TotalDeaths,
@@ -49,6 +48,18 @@ const url = 'https://api.covid19api.com';
     return countries
 }
 
+ // Returns the summary for a country
+ export async function getCountry(country){
+    let response = await fetchCountries()
+    for(let i = 0; i< response.length; i++)
+    {
+      if(country.toLowerCase() == response[i].Country.toLowerCase()){
+        return response[i]
+      }
+    }
+    return new Error("Country not found")
+}
+
 // Sorts the countries from highest to lowest total Cases
 export async function sortedByTotalCases(){
     let response = await fetchCountries()
@@ -59,7 +70,7 @@ export async function sortedByTotalCases(){
 }
 
 // Sorts the countries from highest to lowest total deaths
- export async function sortedByTotalDeaths(){
+export async function sortedByTotalDeaths(){
     let response = await fetchCountries()
     response.sort(function (a, b) {
         return b.TotalDeaths - a.TotalDeaths;
@@ -68,7 +79,7 @@ export async function sortedByTotalCases(){
 }
 
 // Sorts the countries from highest to lowest new cases
- export async function sortedByNewCases(){
+export async function sortedByNewCases(){
     let response = await fetchCountries()
     response.sort(function (a, b) {
         return b.NewConfirmed - a.NewConfirmed;
@@ -77,7 +88,7 @@ export async function sortedByTotalCases(){
 }
 
 // Sorts the countries from highest to lowest new deaths
- export async function sortedByNewDeaths(){
+export async function sortedByNewDeaths(){
     let response = await fetchCountries()
     response.sort(function (a, b) {
         return b.NewDeaths - a.NewDeaths;
@@ -85,7 +96,7 @@ export async function sortedByTotalCases(){
     return response
 }
 // General world wide covid data summary
-  export async function fetchGlobal()
+ export async function fetchGlobal()
 {
     const response = await axios.get(`${url}/summary`);
     return response.data.Global;

@@ -151,8 +151,9 @@ export default {
       this.showMenu = !this.showMenu;
     },
     logout() {
-      localStorage.removeItem('token')
-      localStorage.removeItem('userdata')
+      localStorage.removeItem('token');
+      localStorage.removeItem('userdata');
+      this.$router.push('landing')
     },
   },
   created(){

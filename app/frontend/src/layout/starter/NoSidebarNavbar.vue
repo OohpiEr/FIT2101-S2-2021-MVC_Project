@@ -5,7 +5,7 @@
   >
     <div class="container-fluid">
       <div class="navbar-wrapper">
-         <a class="navbar-brand" href="#sign-up">{{ routeName }}</a>
+        <a class="navbar-brand" href="#sign-up">{{ routeName }}</a>
       </div>
 
       <button
@@ -25,9 +25,12 @@
       <collapse-transition>
         <div class="collapse navbar-collapse show" v-show="showMenu">
           <ul class="navbar-nav" :class="$rtl.isRTL ? 'mr-auto' : 'ml-auto'">
-              <li class="nav-link">
-                <a href="#/home" class="nav-link">Home</a>
-              </li>
+            <li class="nav-login">
+              <a href="#/login" class="nav-login">Login</a>
+            </li>
+            <li class="nav-signup">
+              <a href="#/sign-up" class="nav-signup">Register</a>
+            </li>
           </ul>
         </div>
       </collapse-transition>

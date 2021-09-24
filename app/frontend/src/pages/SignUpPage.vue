@@ -43,6 +43,7 @@
               <label for="user.email">Email</label>
               <input
                 type="email"
+                placeholder="mike123@gmail.com"
                 v-model="user.email"
                 v-bind:class="{
                   'form-control': true,
@@ -61,6 +62,7 @@
               <label for="user.phone">Phone</label>
               <input
                 type="tel"
+                placeholder="0123456789"
                 v-model="user.phone"
                 v-bind:class="{
                   'form-control': true,
