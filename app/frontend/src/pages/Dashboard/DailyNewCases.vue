@@ -4,7 +4,7 @@
       <template slot="header">
         <h5 class="card-category">daily cases</h5>
         <h3 class="card-title">
-          <i class="tim-icons icon-delivery-fast text-info"></i> 3,500
+          <i class="tim-icons icon-world text-info"></i> Total New Cases: {{totalNewCases}}
         </h3>
       </template>
       <div class="chart-area">
@@ -53,9 +53,6 @@ export default {
           position: "nearest",
           callbacks: {
             title: function (tooltipItem, data) {
-              console.log(data);
-              console.log(tooltipItem);
-              console.log(countryNameFull);
               return countryNameFull[tooltipItem[0].index];
             },
           },
@@ -110,16 +107,19 @@ export default {
       },
       gradientColors: config.colors.primaryGradient,
       gradientStops: [1, 0.4, 0],
+      totalNewCases: 0,
     };
   },
 
   async created() {
-    let response = await covid_api.sortedByNewCases();
-    // console.log(response);
+    let countries = await covid_api.sortedByNewCases();
+    let globalData = await covid_api.fetchGlobal();
+    console.log(globalData);
     for (let i = 0; i < 6; i++) {
-      this.chartData.labels.push(response[i].CountryCode);
-      this.chartData.datasets[0].data.push(response[i].NewConfirmed);
-      countryNameFull.push(response[i].Country);
+      this.totalNewCases = globalData.TotalConfirmed;
+      this.chartData.labels.push(countries[i].CountryCode);
+      this.chartData.datasets[0].data.push(countries[i].NewConfirmed);
+      countryNameFull.push(countries[i].Country);
     }
     this.chartData.key
       ? (this.chartData.key = false)
