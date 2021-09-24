@@ -4,7 +4,7 @@
       <template slot="header">
         <h5 class="card-category">daily cases</h5>
         <h3 class="card-title">
-          <i class="tim-icons icon-world text-info"></i> Total New Cases: {{totalNewCases}}
+          <i class="tim-icons icon-world text-info"></i> Total: {{totalNewCases}}
         </h3>
       </template>
       <div class="chart-area">
