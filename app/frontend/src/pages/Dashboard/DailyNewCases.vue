@@ -2,7 +2,7 @@
   <div>
     <card type="chart" :key="chartData.key">
       <template slot="header">
-        <h5 class="card-category">daily cases</h5>
+        <h5 class="card-category">daily new cases</h5>
         <h3 class="card-title">
           <i class="tim-icons icon-world text-info"></i> Total: {{totalNewCases}}
         </h3>
