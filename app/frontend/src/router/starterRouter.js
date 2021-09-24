@@ -24,9 +24,6 @@ const router =  new Router({
       name: 'home',
       redirect: '/dashboard',
       component: DashboardLayout,
-      meta:{
-        requiresAuth: true
-      },
       children: [
         {
           path: 'dashboard',
@@ -89,17 +86,6 @@ const router =  new Router({
   ]
 });
 
-router.beforeEach((to, from, next) => {
-  console.log(typeof(store.token))
-  if (to.matched.some(record => record.meta.requiresAuth)){
-    if (!store.token) {
-      next({ name: 'landing' })
-    } else {
-      next() // continue
-    }
-  } else {
-    next() // continue
-  }
-})
+
 
 export default router;
