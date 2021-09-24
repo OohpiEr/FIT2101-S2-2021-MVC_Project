@@ -77,10 +77,8 @@
       <div class="col-lg-4" :class="{ 'text-right': isRTL }">
         <card type="chart">
           <template slot="header">
-            <h5 class="card-category">{{ $t("dashboard.dailyCases") }}</h5>
-            <h3 class="card-title">
-              <i class="tim-icons icon-delivery-fast text-info "></i> 3,500
-            </h3>
+            <h5 class="card-category">{{$t('dashboard.dailyCases')}}</h5>
+            <h3 class="card-title" id="blueBarChartCard"><i class="tim-icons icon-delivery-fast text-info"></i></h3>
           </template>
           <div class="chart-area">
             <bar-chart
@@ -403,97 +401,39 @@
   </div>
 </template>
 <script>
-import LineChart from "@/components/Charts/LineChart";
-import BarChart from "@/components/Charts/BarChart";
-import PieChart from "@/components/Charts/PieChart";
-import * as chartConfigs from "@/components/Charts/config";
-import TaskList from "./Dashboard/TaskList";
-import UserTable from "./Dashboard/UserTable";
-import config from "@/config";
-import * as covid_api from "../api.js";
+  import LineChart from '@/components/Charts/LineChart';
+  import BarChart from '@/components/Charts/BarChart';
+  import PieChart from '@/components/Charts/PieChart';
+  import * as chartConfigs from '@/components/Charts/config';
+  import TaskList from './Dashboard/TaskList';
+  import UserTable from './Dashboard/UserTable';
+  import config from '@/config';
+  import * as covid_api from "../api.js";
+  
+  const tableColumns = ["Country Code", "Country", "Total Confirmed", "Total Deaths", "New Confirmed", "New Deaths"];
 
-const tableColumns = [
-  "Country Code",
-  "Country",
-  "Total Confirmed",
-  "Total Deaths",
-  "New Confirmed",
-  "New Deaths"
-];
-export default {
-  components: {
-    LineChart,
-    BarChart,
-    PieChart,
-    TaskList,
-    UserTable
-  },
+  export default {
+    components: {
+      LineChart,
+      BarChart,
+      PieChart,
+      TaskList,
+      UserTable
+    },
 
-  data() {
-    return {
-      bigLineChart: {
-        allData: [
-          [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
-          [280, 320, 305, 310, 295, 305, 290, 300, 280, 295, 270, 320],
-          [
-            1060,
-            1080,
-            1065,
-            1130,
-            1080,
-            1105,
-            1090,
-            1130,
-            1070,
-            1115,
-            1060,
-            1130
-          ]
-        ],
-        allLabels: [
-          [
-            "Day1",
-            "Day2",
-            "Day3",
-            "Day4",
-            "Day5",
-            "Day6",
-            "Day7",
-            "Day8",
-            "Day9",
-            "Day10",
-            "Day11",
-            "Day12"
+    data() {
+      return {
+        bigLineChart: {
+          allData: [
+            [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
+            [280, 320, 305, 310, 295, 305, 290, 300, 280, 295, 270, 320],
+            [1060, 1080, 1065, 1130, 1080, 1105, 1090, 1130, 1070, 1115, 1060, 1130]
           ],
-          [
-            "Week1",
-            "Week2",
-            "Week3",
-            "Week4",
-            "Week5",
-            "Week6",
-            "Week7",
-            "Week8",
-            "Week9",
-            "Week10",
-            "Week11",
-            "Week12"
-          ],
-          [
-            "JAN",
-            "FEB",
-            "MAR",
-            "APR",
-            "MAY",
-            "JUN",
-            "JUL",
-            "AUG",
-            "SEP",
-            "OCT",
-            "NOV",
-            "DEC"
-          ]
-        ],
+          allLabels: [
+            ['Day1', 'Day2', 'Day3', 'Day4', 'Day5', 'Day6', 'Day7', 'Day8', 'Day9', 'Day10', 'Day11', 'Day12'],
+            ['Week1', 'Week2', 'Week3', 'Week4', 'Week5', 'Week6', 'Week7', 'Week8', 'Week9', 'Week10', 'Week11', 'Week12'],
+            ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
+            ],
         activeIndex: 0,
         chartData: {
           datasets: [{}]
@@ -552,35 +492,34 @@ export default {
             }
           ]
         },
-        gradientColors: [
-          "rgba(66,134,121,0.15)",
-          "rgba(66,134,121,0.0)",
-          "rgba(66,134,121,0)"
-        ],
-        gradientStops: [1, 0.4, 0]
+        gradientColors: ['rgba(66,134,121,0.15)', 'rgba(66,134,121,0.0)', 'rgba(66,134,121,0)'],
+        gradientStops: [1, 0.4, 0],
       },
       blueBarChart: {
         extraOptions: chartConfigs.barChartOptions,
         chartData: {
-          labels: ["USA", "GER", "AUS", "UK", "CN", "KR"],
-          datasets: [
-            {
-              label: "Countries",
-              fill: true,
-              borderColor: config.colors.info,
-              borderWidth: 2,
-              borderDash: [],
-              borderDashOffset: 0.0,
-              data: [53, 20, 10, 80, 100, 45]
-            }
-          ]
+          labels: [],
+          datasets: [{
+            fill: true,
+            borderColor: config.colors.info,
+            borderWidth: 2,
+            borderDash: [],
+            borderDashOffset: 0.0,
+            data: [],
+          }]
         },
         gradientColors: config.colors.primaryGradient,
-        gradientStops: [1, 0.4, 0]
+        gradientStops: [1, 0.4, 0],
       },
-      pieChart: {
-        chartOptions: {
-          hoverBorderWidth: 20,
+      pieChart:{
+        chartOptions:{
+          legend: {
+              labels: {
+                fontColor: "white",
+                fontSize: 15
+              }
+          },
+          hoverBorderWidth:20,
           circumfurence: 10,
           responsive: true,
           maintainAspectRatio: false
@@ -592,20 +531,20 @@ export default {
           datasets: [
             {
               label: "Data One",
-              backgroundColor: [
-                "#41B883",
-                "#E46651",
-                "#00D8FF",
-                "#ffd700",
-                "#03083c"
-              ],
+              backgroundColor: ["#41B883", "#E46651", "#00D8FF", "#ffd700", "#03083c"],
               data: []
             }
           ]
-        }
+        }  
       },
       doughnut: {
         chartOptions: {
+          legend: {
+              labels: {
+                fontColor: "white",
+                fontSize: 15
+              }
+          },
           hoverBorderWidth: 20,
           circumfurence: 10,
           responsive: true,
@@ -637,8 +576,9 @@ export default {
       },
       country: "Global",
       newCases: 0
-    };
+    }
   },
+
   computed: {
     enableRTL() {
       return this.$route.query.enableRTL;
@@ -668,112 +608,127 @@ export default {
             pointHoverBorderWidth: 15,
             pointRadius: 4,
             data: this.bigLineChart.allData[index]
-          }
-        ],
-        labels: this.bigLineChart.allLabels[index]
-      };
-      this.$refs.bigChart.updateGradients(chartData);
-      this.bigLineChart.chartData = chartData;
-      this.bigLineChart.activeIndex = index;
-    },
-    async onChangeCountry(event) {
-      try {
-        if (this.country == "Global") {
-          const globalCovid = await covid_api.fetchGlobal();
-          let chartData = {
-            ...this.doughnut.chartData,
-            labels: ["NewConfirmed"],
-            datasets: [
-              {
-                ...this.doughnut.chartData.datasets,
-                backgroundColor: [
-                  "#41B883",
-                  "#E46651",
-                  "#00D8FF",
-                  "#ffd700",
-                  "#03083c"
-                ],
-                data: [
-                  globalCovid.NewConfirmed
-                ]
-              }
-            ]
-          };
-          this.$refs.doughnut.refresh(chartData);
-          this.newCases = globalCovid.NewConfirmed;
+          }],
+          labels: this.bigLineChart.allLabels[index],
         }
-        else {
-          const countryCovid = await covid_api.getCountry(this.country);
-          const globalCovid = await covid_api.fetchGlobal();
-          let chartData = {
-            ...this.doughnut.chartData,
-            labels: ["Others", this.country],
-            datasets: [
-              {
-                ...this.doughnut.chartData.datasets,
-                backgroundColor: [
-                  "#41B883",
-                  "#E46651",
-                  "#00D8FF",
-                  "#ffd700",
-                  "#03083c"
-                ],
-                data: [
-                  globalCovid.NewConfirmed - countryCovid.NewConfirmed,
-                  countryCovid.NewConfirmed
-                ]
-              }
-            ]
-          };
-          this.$refs.doughnut.refresh(chartData);
-          this.newCases = countryCovid.NewConfirmed;
-        }
-      } catch (e) {
-        console.log(e)
-      }
-    }
-  },
+        this.$refs.bigChart.updateGradients(chartData);
+        this.bigLineChart.chartData = chartData;
+        this.bigLineChart.activeIndex = index;
+      },
+      displayBarChartTotalNumber(number){
+        let blueBarChartCardRef = document.getElementById("blueBarChartCard");
+        blueBarChartCardRef.insertAdjacentText("beforeend", number);
+      },
 
-  async created() {
-    let response = await covid_api.fetchGlobal();
-    this.pieChart.chartData = {
-      ...this.pieChart.chartData,
-      labels: Object.keys(response).slice(0, 4),
-      datasets: [
-        {
-          ...this.pieChart.chartData.datasets,
-          backgroundColor: [
-            "#41B883",
-            "#E46651",
-            "#00D8FF",
-            "#ffd700",
-            "#03083c"
-          ],
-          data: Object.values(response).slice(0, 4)
+      async onChangeCountry(event) {
+        try {
+          if (this.country == "Global") {
+            const globalCovid = await covid_api.fetchGlobal();
+            let chartData = {
+              ...this.doughnut.chartData,
+              labels: ["NewConfirmed"],
+              datasets: [
+                {
+                  ...this.doughnut.chartData.datasets,
+                  backgroundColor: [
+                    "#41B883",
+                    "#E46651",
+                    "#00D8FF",
+                    "#ffd700",
+                    "#03083c"
+                  ],
+                  data: [
+                    globalCovid.NewConfirmed
+                  ]
+                }
+              ]
+            };
+            this.$refs.doughnut.refresh(chartData);
+            this.newCases = globalCovid.NewConfirmed;
+          }
+          else {
+            const countryCovid = await covid_api.getCountry(this.country);
+            const globalCovid = await covid_api.fetchGlobal();
+            let chartData = {
+              ...this.doughnut.chartData,
+              labels: ["Others", this.country],
+              datasets: [
+                {
+                  ...this.doughnut.chartData.datasets,
+                  backgroundColor: [
+                    "#41B883",
+                    "#E46651",
+                    "#00D8FF",
+                    "#ffd700",
+                    "#03083c"
+                  ],
+                  data: [
+                    globalCovid.NewConfirmed - countryCovid.NewConfirmed,
+                    countryCovid.NewConfirmed
+                  ]
+                }
+              ]
+            };
+            this.$refs.doughnut.refresh(chartData);
+            this.newCases = countryCovid.NewConfirmed;
+          }
+        } catch (e) {
+          console.log(e)
         }
-      ]
-    };
-    this.doughnut.chartData = {
-      ...this.doughnut.chartData,
-      labels: ["NewConfirmed"],
-      datasets: [
-        {
-          ...this.doughnut.chartData.datasets,
-          backgroundColor: [
-            "#41B883",
-            "#E46651",
-            "#00D8FF",
-            "#ffd700",
-            "#03083c"
-          ],
-          data: [response.NewConfirmed]
-        }
-      ]
-    };
-    this.newCases = response.NewConfirmed;
-    let total_deaths = await covid_api.sortedByTotalDeaths();
-    this.table_widget.data = total_deaths.slice(0, 5);
-  },
+      }
+  },  
+
+    async created(){
+      let response = await covid_api.fetchGlobal();
+      this.pieChart.chartData = {...this.pieChart.chartData,
+        labels: Object.keys(response).slice(0,4),
+        datasets: [{...this.pieChart.chartData.datasets,
+          backgroundColor: ["#41B883", "#E46651", "#00D8FF", "#ffd700", "#03083c"],
+          data: Object.values(response).slice(0,4)}]}
+    
+      let total_deaths = await covid_api.sortedByTotalDeaths();
+      this.table_widget.data = total_deaths.slice(0,5);
+
+      this.doughnut.chartData = {
+        ...this.doughnut.chartData,
+        labels: ["NewConfirmed"],
+        datasets: [
+          {
+            ...this.doughnut.chartData.datasets,
+            backgroundColor: [
+              "#41B883",
+              "#E46651",
+              "#00D8FF",
+              "#ffd700",
+              "#03083c"
+            ],
+            data: [response.NewConfirmed]
+          }
+        ]
+      };
+      this.newCases = response.NewConfirmed;
+
+      let response_most_new_deaths = await covid_api.sortedByNewDeaths();
+      let new_deaths_country_list = [];
+      let new_deaths_number_list = [];
+      response_most_new_deaths.forEach((index) => {
+        new_deaths_country_list.push(index["CountryCode"])
+        new_deaths_number_list.push(index["NewDeaths"])
+      });
+      let  totalNewCases = new_deaths_number_list.reduce((partial_sum, a) => partial_sum + a,0);
+      this.blueBarChart.chartData = {
+        labels:  new_deaths_country_list.slice(0,5),
+        datasets: [{
+          data: new_deaths_number_list,
+          fill: true,
+          borderColor: config.colors.info,
+          borderWidth: 2,
+          borderDash: [],
+          borderDashOffset: 0.0,
+        }]
+      }
+      this.displayBarChartTotalNumber(totalNewCases);
+    },
 
   mounted() {
     this.i18n = this.$i18n;
