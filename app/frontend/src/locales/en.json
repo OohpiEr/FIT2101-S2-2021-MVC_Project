@@ -1,7 +1,7 @@
 {
   "dashboard": {
     "fullVaccinations": "Full Vaccinations",
-    "dailyCases": "Daily Cases",
+    "dailyNewDeaths": "Daily New Deaths",
     "performance": "Malaysia",
     "simpleTable": "Covid in Countries",
     "totalCovidCases": "Total Covid Cases",

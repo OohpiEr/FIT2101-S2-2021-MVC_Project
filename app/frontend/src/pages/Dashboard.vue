@@ -77,7 +77,7 @@
       <div class="col-lg-4" :class="{ 'text-right': isRTL }">
         <card type="chart">
           <template slot="header">
-            <h5 class="card-category">{{$t('dashboard.dailyCases')}}</h5>
+            <h5 class="card-category">{{$t('dashboard.dailyNewDeaths')}}</h5>
             <h3 class="card-title" id="blueBarChartCard"><i class="tim-icons icon-delivery-fast text-info"></i></h3>
           </template>
           <div class="chart-area">
@@ -409,7 +409,7 @@
   import UserTable from './Dashboard/UserTable';
   import config from '@/config';
   import * as covid_api from "../api.js";
-  
+
   const tableColumns = ["Country Code", "Country", "Total Confirmed", "Total Deaths", "New Confirmed", "New Deaths"];
 
   export default {
@@ -535,7 +535,7 @@
               data: []
             }
           ]
-        }  
+        }
       },
       doughnut: {
         chartOptions: {
@@ -676,7 +676,7 @@
           console.log(e)
         }
       }
-  },  
+  },
 
     async created(){
       let response = await covid_api.fetchGlobal();
@@ -685,7 +685,7 @@
         datasets: [{...this.pieChart.chartData.datasets,
           backgroundColor: ["#41B883", "#E46651", "#00D8FF", "#ffd700", "#03083c"],
           data: Object.values(response).slice(0,4)}]}
-    
+
       let total_deaths = await covid_api.sortedByTotalDeaths();
       this.table_widget.data = total_deaths.slice(0,5);
 
