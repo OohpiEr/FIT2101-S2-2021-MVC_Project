@@ -67,6 +67,10 @@
 
     <!-- Covid in Countries table -->
     <div class="row">
+      <div class="col-lg-6" :class="{ 'text-right': isRTL }">
+        <most-total-cases></most-total-cases>
+      </div>
+
       <div class="col-lg-6 col-md-12">
         <total-new-deaths></total-new-deaths>
       </div>
@@ -86,6 +90,7 @@
 </template>
 <script>
 import LineChart from "@/components/Charts/LineChart";
+import BarChart from "@/components/Charts/BarChart";
 import * as chartConfigs from "@/components/Charts/config";
 import config from "@/config";
 import * as covid_api from "../api.js";
@@ -94,15 +99,18 @@ import MostNewDeaths from "./Dashboard/mostNewDeaths.vue";
 import NewGlobalCases from "./Dashboard/newGlobalCases.vue";
 import TotalNewDeaths from "./Dashboard/totalNewDeaths.vue";
 import GlobalData from "./Dashboard/globalData.vue";
+import MostTotalCases from "./Dashboard/mostTotalCases.vue"
 
 export default {
   components: {
+    BarChart,
     LineChart,
     DailyNewCases,
     MostNewDeaths,
     NewGlobalCases,
     TotalNewDeaths,
     GlobalData,
+    MostTotalCases,
   },
   data() {
     return {
@@ -210,33 +218,33 @@ export default {
     },
   },
 
-  async created(){
-    let response = await covid_api.fetchCountryCases("Malaysia")
-    console.log("here", response)
+  async created() {
+    let response = await covid_api.fetchCountryCases("Malaysia");
+    console.log("here", response);
     const cases = response.Cases;
     const dates = response.Dates;
 
-    this.bigLineChart.allData[0] = cases.slice(-12)
-    this.bigLineChart.allLabels[0] = dates.slice(-12)
+    this.bigLineChart.allData[0] = cases.slice(-12);
+    this.bigLineChart.allLabels[0] = dates.slice(-12);
 
-    let weeklyCases = []
-    let weeklyDates = []
-    for(let i=cases.length; i>=0; i-=7){
-      weeklyCases.push(cases[i])
-      weeklyDates.push(dates[i])
+    let weeklyCases = [];
+    let weeklyDates = [];
+    for (let i = cases.length; i >= 0; i -= 7) {
+      weeklyCases.push(cases[i]);
+      weeklyDates.push(dates[i]);
     }
-    this.bigLineChart.allData[1] = weeklyCases.slice(-12)
-    this.bigLineChart.allLabels[1] = weeklyDates.slice(-12)
+    this.bigLineChart.allData[1] = weeklyCases.slice(-12);
+    this.bigLineChart.allLabels[1] = weeklyDates.slice(-12);
 
-    let monthlyCases = []
-    let monthlyDates = []
-    for(let i=cases.length; i>=0; i-=30){
-      monthlyCases.push(cases[i])
-      monthlyDates.push(dates[i])
+    let monthlyCases = [];
+    let monthlyDates = [];
+    for (let i = cases.length; i >= 0; i -= 30) {
+      monthlyCases.push(cases[i]);
+      monthlyDates.push(dates[i]);
     }
-    this.bigLineChart.allData[2] = monthlyCases.slice(-12)
-    this.bigLineChart.allLabels[2] = monthlyDates.slice(-12)
-    this.initBigChart(0)
+    this.bigLineChart.allData[2] = monthlyCases.slice(-12);
+    this.bigLineChart.allLabels[2] = monthlyDates.slice(-12);
+    this.initBigChart(0);
   },
 
   mounted() {
