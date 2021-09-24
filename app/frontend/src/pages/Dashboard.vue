@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-12">
         <card type="chart">
           <template slot="header">
@@ -51,7 +51,8 @@
           </div>
         </card>
       </div>
-    </div>
+    </div> -->
+
     <div class="row">
       <div class="col-lg-4" :class="{ 'text-right': isRTL }">
         <card type="chart">
@@ -92,29 +93,15 @@
           </div>
         </card>
       </div>
+
       <div class="col-lg-4" :class="{ 'text-right': isRTL }">
-        <card type="chart">
-          <template slot="header">
-            <h5 class="card-category">
-              {{ $t("dashboard.fullVaccinations") }}
-            </h5>
-            <h3 class="card-title">
-              <i class="tim-icons icon-send text-success "></i> 12,100
-            </h3>
-          </template>
-          <div class="chart-area">
-            <line-chart
-              style="height: 100%"
-              chart-id="green-line-chart"
-              :chart-data="greenLineChart.chartData"
-              :gradient-stops="greenLineChart.gradientStops"
-              :extra-options="greenLineChart.extraOptions"
-            >
-            </line-chart>
-          </div>
-        </card>
+        <daily-new-cases></daily-new-cases>
+
       </div>
+
     </div>
+
+    <!-- Covid in Countries table -->
     <div class="row">
       <div class="col-lg-6 col-md-12">
         <card class="card" :header-classes="{ 'text-right': isRTL }">
@@ -136,6 +123,8 @@
         </card>
       </div>
     </div>
+
+    <!-- global covid data piechart -->
     <div class="row">
       <div class="col-lg-6 col-md-12">
         <card type="chart">
@@ -401,33 +390,33 @@
   </div>
 </template>
 <script>
-  import LineChart from '@/components/Charts/LineChart';
-  import BarChart from '@/components/Charts/BarChart';
-  import PieChart from '@/components/Charts/PieChart';
-  import * as chartConfigs from '@/components/Charts/config';
-  import TaskList from './Dashboard/TaskList';
-  import UserTable from './Dashboard/UserTable';
-  import config from '@/config';
-  import * as covid_api from "../api.js";
-  
-  const tableColumns = ["Country Code", "Country", "Total Confirmed", "Total Deaths", "New Confirmed", "New Deaths"];
+import LineChart from "@/components/Charts/LineChart";
+import BarChart from "@/components/Charts/BarChart";
+import PieChart from "@/components/Charts/PieChart";
+import * as chartConfigs from "@/components/Charts/config";
+import DailyNewCases from "./Dashboard/DailyNewCases.vue";
+import TaskList from "./Dashboard/TaskList";
+import UserTable from "./Dashboard/UserTable";
+import config from "@/config";
+import * as covid_api from "../api.js";
+const tableColumns = ["Country Code", "Country", "Total Confirmed", "Total Deaths", "New Confirmed", "New Deaths"];
 
-  export default {
-    components: {
-      LineChart,
-      BarChart,
-      PieChart,
-      TaskList,
-      UserTable
-    },
-
-    data() {
-      return {
-        bigLineChart: {
-          allData: [
-            [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
-            [280, 320, 305, 310, 295, 305, 290, 300, 280, 295, 270, 320],
-            [1060, 1080, 1065, 1130, 1080, 1105, 1090, 1130, 1070, 1115, 1060, 1130]
+export default {
+  components: {
+    LineChart,
+    BarChart,
+    PieChart,
+    TaskList,
+    UserTable,
+    DailyNewCases,
+  },
+  data() {
+    return {
+      bigLineChart: {
+        allData: [
+          [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
+          [280, 320, 305, 310, 295, 305, 290, 300, 280, 295, 270, 320],
+          [1060, 1080, 1065, 1130, 1080, 1105, 1090, 1130, 1070, 1115, 1060, 1130,]
           ],
           allLabels: [
             ['Day1', 'Day2', 'Day3', 'Day4', 'Day5', 'Day6', 'Day7', 'Day8', 'Day9', 'Day10', 'Day11', 'Day12'],

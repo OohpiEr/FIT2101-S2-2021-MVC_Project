@@ -195,7 +195,8 @@ export let barChartOptions = {
     xPadding: 12,
     mode: "nearest",
     intersect: 0,
-    position: "nearest"
+    position: "nearest",
+
   },
   scales: {
     yAxes: [{

@@ -76,7 +76,7 @@
             >
               <a
                 slot="title"
-                href="#"
+                href="javascript:void(0);"
                 class="dropdown-toggle nav-link"
                 data-toggle="dropdown"
                 aria-expanded="true"
@@ -85,7 +85,7 @@
                   <img src="img/anime3.png" />
                 </div>
                 <b class="caret d-none d-lg-block d-xl-block"></b>
-                <p class="d-lg-none">Log out</p>
+                <p class="d-lg-none">{{username}}</p>
               </a>
               <li class="nav-link">
                 <a href="#/profile" class="nav-item dropdown-item">Profile</a>
@@ -95,7 +95,7 @@
               </li> -->
               <div class="dropdown-divider"></div>
               <li class="nav-link">
-                <a href="#" class="nav-item dropdown-item">Log out</a>
+                <a href="javascript:void(0);" class="nav-item dropdown-item"  @click="logout">Log out</a>
               </li>
             </base-dropdown>
           </ul>
@@ -107,6 +107,7 @@
 <script>
 import { CollapseTransition } from "vue2-transitions";
 import Modal from "@/components/Modal";
+import store from "@/store";
 
 export default {
   components: {
@@ -128,6 +129,7 @@ export default {
       showMenu: false,
       searchModalVisible: false,
       searchQuery: "",
+      username: '',
     };
   },
   methods: {
@@ -149,7 +151,17 @@ export default {
     toggleMenu() {
       this.showMenu = !this.showMenu;
     },
+    logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('userdata');
+      store.token = null;
+      this.$router.push('landing')
+    },
   },
+  created(){
+      let userdata = JSON.parse(localStorage.userdata)
+      this.username = userdata.username
+  }
 };
 </script>
 <style>
