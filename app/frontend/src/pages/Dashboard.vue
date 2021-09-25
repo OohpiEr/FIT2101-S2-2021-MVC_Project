@@ -220,30 +220,29 @@ export default {
 
   async created() {
     let response = await covid_api.fetchCountryCases("Malaysia");
-    console.log("here", response);
     const cases = response.Cases;
-    const dates = response.Dates;
+    const dates = response.Dates.map(s => s.slice(0,10));
 
     this.bigLineChart.allData[0] = cases.slice(-12);
     this.bigLineChart.allLabels[0] = dates.slice(-12);
 
     let weeklyCases = [];
     let weeklyDates = [];
-    for (let i = cases.length; i >= 0; i -= 7) {
+    for (let i = cases.length-1; i >= 0; i -= 7) {
       weeklyCases.push(cases[i]);
       weeklyDates.push(dates[i]);
     }
-    this.bigLineChart.allData[1] = weeklyCases.slice(-12);
-    this.bigLineChart.allLabels[1] = weeklyDates.slice(-12);
+    this.bigLineChart.allData[1] = weeklyCases.slice(0,12);
+    this.bigLineChart.allLabels[1] = weeklyDates.slice(0,12);
 
     let monthlyCases = [];
     let monthlyDates = [];
-    for (let i = cases.length; i >= 0; i -= 30) {
+    for (let i = cases.length-1; i >= 0; i -= 30) {
       monthlyCases.push(cases[i]);
       monthlyDates.push(dates[i]);
     }
-    this.bigLineChart.allData[2] = monthlyCases.slice(-12);
-    this.bigLineChart.allLabels[2] = monthlyDates.slice(-12);
+    this.bigLineChart.allData[2] = monthlyCases.slice(0,12);
+    this.bigLineChart.allLabels[2] = monthlyDates.slice(0,12);
     this.initBigChart(0);
   },
 
