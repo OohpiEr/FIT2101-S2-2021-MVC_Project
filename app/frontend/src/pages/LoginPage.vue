@@ -91,7 +91,6 @@ export default {
       axios
         .post("http://localhost:3000/api/user/login", postinfo)
         .then((response) => {
-          console.log(response);
           this.loginFail = false;
           this.loginSuccess = true;
           localStorage.setItem('token', response.data.token)

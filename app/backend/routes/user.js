@@ -32,16 +32,10 @@ router.post("/signup",jsonParser, (req,res,next) => {
     }); 
 });
 
-router.get("/signup", (req,res,next) => {
-    res.status(200).json({
-        message: "GET success!"
-    })
-    next();
-});
-
 async function checkuser (password1,password2) {
-    const match = await bcrypt.compare(password1, password2);
-    console.log(password1,password2,match);
+    const match = await bcrypt.compare(password1, password2).catch(error => {
+        return false
+    });
     return match;
 }
 
@@ -50,32 +44,33 @@ router.post("/login",jsonParser, (req,res,next) => {
     User.findOne({ useremail: req.body.useremail })
     .then(user => {
         if(!user){
-            return res.status(401).json({
-                message: "Authentication failed"
-            });
+            return false
         }
-        fetchedUser = user;
-        return checkuser(req.body.password, user.password);
+        else{
+            fetchedUser = user;
+            return checkuser(req.body.password, user.password);
+        }
     })
-    .then(result => { 
+    .then(result => {
         if (!result) {
             return res.status(401).json({
                 message: "Authentication failed"
+            })
+        }
+        else{
+            const token = jwt.sign({useremail: fetchedUser.useremail, userId: fetchedUser._id}, 'long_secret_key_that_should_be_used_for_authentication', {expiresIn: '1h'}); // secret key for encryption
+            return res.status(200).json({
+                token: token,
+                useremail: fetchedUser.useremail,
+                username: fetchedUser.username,
+                contact: fetchedUser.contact
             });
         }
-        const token = jwt.sign({useremail: fetchedUser.useremail, userId: fetchedUser._id}, 'long_secret_key_that_should_be_used_for_authentication', {expiresIn: '1h'}); // secret key for encryption
-        res.status(200).json({
-            token: token,
-            useremail: fetchedUser.useremail,
-            username: fetchedUser.username,
-            contact: fetchedUser.contact
-        });
-    })
-    .catch(error => {
+    }).catch(error => {
         return res.status(401).json({
             message: "Authentication failed"
         });
-    });;
+    });
 });
 
 // Testing request to mongodb database
