@@ -113,13 +113,13 @@ export default {
   },
 
   async created() {
-    let response = await covid_api.sortedByNewCases();
-    let global = await covid_api.fetchGlobal();
+    let countries = await covid_api.sortedByNewCases();
+    let globalData = await covid_api.fetchGlobal();
+    this.totalNewCases = globalData.NewConfirmed;
     for (let i = 0; i < 6; i++) {
-      this.totalNewCases = global.TotalConfirmed;
-      this.chartData.labels.push(response[i].CountryCode);
-      this.chartData.datasets[0].data.push(response[i].NewConfirmed);
-      countryNameFull.push(response[i].Country);
+      this.chartData.labels.push(countries[i].CountryCode);
+      this.chartData.datasets[0].data.push(countries[i].NewConfirmed);
+      countryNameFull.push(countries[i].Country);
     }
     this.chartData.key
       ? (this.chartData.key = false)
