@@ -62,6 +62,7 @@
 import axios from "axios";
 import { BaseAlert } from "@/components";
 import router from "../router/starterRouter";
+import store from "@/store";
 
 export default {
   name: "login",
@@ -80,7 +81,7 @@ export default {
     };
   },
   methods: {
-    handleSubmit() {
+    async handleSubmit() {
       console.log("form submitted");
 
       const postinfo = {
@@ -90,10 +91,18 @@ export default {
       axios
         .post("http://localhost:3000/api/user/login", postinfo)
         .then((response) => {
-          console.log(response);
           this.loginFail = false;
           this.loginSuccess = true;
-          setTimeout(() => {  router.push("dashboard"); }, 500);
+          localStorage.setItem('token', response.data.token)
+          localStorage.setItem('userdata',JSON.stringify(response.data))
+          store.user.username = response.data.username; 
+          store.user.email = response.data.useremail; 
+          store.token = response.data.token; 
+
+          
+          setTimeout(() => {
+            router.push("dashboard");
+          }, 200);
         })
         .catch((error) => {
           console.log(error.message);
@@ -101,6 +110,7 @@ export default {
             this.loginFail = true;
           }
         });
+
     },
   },
 };
@@ -108,4 +118,8 @@ export default {
 
 
 
-<style></style>
+<style>
+.button {
+  padding: 15px;
+}
+</style>
