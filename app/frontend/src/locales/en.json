@@ -1,10 +1,14 @@
 {
   "dashboard": {
     "fullVaccinations": "Full Vaccinations",
-    "dailyCases": "Daily Cases",
+    "dailyCases": "Daily Covid Cases",
     "performance": "Malaysia",
     "simpleTable": "Covid in Countries",
     "totalCovidCases": "Total Covid Cases",
+    "mostTotalCases": "Most Total Cases (By Country)",
+    "newCases": "New Cases",
+    "totalDeaths": "Countries with the most total deaths",
+    "mostNewDeaths": "Most New Deaths",
     "chartCategories": [
       "Daily",
       "Weekly",
