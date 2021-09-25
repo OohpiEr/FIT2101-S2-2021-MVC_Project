@@ -95,11 +95,11 @@ import * as chartConfigs from "@/components/Charts/config";
 import config from "@/config";
 import * as covid_api from "../api.js";
 import DailyNewCases from "./Dashboard/DailyNewCases.vue";
-import MostNewDeaths from "./Dashboard/mostNewDeaths.vue";
-import NewGlobalCases from "./Dashboard/newGlobalCases.vue";
-import TotalNewDeaths from "./Dashboard/totalNewDeaths.vue";
-import GlobalData from "./Dashboard/globalData.vue";
-import MostTotalCases from "./Dashboard/mostTotalCases.vue"
+import MostNewDeaths from "./Dashboard/MostNewDeaths.vue";
+import NewGlobalCases from "./Dashboard/NewGlobalCases.vue";
+import TotalNewDeaths from "./Dashboard/TotalNewDeaths.vue";
+import GlobalData from "./Dashboard/GlobalData.vue";
+import MostTotalCases from "./Dashboard/MostTotalCases.vue";
 
 export default {
   components: {
@@ -116,56 +116,10 @@ export default {
     return {
       bigLineChart: {
         allData: [
-          [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
-          [280, 320, 305, 310, 295, 305, 290, 300, 280, 295, 270, 320],
-          [
-            1060, 1080, 1065, 1130, 1080, 1105, 1090, 1130, 1070, 1115, 1060,
-            1130,
-          ],
+          [],[],[],
         ],
         allLabels: [
-          [
-            "Day1",
-            "Day2",
-            "Day3",
-            "Day4",
-            "Day5",
-            "Day6",
-            "Day7",
-            "Day8",
-            "Day9",
-            "Day10",
-            "Day11",
-            "Day12",
-          ],
-          [
-            "Week1",
-            "Week2",
-            "Week3",
-            "Week4",
-            "Week5",
-            "Week6",
-            "Week7",
-            "Week8",
-            "Week9",
-            "Week10",
-            "Week11",
-            "Week12",
-          ],
-          [
-            "JAN",
-            "FEB",
-            "MAR",
-            "APR",
-            "MAY",
-            "JUN",
-            "JUL",
-            "AUG",
-            "SEP",
-            "OCT",
-            "NOV",
-            "DEC",
-          ],
+          [],[],[],
         ],
         activeIndex: 0,
         chartData: {
@@ -232,8 +186,8 @@ export default {
       weeklyCases.push(cases[i]);
       weeklyDates.push(dates[i]);
     }
-    this.bigLineChart.allData[1] = weeklyCases.slice(0,12);
-    this.bigLineChart.allLabels[1] = weeklyDates.slice(0,12);
+    this.bigLineChart.allData[1] = weeklyCases.slice(0,12).reverse();
+    this.bigLineChart.allLabels[1] = weeklyDates.slice(0,12).reverse();
 
     let monthlyCases = [];
     let monthlyDates = [];
@@ -241,8 +195,8 @@ export default {
       monthlyCases.push(cases[i]);
       monthlyDates.push(dates[i]);
     }
-    this.bigLineChart.allData[2] = monthlyCases.slice(0,12);
-    this.bigLineChart.allLabels[2] = monthlyDates.slice(0,12);
+    this.bigLineChart.allData[2] = monthlyCases.slice(0,12).reverse();
+    this.bigLineChart.allLabels[2] = monthlyDates.slice(0,12).reverse();
     this.initBigChart(0);
   },
 
