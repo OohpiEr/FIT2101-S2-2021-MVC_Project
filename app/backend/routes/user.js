@@ -5,19 +5,25 @@ const bodyParser = require('body-parser');
 
 const User = require("../models/user");
 const checkAuth = require("../middleware/check-auth");
+const CryptoJS = require("../controllers/encryption")
 
 const router = express.Router();
 
 const jsonParser = bodyParser.json();
 
+const SECRET_KEY = 'long_secret_key_that_should_be_used_for_authentication';
+
 router.post("/signup",jsonParser, (req,res,next) => {
     let user;
     bcrypt.hash(req.body.password, 10).then(hash => {
         user = new User({
-            useremail: req.body.useremail,
-            username: req.body.username,
-            contact: req.body.contact,
-            password: hash
+            useremail: CryptoJS.encrypt(req.body.useremail),
+            username: CryptoJS.encrypt(req.body.username),
+            contact: CryptoJS.encrypt(req.body.contact),
+            password: hash,
+            login_count: 0,  
+            last_login: new Date(0),
+            PIN: "011234"
         }); 
         user.save().then(result =>{
             res.status(201).json({
@@ -28,7 +34,7 @@ router.post("/signup",jsonParser, (req,res,next) => {
             res.status(500).json({
                 error: error
             });
-        });
+        }); 
     }); 
 });
 
@@ -39,12 +45,13 @@ async function checkuser (password1,password2) {
     return match;
 }
 
-router.post("/login",jsonParser, (req,res,next) => {
+router.post("/login", jsonParser, (req,res,next) => {
     let fetchedUser;
-    User.findOne({ useremail: req.body.useremail })
+    let requestUseremail = CryptoJS.encrypt(req.body.useremail);
+    User.findOne({ useremail: requestUseremail })
     .then(user => {
         if(!user){
-            return false
+            return false;
         }
         else{
             fetchedUser = user;
@@ -58,15 +65,31 @@ router.post("/login",jsonParser, (req,res,next) => {
             })
         }
         else{
-            const token = jwt.sign({useremail: fetchedUser.useremail, userId: fetchedUser._id}, 'long_secret_key_that_should_be_used_for_authentication', {expiresIn: '1h'}); // secret key for encryption
-            return res.status(200).json({
-                token: token,
-                useremail: fetchedUser.useremail,
-                username: fetchedUser.username,
-                contact: fetchedUser.contact
+            // TODO: update the useremail
+            const token = jwt.sign({useremail: fetchedUser.useremail, userId: fetchedUser._id, class: fetchedUser.class}, SECRET_KEY, {expiresIn: '1h'}); // secret key for encryption
+            
+            // update login count
+            const UpdateUser = new User({
+                login_count: fetchedUser.login_count + 1,
+                last_login: Date.now()
             });
+
+            User.updateOne({ useremail: CryptoJS.encrypt(req.body.useremail) },{ $set: { login_count: UpdateUser.login_count, last_login: UpdateUser.last_login}}).then(output => {
+                return res.status(200).json({
+                    token: token,
+                    useremail:  CryptoJS.decrypt(fetchedUser.useremail),
+                    username:   CryptoJS.decrypt(fetchedUser.username),
+                    contact:    CryptoJS.decrypt(fetchedUser.contact)
+                });
+            })
+            .catch(error => {
+                return res.status(401).json({
+                    message: "Update login history failed"
+                });
+            })
         }
     }).catch(error => {
+        console.log("error")
         return res.status(401).json({
             message: "Authentication failed"
         });
@@ -77,24 +100,21 @@ router.post("/login",jsonParser, (req,res,next) => {
 router.get("/jii",(req,res,next) => {
     User.find()
         .then(userinfo => {
+            for (let i = 0;i<userinfo.length;i++) {
+                userinfo[i].useremail = CryptoJS.decrypt(userinfo[i].useremail)
+                userinfo[i].username =  CryptoJS.decrypt(userinfo[i].username)
+                userinfo[i].contact =   CryptoJS.decrypt(userinfo[i].contact)
+            };
             res.status(201).json({
                 message: 'Post fetched successfully!',
                 posts: userinfo        // transform of data at guide 54
             });
-        });
-    code = Math.floor(Math.random() * (100 - 0) + 0);
-    email = 'testing' + code + '@gmail.com';
-    const user = new User({
-        username: 'Android'+code, 
-        useremail: email,
-        contact: ''+Math.floor(Math.random() * (99999999 - 10000000) + 10000000),
-        password: "" + Math.random()
-    });
-    //user.save().catch(error => {
-    //    console.log("Email already exists!!!!!!")
-    //});
+        })
+        .catch(error => {
+            console.log(error)
+        })
 })
-
+ 
 // To be developed for updating 
 router.put("/update",checkAuth,(req,res,next) => {
     // old password and new password should be sent here and authenticate using the User.findOne
