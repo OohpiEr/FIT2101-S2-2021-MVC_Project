@@ -18,7 +18,7 @@ For IP Access List :
 
 ## Backend target
 - [x] Create database for backend to store user data
-- [ ] Link server to frontend
-- [ ] Send user input POST request at server to database
-- [ ] Create login feature
-- [ ] Create signup feature
+- [x] Link server to frontend
+- [x] Send user input POST request at server to database
+- [x] Create login feature
+- [x] Create signup feature
