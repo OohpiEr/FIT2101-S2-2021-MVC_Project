@@ -83,7 +83,7 @@ router.post("/login", jsonParser, (req,res,next) => {
         }
         else{
             // TODO: update the useremail
-            const token = jwt.sign({useremail: fetchedUser.useremail, userId: fetchedUser._id, class: fetchedUser.class}, SECRET_KEY, { expiresIn: '1h'}); // secret key for encryption
+            const token = jwt.sign({useremail: fetchedUser.useremail, userId: fetchedUser._id, class: fetchedUser.class}, SECRET_KEY, { expiresIn: '4h'}); // secret key for encryption
             
             // update login count
             const UpdateUser = new User({
@@ -91,7 +91,7 @@ router.post("/login", jsonParser, (req,res,next) => {
                 last_login: Date.now()
             });
 
-            User.updateOne({ useremail: CryptoJS.encrypt(req.body.useremail) },{ $set: { login_count: UpdateUser.login_count, last_login: UpdateUser.last_login}}).then(output => {
+            User.updateOne({ useremail: requestUseremail },{ $set: { login_count: UpdateUser.login_count, last_login: UpdateUser.last_login}}).then(output => {
                 return res.status(200).json({
                     token: token,
                     useremail:  CryptoJS.decrypt(fetchedUser.useremail),
