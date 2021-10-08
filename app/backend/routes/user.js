@@ -32,35 +32,34 @@ async function checkuser (password1,password2) {
 // Signup route for user
 router.post("/signup",jsonParser, (req,res,next) => {
     let hashpwd = null;
-    let hashpin = null;
+    let hashpin = "1234";
     bcrypt.hash(req.body.password, 10).then(hash => {
         hashpwd = hash;
     }); 
-    bcrypt.hash(req.body.PIN, 10).then(hash => {
-        hashpin = hash;
+    // TODO: replace hashpin with req.body.PIN after PIN have been added to signup
+    bcrypt.hash(hashpin, 10).then(hash => {
+        const user = new User({
+            useremail: CryptoJS.encrypt(req.body.useremail),
+            username: CryptoJS.encrypt(req.body.username),
+            contact: CryptoJS.encrypt(req.body.contact),
+            password: hashpwd,
+            login_count: 0,
+            last_login: new Date(0),
+            PIN: hash
+        }); 
+        user.save().then(result =>{
+            res.status(201).json({
+                message: "User created",
+                result: result
+            });
+        }).catch(error => {
+            res.status(500).json({
+                error: error
+            });
+        }); 
     }); 
-    const user = new User({
-        useremail: CryptoJS.encrypt(req.body.useremail),
-        username: CryptoJS.encrypt(req.body.username),
-        contact: CryptoJS.encrypt(req.body.contact),
-        password: hashpwd,
-        login_count: 0,
-        last_login: new Date(0),
-        PIN: hashpin
-    }); 
-    user.save().then(result =>{
-        res.status(201).json({
-            message: "User created",
-            result: result
-        });
-    }).catch(error => {
-        res.status(500).json({
-            error: error
-        });
-    }); 
-
 });
-
+ 
 // Login route for user
 router.post("/login", jsonParser, (req,res,next) => {
     let fetchedUser;
@@ -96,7 +95,8 @@ router.post("/login", jsonParser, (req,res,next) => {
                     token: token,
                     useremail:  CryptoJS.decrypt(fetchedUser.useremail),
                     username:   CryptoJS.decrypt(fetchedUser.username),
-                    contact:    CryptoJS.decrypt(fetchedUser.contact)
+                    contact:    CryptoJS.decrypt(fetchedUser.contact),
+                    class: fetchedUser.class
                 });
             })
             .catch(error => {
