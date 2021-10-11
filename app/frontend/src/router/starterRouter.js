@@ -58,11 +58,11 @@ const router = new Router({
     },
     {
       path: '/',
-      name: 'superuserRoutes',
+      name: 'SuperaccountRoutes',
       redirect: '/dashboard',
       component: DashboardLayout, 
       meta: {
-        requiresSuperuser: true
+        requiresSuperaccount: true
       },
       children: [
         {
@@ -119,8 +119,8 @@ router.beforeEach((to, from, next) => {
   }
 
   // guard for report page
-  if (to.matched.some(record => record.meta.requiresSuperuser)) {
-    if (JSON.parse(localStorage.userdata).class !== 'superuser') {
+  if (to.matched.some(record => record.meta.requiresSuperaccount)) {
+    if (JSON.parse(localStorage.userdata).class !== 'superaccount') {
       next({ name: 'dashboard' })
     } else {
       next() // continue

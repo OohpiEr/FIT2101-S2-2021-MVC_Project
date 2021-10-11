@@ -23,7 +23,7 @@
           icon="tim-icons icon-alert-circle-exc"
         />
         <sidebar-link
-          v-if="userclass === 'superuser'"
+          v-if="userclass === 'superaccount'"
           to="/report"
           :name="$t('report')"
           icon="tim-icons icon-alert-circle-exc"
@@ -67,8 +67,8 @@ export default {
   },
   created() {
     let userdata = JSON.parse(localStorage.userdata);
-    this.model.username = userdata.class;
-    console.log("this.class");
+    this.userclass = userdata.class;
+    console.log(this.userclass);
   },
 };
 </script>
