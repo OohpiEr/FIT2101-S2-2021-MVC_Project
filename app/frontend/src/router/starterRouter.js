@@ -8,6 +8,7 @@ const Dashboard = () => import(/* webpackChunkName: "dashboard" */"@/pages/Dashb
 const AboutUs = () => import(/* webpackChunkName: "common" */ "@/pages/AboutUs.vue");
 const Analysis = () => import(/* webpackChunkName: "common" */ "@/pages/Analysis.vue");
 const Table = () => import(/* webpackChunkName: "common" */ "@/pages/Table.vue");
+const ReportPage = () => import(/* webpackChunkName: "common" */ "@/pages/ReportPage.vue");
 const Profile = () => import(/* webpackChunkName: "common" */ "@/pages/Profile.vue");
 const SignUpPage = () => import(/* webpackChunkName: "unauthorized" */ "@/pages/SignUpPage.vue");
 const Landing = () => import(/* webpackChunkName: "unauthorized" */ "@/pages/Landing.vue");
@@ -52,6 +53,11 @@ const router =  new Router({
           path: "profile",
           name: "profile",
           component: Profile
+        },
+        {
+          path: "report",
+          name: "report",
+          component: ReportPage
         }
       ]
     },
