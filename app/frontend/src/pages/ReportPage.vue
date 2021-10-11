@@ -142,25 +142,13 @@ export default {
     };
   },
   async created() {
-    //api/user/get
-    const response = await axios.get(
-      "http://localhost:3000/api/user/get"
-    );
-    // const response = await axios.get(
-    //   "http://localhost:3000/api/user/get",
-    //   {
-    //     headers: {
-    //       Authorization: localStorage.getItem("token"),
-    //       "Access-Control-Allow-Origin": "*",
-    //       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-    //       'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
-
-    //     },
-    //   }
-    // );
+    const response = await axios.get('http://localhost:3000/api/user/get/report', {
+      headers: {
+        "Authorization": localStorage.getItem('token'),
+      }
+    })
 
     console.log(response);
-    // console.log(response.data.headers["Authorization"]);
   },
 };
 </script>
