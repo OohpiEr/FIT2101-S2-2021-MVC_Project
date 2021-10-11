@@ -18,14 +18,14 @@ const NotFoundPage = () => import(/* webpackChunkName: "unauthorized" */ "@/page
 
 Vue.use(Router);
 
-const router =  new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
       name: 'home',
       redirect: '/dashboard',
       component: DashboardLayout,
-      meta:{
+      meta: {
         requiresAuth: true
       },
       children: [
@@ -53,12 +53,23 @@ const router =  new Router({
           path: "profile",
           name: "profile",
           component: Profile
-        },
+        }
+      ]
+    },
+    {
+      path: '/',
+      name: 'superuserRoutes',
+      redirect: '/dashboard',
+      component: DashboardLayout, 
+      meta: {
+        requiresSuperuser: true
+      },
+      children: [
         {
           path: "report",
           name: "report",
           component: ReportPage
-        }
+        },
       ]
     },
     {
@@ -96,7 +107,8 @@ const router =  new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)){
+  // guard for login
+  if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!localStorage.getItem('token')) {
       next({ name: 'landing' })
     } else {
@@ -105,6 +117,18 @@ router.beforeEach((to, from, next) => {
   } else {
     next() // continue
   }
+
+  // guard for report page
+  if (to.matched.some(record => record.meta.requiresSuperuser)) {
+    if (JSON.parse(localStorage.userdata).class !== 'superuser') {
+      next({ name: 'dashboard' })
+    } else {
+      next() // continue
+    }
+  } else {
+    next() // continue
+  }
+
 })
 
 export default router;
