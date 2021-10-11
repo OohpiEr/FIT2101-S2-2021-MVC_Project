@@ -144,12 +144,11 @@ export default {
   async created() {
     const response = await axios.get('http://localhost:3000/api/user/get/report', {
       headers: {
-        'authorization': localStorage.getItem('token')
+        "Authorization": localStorage.getItem('token'),
       }
     })
 
-    // console.log(response.headers);
-    console.log(response.data.headers['authorization']);
+    console.log(response);
   },
 };
 </script>

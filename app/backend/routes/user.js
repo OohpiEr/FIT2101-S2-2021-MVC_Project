@@ -115,9 +115,9 @@ router.post("/login", jsonParser, (req,res,next) => {
 
 // Return report for superaccount 
 router.get("/get/report", checkAuth, (req,res,next) => {
-    const token = req.headers.authorization.split(" ")[1];   // try to check if user action was authorised
+    const token = req.headers.authorization;   // try to check if user action was authorised
     const verifiedJwt = jwt.verify(token, SECRET_KEY);
-    if (verifiedJwt.body.class == "superaccount"){
+    if (verifiedJwt.class == "superaccount"){
         // If authentication of user success
         User.find().sort({last_login: -1})
         .then(userinfo => {
@@ -176,7 +176,7 @@ router.get("/get/raw",(req,res,next) => {
             console.log(error)
         })
 });
- 
+
 // Forgot password reset request
 router.put("/update/forgot", jsonParser, (req,res,next) => {
     /**
