@@ -64,6 +64,8 @@
   </div>
 </template>
 <script>
+import axios from "axios";
+
 import { BaseTable } from "@/components";
 const tableColumns = ["Username", "Email", "Phone", "numlogins", "lastlogin"];
 // const tableColumns = ["Username", "Email", "Phone", "Number Of Logins", "Last Login"];
@@ -138,6 +140,16 @@ export default {
         data: [...tableData],
       },
     };
+  },
+  async created() {
+    const response = await axios.get('http://localhost:3000/api/user/get/report', {
+      headers: {
+        'authorization': localStorage.getItem('token')
+      }
+    })
+
+    // console.log(response);
+    response.data.headers['authorization'];
   },
 };
 </script>
