@@ -148,8 +148,8 @@ export default {
       }
     })
 
-    // console.log(response);
-    response.data.headers['authorization'];
+    // console.log(response.headers);
+    console.log(response.data.headers['authorization']);
   },
 };
 </script>
