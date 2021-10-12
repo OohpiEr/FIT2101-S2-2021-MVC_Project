@@ -67,66 +67,72 @@
 import axios from "axios";
 
 import { BaseTable } from "@/components";
-const tableColumns = ["Username", "Email", "Phone", "numlogins", "lastlogin"];
-// const tableColumns = ["Username", "Email", "Phone", "Number Of Logins", "Last Login"];
-const tableData = [
-  {
-    id: 1,
-    username: "Dakota Rice",
-    numlogins: "$36.738",
-    email: "Niger",
-    phone: "Oud-Turnhout",
-    lastlogin: "Oud-Turnhout",
-  },
-  {
-    id: 2,
-    username: "Minerva Hooper",
-    numlogins: "$23,789",
-    email: "Curaçao",
-    phone: "Sinaai-Waas",
-    lastlogin: "Oud-Turnhout",
-  },
-  {
-    id: 3,
-    username: "Sage Rodriguez",
-    numlogins: "$56,142",
-    email: "Netherlands",
-    phone: "Baileux",
-    lastlogin: "Oud-Turnhout",
-  },
-  {
-    id: 4,
-    username: "Philip Chaney",
-    numlogins: "$38,735",
-    email: "Korea, South",
-    phone: "Overland Park",
-    lastlogin: "Oud-Turnhout",
-  },
-  {
-    id: 5,
-    username: "Doris Greene",
-    numlogins: "$63,542",
-    email: "Malawi",
-    phone: "Feldkirchen in Kärnten",
-    lastlogin: "Oud-Turnhout",
-  },
-  {
-    id: 6,
-    username: "Mason Porter",
-    numlogins: "$98,615",
-    email: "Chile",
-    phone: "Gloucester",
-    lastlogin: "Oud-Turnhout",
-  },
-  {
-    id: 7,
-    username: "Jon Porter",
-    numlogins: "$78,615",
-    email: "Portugal",
-    phone: "Gloucester",
-    lastlogin: "Oud-Turnhout",
-  },
+const tableColumns = [
+  "username",
+  "useremail",
+  "contact",
+  "login_count",
+  "last_login",
 ];
+// const tableColumns = ["username", "useremail", "Phone", "Number Of Logins", "Last Login"];
+// const tableData = [
+//   {
+//     id: 1,
+//     username: "Dakota Rice",
+//     login_count: "$36.738",
+//     useremail: "Niger",
+//     contact: "Oud-Turnhout",
+//     last_login: "Oud-Turnhout",
+//   },
+//   {
+//     id: 2,
+//     username: "Minerva Hooper",
+//     login_count: "$23,789",
+//     useremail: "Curaçao",
+//     contact: "Sinaai-Waas",
+//     last_login: "Oud-Turnhout",
+//   },
+//   {
+//     id: 3,
+//     username: "Sage Rodriguez",
+//     login_count: "$56,142",
+//     useremail: "Netherlands",
+//     contact: "Baileux",
+//     last_login: "Oud-Turnhout",
+//   },
+//   {
+//     id: 4,
+//     username: "Philip Chaney",
+//     login_count: "$38,735",
+//     useremail: "Korea, South",
+//     contact: "Overland Park",
+//     last_login: "Oud-Turnhout",
+//   },
+//   {
+//     id: 5,
+//     username: "Doris Greene",
+//     login_count: "$63,542",
+//     useremail: "Malawi",
+//     contact: "Feldkirchen in Kärnten",
+//     last_login: "Oud-Turnhout",
+//   },
+//   {
+//     id: 6,
+//     username: "Mason Porter",
+//     login_count: "$98,615",
+//     useremail: "Chile",
+//     contact: "Gloucester",
+//     last_login: "Oud-Turnhout",
+//   },
+//   {
+//     id: 7,
+//     username: "Jon Porter",
+//     login_count: "$78,615",
+//     useremail: "Portugal",
+//     contact: "Gloucester",
+//     last_login: "Oud-Turnhout",
+//   },
+// ];
 
 export default {
   components: {
@@ -137,23 +143,35 @@ export default {
       table1: {
         title: "Report",
         columns: [...tableColumns],
-        data: [...tableData],
+        data: [],
       },
     };
   },
   async created() {
-    const response = await axios.get('http://localhost:3000/api/user/get/report', {
-      headers: {
-        "Authorization": localStorage.getItem('token'),
+    const response = await axios.get(
+      "http://localhost:3000/api/user/get/report",
+      {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
       }
-    })
-
-    console.log(response);
+    );
+    
+    let options = { hour: "2-digit", minute: "2-digit" };
+    let tableData = response.data.posts;
+    tableData.pop();
+    console.log(tableData);
+    for (let i = 0; i < tableData.length; i++) {
+      var date = new Date(tableData[i].last_login);
+      tableData[i].last_login =date.toLocaleDateString("en-MY", options);
+      console.log(tableData[i].last_login); 
+    }
+    this.table1.data = tableData;
   },
 };
 </script>
 <style>
-.overflow-hidden {
+/* .overflow-hidden {
   overflow: hidden;
-}
+} */
 </style>
