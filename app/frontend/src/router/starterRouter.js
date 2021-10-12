@@ -35,11 +35,6 @@ const router = new Router({
           component: Dashboard
         },
         {
-          path: "about-us",
-          name: "about us",
-          component: AboutUs
-        },
-        {
           path: "analysis",
           name: "analysis",
           component: Analysis
