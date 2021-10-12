@@ -18,7 +18,12 @@ For IP Access List :
 
 ## Backend target
 - [x] Create database for backend to store user data
-- [ ] Link server to frontend
-- [ ] Send user input POST request at server to database
-- [ ] Create login feature
-- [ ] Create signup feature
+- [x] Link server to frontend
+- [x] Send user input POST request at server to database
+- [x] Create login feature
+- [x] Create signup feature
+- [] Return user data to superaccount
+- [] Allow user to update their username and contact
+- [] Allow user to update their password
+- [] Allow user to have a fallback PIN when they forgot their original password
+- [x] Store user's personal information in encrypted form 

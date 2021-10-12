@@ -6,6 +6,7 @@
         <sidebar-link to="/analysis" :name="$t('analysis')" icon="tim-icons icon-chart-pie-36"/>
         <sidebar-link to="/table" :name="$t('table')" icon="tim-icons icon-chart-pie-36"/>
         <sidebar-link to="/about-us" :name="$t('about us')" icon="tim-icons icon-alert-circle-exc"/>
+        <sidebar-link to="/report" :name="$t('report')" icon="tim-icons icon-alert-circle-exc"/>
       </template>
     </side-bar>
     <div class="main-panel">

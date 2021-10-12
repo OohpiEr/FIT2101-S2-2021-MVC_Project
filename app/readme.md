@@ -1,0 +1,1 @@
+Windows: To run the backend and frontend just execute start.bat
