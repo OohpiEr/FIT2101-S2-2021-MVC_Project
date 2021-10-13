@@ -237,7 +237,6 @@ router.put("/update/info", checkAuth, jsonParser, (req,res,next) => {
      * useremail are not allowed to change
      */
     User.updateOne({ useremail: CryptoJS.encrypt(req.body.useremail) },{ $set: { username: CryptoJS.encrypt(req.body.username), contact: CryptoJS.encrypt(req.body.contact) }})        .then(output => {
-            console.log(output);
             return res.status(200).json({
                 message: "Personal information updated"
             });

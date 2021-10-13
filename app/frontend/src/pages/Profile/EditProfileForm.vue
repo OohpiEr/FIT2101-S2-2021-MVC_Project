@@ -79,26 +79,12 @@ export default {
         });
         console.log(response);
         if (response.status === 200){
-
           localStorage.setItem("userdata", JSON.stringify(update));
         }
 
       }
     }
   },
-  // async created(){
-  //   const update = {
-  //     useremail: this.model.email,
-  //     username: this.model.username,
-  //     contact: this.model.phone,
-  //   };
-  //   const response = await axios.put('http://localhost:3000/api/user/update/info',update, {
-  //     headers: {
-  //       "Authorization": localStorage.getItem('token'),
-  //     }
-  //   });
-  //   console.log(response);
-  // }
 };
 
 </script>
