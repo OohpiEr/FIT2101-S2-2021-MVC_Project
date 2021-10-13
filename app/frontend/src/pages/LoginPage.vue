@@ -93,16 +93,13 @@ export default {
         .then((response) => {
           this.loginFail = false;
           this.loginSuccess = true;
-          localStorage.setItem('token', response.data.token)
-          localStorage.setItem('userdata',JSON.stringify(response.data))
-          store.user.username = response.data.username; 
-          store.user.email = response.data.useremail; 
-          store.token = response.data.token; 
-
-          
-          setTimeout(() => {
-            router.push("dashboard");
-          }, 200);
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("userdata", JSON.stringify(response.data));
+          // store.user.username = response.data.username;
+          // store.user.email = response.data.useremail;
+          // store.token = response.data.token;
+          router.push("dashboard");
+          console.log(response.data);
         })
         .catch((error) => {
           console.log(error.message);
@@ -110,7 +107,6 @@ export default {
             this.loginFail = true;
           }
         });
-
     },
   },
 };
