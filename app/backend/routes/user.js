@@ -32,12 +32,12 @@ async function checkuser (password1,password2) {
 // Signup route for user
 router.post("/signup",jsonParser, (req,res,next) => {
     let hashpwd = null;
-    let hashpin = "1234";
+    // let hashpin = "1234";
     bcrypt.hash(req.body.password, 10).then(hash => {
         hashpwd = hash;
     }); 
     // TODO: replace hashpin with req.body.PIN after PIN have been added to signup
-    bcrypt.hash(hashpin, 10).then(hash => {
+    bcrypt.hash(req.body.pin, 10).then(hash => {
         const user = new User({
             useremail: CryptoJS.encrypt(req.body.useremail),
             username: CryptoJS.encrypt(req.body.username),
