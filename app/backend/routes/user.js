@@ -32,7 +32,6 @@ async function checkuser (password1,password2) {
 // Signup route for user
 router.post("/signup",jsonParser, (req,res,next) => {
     let hashpwd = null;
-    // let hashpin = "1234";
     bcrypt.hash(req.body.password, 10).then(hash => {
         hashpwd = hash;
     }); 
@@ -237,8 +236,8 @@ router.put("/update/info", checkAuth, jsonParser, (req,res,next) => {
      * 
      * useremail are not allowed to change
      */
-    User.updateOne({ useremail: CryptoJS.encrypt(req.body.useremail) },{ $set: { username: req.body.username, contact: req.body.contact }})
-        .then(output => {
+    User.updateOne({ useremail: CryptoJS.encrypt(req.body.useremail) },{ $set: { username: CryptoJS.encrypt(req.body.username), contact: CryptoJS.encrypt(req.body.contact) }})        .then(output => {
+            console.log(output);
             return res.status(200).json({
                 message: "Personal information updated"
             });
