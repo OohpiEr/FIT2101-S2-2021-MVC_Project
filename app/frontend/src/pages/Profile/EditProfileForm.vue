@@ -67,6 +67,18 @@ export default {
         phone_number.disabled = "true";
       }
     }
+  },
+  async created(){
+    const update = {
+      useremail: this.user.email,
+      username: this.user.username,
+      contact: this.user.phone,
+    };
+    const response = await axios.put('http://localhost:3000/api/user/update/info',update, {
+      headers: {
+        "Authorization": localStorage.getItem('token'),
+      }
+    });
   }
 };
 
