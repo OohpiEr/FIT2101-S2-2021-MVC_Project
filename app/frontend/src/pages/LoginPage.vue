@@ -57,17 +57,57 @@
           <!-- Modal content -->
           <div class="modal-content"  style="background: black; width: 300px; text-align: center">
             <span class="close">&times;</span>
-            <p style="">Enter your PIN.</p>
             <form role="form">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label  class="white-label">Enter your PIN.</label>
               <input
                           type="password"
                           placeholder="PIN"
                           required
                           maxlength="4"
-                          class="modal-form">
+                          class="modal-pin">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="white-label">Password</label>
+                    <input
+                      type="password"
+                      v-model="user.password"
+                      required
+                      class="modal-password"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="white-label">Confirm Password</label>
+                    <input
+                      type="password"
+                      v-model="user.confirmPassword"
+                      required
+                      class="modal-password"
+                    />
+                    <div class="invalid-feedback">
+                      Confirm password must be the same as password
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div class="text-center">
                 <base-button type="primary" class="my-4">Submit</base-button>
               </div>
+
+
+
             </form>
           </div>
         </div>
@@ -186,8 +226,17 @@ export default {
   background: white;
 }
 
-.modal-form{
+.modal-pin{
   border-radius: 5px; padding-left:60px; padding-right:60px; font-size:20px; width: 170px; outline: none;
+}
+
+.modal-password{
+  border-radius: 5px; padding-left:10px; padding-right:10px; font-size:20px; width: 200px; outline: none;
+}
+
+.white-label{
+  display: block;
+  color: white;
 }
 
 .modal {
