@@ -8,6 +8,7 @@ const Dashboard = () => import(/* webpackChunkName: "dashboard" */"@/pages/Dashb
 const AboutUs = () => import(/* webpackChunkName: "common" */ "@/pages/AboutUs.vue");
 const Analysis = () => import(/* webpackChunkName: "common" */ "@/pages/Analysis.vue");
 const Table = () => import(/* webpackChunkName: "common" */ "@/pages/Table.vue");
+const ReportPage = () => import(/* webpackChunkName: "common" */ "@/pages/ReportPage.vue");
 const Profile = () => import(/* webpackChunkName: "common" */ "@/pages/Profile.vue");
 const SignUpPage = () => import(/* webpackChunkName: "unauthorized" */ "@/pages/SignUpPage.vue");
 const Landing = () => import(/* webpackChunkName: "unauthorized" */ "@/pages/Landing.vue");
@@ -17,14 +18,14 @@ const NotFoundPage = () => import(/* webpackChunkName: "unauthorized" */ "@/page
 
 Vue.use(Router);
 
-const router =  new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
       name: 'home',
       redirect: '/dashboard',
       component: DashboardLayout,
-      meta:{
+      meta: {
         requiresAuth: true
       },
       children: [
@@ -32,11 +33,6 @@ const router =  new Router({
           path: 'dashboard',
           name: 'dashboard',
           component: Dashboard
-        },
-        {
-          path: "about-us",
-          name: "about us",
-          component: AboutUs
         },
         {
           path: "analysis",
@@ -53,6 +49,22 @@ const router =  new Router({
           name: "profile",
           component: Profile
         }
+      ]
+    },
+    {
+      path: '/',
+      name: 'SuperaccountRoutes',
+      redirect: '/dashboard',
+      component: DashboardLayout, 
+      meta: {
+        requiresSuperaccount: true
+      },
+      children: [
+        {
+          path: "report",
+          name: "report",
+          component: ReportPage
+        },
       ]
     },
     {
@@ -90,7 +102,8 @@ const router =  new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)){
+  // guard for login
+  if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!localStorage.getItem('token')) {
       next({ name: 'landing' })
     } else {
@@ -99,6 +112,18 @@ router.beforeEach((to, from, next) => {
   } else {
     next() // continue
   }
+
+  // guard for report page
+  if (to.matched.some(record => record.meta.requiresSuperaccount)) {
+    if (JSON.parse(localStorage.userdata).class !== 'superaccount') {
+      next({ name: 'dashboard' })
+    } else {
+      next() // continue
+    }
+  } else {
+    next() // continue
+  }
+
 })
 
 export default router;

@@ -116,6 +116,28 @@
         </div>
 
         <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="user.pin">PIN</label>
+              <input
+                maxlength="4"
+                type="password"
+                v-model="user.pin"
+                v-bind:class="{
+                  'form-control': true,
+                  'is-invalid': !pin_length(),
+                }"
+                required
+              />
+              <div class="invalid-feedback">
+                PIN needs to of length 4.
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row">
           <div class="col text-center button">
             <button class="btn" slot="footer" type="primary" fill>
               Sign Up
@@ -128,7 +150,7 @@
       <div class="row">
         <div class="col text-right">
           <p>Already have an account? <router-link to="/login">Login.</router-link></p>
-         
+
           <!-- <base-button class="btn" slot="footer" type="primary" fill>Sign Up</base-button> -->
         </div>
       </div>
@@ -158,6 +180,7 @@ export default {
         phone: "",
         password: "",
         confirmPassword: "",
+        pin: ""
       },
       submitted: false,
       modal: false,
@@ -175,6 +198,9 @@ export default {
     confirmPassword: function () {
       return this.user.password == this.user.confirmPassword;
     },
+    pin_length: function(){
+      return this.user.pin.length >= 4 || this.user.pin === "";
+    },
     validatePhone: function () {
       let phone = Math.floor(Number(this.user.phone));
       return phone >= 0;
@@ -185,7 +211,9 @@ export default {
         username: this.user.username,
         contact: this.user.phone,
         password: this.user.password,
+        pin: this.user.pin,
       };
+      console.log(this.user.pin);
       axios
         .post("http://localhost:3000/api/user/signup", signup)
         .then((response) => {

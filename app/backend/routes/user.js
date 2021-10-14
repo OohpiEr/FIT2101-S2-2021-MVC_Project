@@ -32,12 +32,11 @@ async function checkuser (password1,password2) {
 // Signup route for user
 router.post("/signup",jsonParser, (req,res,next) => {
     let hashpwd = null;
-    let hashpin = "1234";
     bcrypt.hash(req.body.password, 10).then(hash => {
         hashpwd = hash;
     }); 
     // TODO: replace hashpin with req.body.PIN after PIN have been added to signup
-    bcrypt.hash(hashpin, 10).then(hash => {
+    bcrypt.hash(req.body.pin, 10).then(hash => {
         const user = new User({
             useremail: CryptoJS.encrypt(req.body.useremail),
             username: CryptoJS.encrypt(req.body.username),
@@ -115,9 +114,9 @@ router.post("/login", jsonParser, (req,res,next) => {
 
 // Return report for superaccount 
 router.get("/get/report", checkAuth, (req,res,next) => {
-    const token = req.headers.authorization.split(" ")[1];   // try to check if user action was authorised
+    const token = req.headers.authorization;   // try to check if user action was authorised
     const verifiedJwt = jwt.verify(token, SECRET_KEY);
-    if (verifiedJwt.body.class == "superaccount"){
+    if (verifiedJwt.class == "superaccount"){
         // If authentication of user success
         User.find().sort({last_login: -1})
         .then(userinfo => {
@@ -176,7 +175,7 @@ router.get("/get/raw",(req,res,next) => {
             console.log(error)
         })
 });
- 
+
 // Forgot password reset request
 router.put("/update/forgot", jsonParser, (req,res,next) => {
     /**
@@ -237,8 +236,7 @@ router.put("/update/info", checkAuth, jsonParser, (req,res,next) => {
      * 
      * useremail are not allowed to change
      */
-    User.updateOne({ useremail: CryptoJS.encrypt(req.body.useremail) },{ $set: { username: req.body.username, contact: req.body.contact }})
-        .then(output => {
+    User.updateOne({ useremail: CryptoJS.encrypt(req.body.useremail) },{ $set: { username: CryptoJS.encrypt(req.body.username), contact: CryptoJS.encrypt(req.body.contact) }})        .then(output => {
             return res.status(200).json({
                 message: "Personal information updated"
             });
