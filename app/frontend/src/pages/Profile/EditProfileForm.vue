@@ -63,25 +63,25 @@ export default {
         phone_number.removeAttribute("disabled");
       }
       else{
-        btn.innerText = "Edit";
-        username.disabled = "true";
-        phone_number.disabled = "true";
-        const update = {
-          useremail: this.model.email,
-          username: this.model.username,
-          contact: this.model.phone,
-        };
-        console.log(update);
-        const response = await axios.put('http://localhost:3000/api/user/update/info',update, {
-          headers: {
-            "Authorization": localStorage.getItem('token'),
+          btn.innerText = "Edit";
+          username.disabled = "true";
+          phone_number.disabled = "true";
+          const update = {
+            useremail: this.model.email,
+            username: this.model.username,
+            contact: this.model.phone,
+          };
+          const response = await axios.put('http://localhost:3000/api/user/update/info',update, {
+            headers: {
+              "Authorization": localStorage.getItem('token'),
+            }
+          });
+          let response_text = response["request"]["responseText"];
+          let msg = response_text.substring(response_text.indexOf(':') + 2, response_text.length - 2);
+          if (response.status === 200){
+            localStorage.setItem("userdata", JSON.stringify(update));
           }
-        });
-        console.log(response);
-        if (response.status === 200){
-          localStorage.setItem("userdata", JSON.stringify(update));
-        }
-
+          window.alert(msg);
       }
     }
   },
