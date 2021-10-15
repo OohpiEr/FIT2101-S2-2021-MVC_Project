@@ -71,7 +71,6 @@ export default {
   async created() {
     let response = await covid_api.fetchCountries();
     this.table1.data = [...response]
-    console.log(this.table1.data)
   },
   computed:{
     filteredCountries: function(){

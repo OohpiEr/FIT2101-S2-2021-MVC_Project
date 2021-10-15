@@ -53,11 +53,8 @@ export default {
         },
       }
     );
-    
     let options = { hour: "2-digit", minute: "2-digit" };
-    let tableData = response.data.posts;
-    tableData.pop();
-    console.log(tableData);
+    let tableData = JSON.parse(response.data.posts);
     for (let i = 0; i < tableData.length; i++) {
       var date = new Date(tableData[i].last_login);
       tableData[i].last_login =date.toLocaleDateString("en-MY", options);

@@ -45,7 +45,6 @@ export default {
   created() {
     let userdata = JSON.parse(localStorage.userdata);
     this.userclass = userdata.class;
-    console.log(this.userclass);
   },
 };
 </script>
