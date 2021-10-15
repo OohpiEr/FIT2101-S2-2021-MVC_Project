@@ -67,7 +67,7 @@
         <div class="modal-content"  style="background: black; width: 300px; text-align: center">
           <span class="close">&times;</span>
 
-          <form role="form" @submit.prevent="submit_pin">
+          <form role="form" @submit.prevent="handleSubmitPin">
             <base-alert v-if="resetError" type="warning">
               Invalid PIN, email address or password.
             </base-alert>
@@ -114,6 +114,9 @@
                     v-model="model.password"
                     required
                     class="modal-password"
+                    v-bind:class="{
+                  'is-invalid': !confirmPassword(),
+                    }"
                   />
                 </div>
               </div>
@@ -125,9 +128,12 @@
                   <label class="white-label">Confirm Password</label>
                   <input
                     type="password"
-                    v-model="model.confirmPassword"
-                    required
                     class="modal-password"
+                    v-model="model.confirmPassword"
+                    v-bind:class="{
+                      'is-invalid': !confirmPassword(),
+                    }"
+                    required
                   />
                   <div class="invalid-feedback">
                     Confirm password must be the same as password
@@ -177,6 +183,7 @@ export default {
         PIN: "",
         email: "",
         password: "",
+        confirmPassword: "",
       },
       loginFail: false,
       loginSuccess: false,
@@ -212,6 +219,14 @@ export default {
           }
         });
     },
+    handleSubmitPin() {
+      if (this.confirmPassword()) {
+        this.submit_pin();
+      } else {
+        console.log("form denied");
+        this.resetError = true;
+      }
+    },
     async submit_pin(){
       const postinfo = {
         useremail: this.model.email,
@@ -229,9 +244,10 @@ export default {
           // store.user.username = response.data.username;
           // store.user.email = response.data.useremail;
           // store.token = response.data.token;
-          router.push("dashboard");
           // console.log(response.data);
           console.log(response);
+          let modal = document.getElementById("myModal");
+          modal.style.display = "none";
         })
         .catch((error) => {
           console.log(error.message);
@@ -239,6 +255,9 @@ export default {
             this.resetError = true;
           }
         });
+    },
+    confirmPassword: function () {
+      return this.model.password == this.model.confirmPassword;
     },
     modal: function(){
       // Get the modal
@@ -285,7 +304,7 @@ export default {
   font-size: 13px;
 }
 .input_white_background{
-  background: white;
+  color: white;
 }
 
 .modal-pin{
