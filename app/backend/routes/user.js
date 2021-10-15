@@ -201,23 +201,21 @@ router.put("/update/forgot", jsonParser, (req,res,next) => {
             })
         }
         else{
-            let hashpwd = null;
             // hash replaced password
             bcrypt.hash(req.body.password, 10).then(hash => {
-                hashpwd = hash;
+                // update password for user
+                User.updateOne({ useremail: requestUseremail },{ $set: { password: hash }})
+                .then(output => {
+                    return res.status(200).json({
+                        message: "Password reset completed"
+                    });
+                })
+                .catch(error => {
+                    return res.status(401).json({
+                        message: `Failed to update password for ${req.body.useremail}`
+                    });
+                })
             }); 
-            // update password for user
-            User.updateOne({ useremail: CryptoJS.encrypt(req.body.useremail) },{ $set: { password: hashpwd }})
-            .then(output => {
-                return res.status(200).json({
-                    message: "Password reset completed"
-                });
-            })
-            .catch(error => {
-                return res.status(401).json({
-                    message: `Failed to update password for ${req.body.useremail}`
-                });
-            })
         }
     }).catch(error => {
         return res.status(401).json({
