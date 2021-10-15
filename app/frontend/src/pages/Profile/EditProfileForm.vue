@@ -99,10 +99,20 @@
           >
           </base-input>
           <div class="invalid-feedback" style="color: red">
-            Confirm password must be the same as password
+            ignore this--------------Confirm password must be the same as
+            password
           </div>
         </div>
       </div>
+
+      <base-alert
+        id="password_validation"
+        v-if="newPasswordValidationFail"
+        type="warning"
+        style="color: red"
+      >
+        Confirm password must be the same as new password!
+      </base-alert>
 
       <!-- @click="modify_button" -->
       <!-- @click="modify_password" -->
@@ -129,6 +139,7 @@ export default {
         return {};
       },
     },
+    newPasswordValidationFail: false,
   },
   methods: {
     async modify_button() {
@@ -155,7 +166,7 @@ export default {
           update,
           {
             headers: {
-              "Authorization": localStorage.getItem("token"),
+              Authorization: localStorage.getItem("token"),
             },
           }
         );
@@ -174,20 +185,26 @@ export default {
       let old_password = document.getElementById("old_password");
       let new_password = document.getElementById("new_password");
       let confirm_password = document.getElementById("confirm_password");
+      // old_password.value = "";
+      // new_password.value = "";
+      // confirm_password.value = "";
 
       if (change_button.innerText === "Change Password") {
         change_button.innerText = "Save Password";
         old_password.removeAttribute("disabled");
         new_password.removeAttribute("disabled");
         confirm_password.removeAttribute("disabled");
+        old_password.value = "";
+        new_password.value = "";
+        confirm_password.value = "";
       } else {
         change_button.innerText = "Change Password";
         old_password.disabled = "true";
         new_password.disabled = "true";
         confirm_password.disabled = "true";
-        old_password.value = "";
-        new_password.value = "";
-        confirm_password.value = "";
+        // old_password.value = "";
+        // new_password.value = "";
+        // confirm_password.value = "";
 
         const update_password = {
           useremail: this.model.email, // cannot get email
@@ -203,19 +220,28 @@ export default {
         // this is the things that the user typed into the fields
         // example from personal information
         // {useremail: 'Test18@gmail.com', username: 'AE', contact: '012222'}
-        const response_password = await axios.put(
-          "http://localhost:3000/api/user/update/pwd",
-          update_password,
-          {
-            headers: {
-              "Authorization": localStorage.getItem("token"), // Wei Hung asked this for testing purpose
+
+        if (this.model.newpassword == this.model.confirmpassword) {
+          this.newPasswordValidationFail = false;
+          const response_password = await axios.put(
+            "http://localhost:3000/api/user/update/pwd",
+            update_password,
+            {
+              headers: {
+                Authorization: localStorage.getItem("token"), // Wei Hung asked this for testing purpose
+              },
             }
+          );
+          console.log(response_password);
+          // for error is 401?
+          if (response_password.status === 200) {
+            localStorage.setItem("userdata", JSON.stringify(update_password));
           }
-        );
-        console.log(response_password);
-        // for error is 401?
-        if (response_password.status === 200) {
-          localStorage.setItem("userdata", JSON.stringify(update_password));
+        } else if (this.model.newpassword != this.model.confirmpassword) {
+          this.newPasswordValidationFail = true;
+          //old_password.value = "";
+          //new_password.value = "";
+          //confirm_password.value = "";
         }
       }
     },
