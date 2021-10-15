@@ -155,7 +155,7 @@ export default {
           update,
           {
             headers: {
-              Authorization: localStorage.getItem("token"),
+              "Authorization": localStorage.getItem("token"),
             },
           }
         );
@@ -208,8 +208,8 @@ export default {
           update_password,
           {
             headers: {
-              Authorization: localStorage.getItem("token"), // Wei Hung asked this for testing purpose
-            },
+              "Authorization": localStorage.getItem("token"), // Wei Hung asked this for testing purpose
+            }
           }
         );
         console.log(response_password);
