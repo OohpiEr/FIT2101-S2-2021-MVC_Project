@@ -14,7 +14,7 @@
         <div class="row white_text">
           <div class="col-md-12">
             <div class="form-group">
-              <label for="user.email">Email</label>
+              <label>Email</label>
               <input
                 class="input_white_background"
                 type="email"
@@ -32,7 +32,7 @@
         <div class="row white_text">
           <div class="col-md-12">
             <div class="form-group">
-              <label for="user.email">Password</label>
+              <label>Password</label>
               <input
                 class="input_white_background"
                 type="password"
