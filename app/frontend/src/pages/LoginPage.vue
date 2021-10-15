@@ -68,6 +68,12 @@
           <span class="close">&times;</span>
 
           <form role="form" @submit.prevent="submit_pin">
+            <base-alert v-if="resetError" type="warning">
+              Invalid PIN, email address or password.
+            </base-alert>
+            <base-alert v-if="resetSuccess" type="success">
+              Password reset successful!
+            </base-alert>
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
@@ -174,6 +180,8 @@ export default {
       },
       loginFail: false,
       loginSuccess: false,
+      resetError: false,
+      resetSuccess: false
     };
   },
   methods: {
@@ -208,13 +216,14 @@ export default {
       const postinfo = {
         useremail: this.model.email,
         password: this.model.password,
-        PIN: this.model.pin
+        PIN: this.model.PIN
       };
+      console.log(postinfo);
       axios
         .put("http://localhost:3000/api/user/update/forgot", postinfo)
         .then((response) => {
-          this.loginFail = false;
-          this.loginSuccess = true;
+          this.resetError = false;
+          this.resetSuccess = true;
           // localStorage.setItem("token", response.data.token);
           // localStorage.setItem("userdata", JSON.stringify(response.data));
           // store.user.username = response.data.username;
@@ -226,8 +235,8 @@ export default {
         })
         .catch((error) => {
           console.log(error.message);
-          if (!this.loginFail) {
-            this.loginFail = true;
+          if (!this.resetError) {
+            this.resetError = true;
           }
         });
     },
