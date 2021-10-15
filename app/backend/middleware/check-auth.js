@@ -8,7 +8,6 @@ module.exports = (req,res,next) => {
         jwt.verify(token, SECRET_KEY);
         next();
     } catch (error) {
-        console.log(error)
         res.status(401).json({
             message: "UNAUTHORISED ACCESS"
         });
