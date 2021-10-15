@@ -3,7 +3,6 @@
     <side-bar>
       <template slot="links">
         <sidebar-link to="/dashboard" :name="$t('sidebar.dashboard')" icon="tim-icons icon-chart-pie-36" />
-        <sidebar-link to="/analysis" :name="$t('analysis')" icon="tim-icons icon-chart-pie-36" />
         <sidebar-link to="/table" :name="$t('table')" icon="tim-icons icon-chart-pie-36" />
         <sidebar-link v-if="userclass === 'superaccount'" to="/report" :name="$t('report')" icon="tim-icons icon-alert-circle-exc" />
       </template>

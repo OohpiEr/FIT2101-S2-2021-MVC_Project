@@ -35,38 +35,7 @@
       <collapse-transition>
         <div class="collapse navbar-collapse show" v-show="showMenu">
           <ul class="navbar-nav" :class="$rtl.isRTL ? 'mr-auto' : 'ml-auto'">
-            <div
-              class="search-bar input-group"
-              @click="searchModalVisible = true"
-            >
-              <!-- <input type="text" class="form-control" placeholder="Search...">
-              <div class="input-group-addon"><i class="tim-icons icon-zoom-split"></i></div> -->
-              <button
-                class="btn btn-link"
-                id="search-button"
-                data-toggle="modal"
-                data-target="#searchModal"
-              >
-                <i class="tim-icons icon-zoom-split"></i>
-              </button>
-              <!-- You can choose types of search input -->
-            </div>
-            <modal
-              :show.sync="searchModalVisible"
-              class="modal-search"
-              id="searchModal"
-              :centered="false"
-              :show-close="true"
-            >
-              <input
-                slot="header"
-                v-model="searchQuery"
-                type="text"
-                class="form-control"
-                id="inlineFormInputGroup"
-                placeholder="SEARCH"
-              />
-            </modal>
+            
             <base-dropdown
               tag="li"
               :menu-on-right="!$rtl.isRTL"

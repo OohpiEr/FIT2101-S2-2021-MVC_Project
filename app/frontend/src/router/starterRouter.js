@@ -6,7 +6,6 @@ import store from "@/store";
 
 const Dashboard = () => import(/* webpackChunkName: "dashboard" */"@/pages/Dashboard.vue");
 const AboutUs = () => import(/* webpackChunkName: "common" */ "@/pages/AboutUs.vue");
-const Analysis = () => import(/* webpackChunkName: "common" */ "@/pages/Analysis.vue");
 const Table = () => import(/* webpackChunkName: "common" */ "@/pages/Table.vue");
 const ReportPage = () => import(/* webpackChunkName: "common" */ "@/pages/ReportPage.vue");
 const Profile = () => import(/* webpackChunkName: "common" */ "@/pages/Profile.vue");
@@ -33,11 +32,6 @@ const router = new Router({
           path: 'dashboard',
           name: 'dashboard',
           component: Dashboard
-        },
-        {
-          path: "analysis",
-          name: "analysis",
-          component: Analysis
         },
         {
           path: "table",
