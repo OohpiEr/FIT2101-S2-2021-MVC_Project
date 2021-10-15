@@ -56,6 +56,7 @@
             label="Old Password"
             v-model="model.password"
             placeholder="Old Password"
+            type="password"
             disabled
           >
           </base-input>
@@ -69,6 +70,12 @@
             label="New Password"
             v-model="model.newpassword"
             placeholder="New Password"
+            type="password"
+            v-bind:class="{
+              'is-invalid': !(
+                this.model.newpassword == this.model.confirmpassword
+              ),
+            }"
             disabled
           >
           </base-input>
@@ -82,19 +89,29 @@
             label="Confirm Password"
             v-model="model.confirmpassword"
             placeholder="Confirm Password"
+            type="password"
+            v-bind:class="{
+              'is-invalid': !(
+                this.model.newpassword == this.model.confirmpassword
+              ),
+            }"
             disabled
           >
           </base-input>
+          <div class="invalid-feedback" style="color: red">
+            Confirm password must be the same as password
+          </div>
         </div>
       </div>
 
+      <!-- @click="modify_button" -->
       <!-- @click="modify_password" -->
       <base-button
         id="edit_change_password_btn"
         slot="footer"
         type="primary"
         fill
-        @click="modify_button"
+        @click="modify_password"
         >Change Password</base-button
       >
     </card>
@@ -149,49 +166,59 @@ export default {
       }
     },
 
-    // async modify_password() {
-    //   // need to hide the password when typed, but will do this after everything runs well
-    //   let change_button = document.getElementById("edit_change_password_btn");
-    //   let username = document.getElementById("username");
+    async modify_password() {
+      // need to hide the password when typed, but will do this after everything runs well
+      let change_button = document.getElementById("edit_change_password_btn");
+      let username = document.getElementById("username");
 
-    //   let old_password = document.getElementById("old_password");
-    //   let new_password = document.getElementById("new_password");
-    //   let confirm_password = document.getElementById("confirm_password");
+      let old_password = document.getElementById("old_password");
+      let new_password = document.getElementById("new_password");
+      let confirm_password = document.getElementById("confirm_password");
 
-    //   if (change_button.innerText === "Change Password") {
-    //     change_button.innerText = "Save Password";
-    //     old_password.removeAttribute("disabled");
-    //     new_password.removeAttribute("disabled");
-    //     confirm_password.removeAttribute("disabled");
-    //   } else {
-    //     change_button.innerText = "Change Password";
-    //     old_password.disabled = "true";
-    //     new_password.disabled = "true";
-    //     confirm_password.disabled = "true";
-    //     const update_password = {
-    //       useremail: this.model.email,
-    //       newpassword: this.model.newpassword,
-    //       oldpassword: this.model.password,
-    //       // need to compare new password and confirm password
-    //     };
-    //     // confirmpassword: this.model.confirmpassword,
-    //     console.log(update_password); // this one prints in console
-    //     // {useremail: 'Test18@gmail.com', username: 'AE', contact: '012222'}
-    //     const response_password = await axios.put(
-    //       "http://localhost:3000/api/user/update/pwd",
-    //       update_password,
-    //       {
-    //         headers: {
-    //           Authorization: localStorage.getItem("token"),
-    //         },
-    //       }
-    //     );
-    //     console.log(response_password);
-    //     if (response_password.status === 200) {
-    //       localStorage.setItem("userdata", JSON.stringify(update_password));
-    //     }
-    //   }
-    // },
+      if (change_button.innerText === "Change Password") {
+        change_button.innerText = "Save Password";
+        old_password.removeAttribute("disabled");
+        new_password.removeAttribute("disabled");
+        confirm_password.removeAttribute("disabled");
+      } else {
+        change_button.innerText = "Change Password";
+        old_password.disabled = "true";
+        new_password.disabled = "true";
+        confirm_password.disabled = "true";
+        old_password.value = "";
+        new_password.value = "";
+        confirm_password.value = "";
+
+        const update_password = {
+          useremail: this.model.email, // cannot get email
+          newpassword: this.model.newpassword,
+          oldpassword: this.model.password,
+          // this.model.newpassword == this.model.confirmpassword ? <proceed> : <ask user to check>
+          // how to raise error to the screen? "New Password is not the same as Confirm Password"
+          // think they have the functionality on other component?
+          // need to compare new password and confirm password
+        };
+        // confirmpassword: this.model.confirmpassword,
+        console.log(update_password); // this one prints in console
+        // this is the things that the user typed into the fields
+        // example from personal information
+        // {useremail: 'Test18@gmail.com', username: 'AE', contact: '012222'}
+        const response_password = await axios.put(
+          "http://localhost:3000/api/user/update/pwd",
+          update_password,
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"), // Wei Hung asked this for testing purpose
+            },
+          }
+        );
+        console.log(response_password);
+        // for error is 401?
+        if (response_password.status === 200) {
+          localStorage.setItem("userdata", JSON.stringify(update_password));
+        }
+      }
+    },
 
     // async modify_password() {
     //   console.log("attempting to change password");

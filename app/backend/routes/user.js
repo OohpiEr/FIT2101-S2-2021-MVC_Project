@@ -258,6 +258,7 @@ router.put("/update/pwd", checkAuth, jsonParser, (req,res,next) => {
      */
     // old password and new password should be sent here and authenticate using the User.findOne
     let requestUseremail = CryptoJS.encrypt(req.body.useremail);
+    console.log(req.body);
     User.findOne({ useremail: requestUseremail })
     .then(user => {
         if(!user){
@@ -276,9 +277,11 @@ router.put("/update/pwd", checkAuth, jsonParser, (req,res,next) => {
         else{
             let hashpwd = null;
             // hash newpassword
+            console.log(req.body.newpassword);
             bcrypt.hash(req.body.newpassword, 10).then(hash => {
                 hashpwd = hash;
             }); 
+            console.log(hashpwd);
             // update password for user
             User.updateOne({ useremail: CryptoJS.encrypt(req.body.useremail) },{ $set: { password: hashpwd }})
             .then(output => {
