@@ -233,7 +233,6 @@ export default {
         password: this.model.password,
         PIN: this.model.PIN
       };
-      console.log(postinfo);
       axios
         .put("http://localhost:3000/api/user/update/forgot", postinfo)
         .then((response) => {

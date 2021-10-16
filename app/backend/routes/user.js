@@ -154,6 +154,7 @@ router.put("/update/forgot", jsonParser, (req, res, next) => {
      * - password
      * - PIN
      */
+    let fetchedUser;
     let requestUseremail = CryptoJS.encrypt(req.body.useremail);
     User.findOne({ useremail: requestUseremail })
         .then(user => {
@@ -161,6 +162,7 @@ router.put("/update/forgot", jsonParser, (req, res, next) => {
                 return false;
             }
             else {
+                fetchedUser = user;
                 return checkuser(req.body.PIN, user.PIN);
             }
         })
@@ -174,7 +176,7 @@ router.put("/update/forgot", jsonParser, (req, res, next) => {
                 // hash replaced password
                 bcrypt.hash(req.body.password, 10).then(hash => {
                     // update password for user
-                    User.updateOne({ useremail: CryptoJS.encrypt(req.body.useremail) }, { $set: { password: hash } })
+                    User.updateOne({ useremail: requestUseremail }, { $set: { password: hash } })
                         .then(output => {
                             return res.status(200).json({
                                 message: "Password reset completed"
