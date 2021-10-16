@@ -156,7 +156,7 @@ export default {
           }
         );
         if (response.status === 200) {
-          updateInfo = JSON.parse(
+          let updateInfo = JSON.parse(
             localStorage.getItem("userdata", JSON.stringify(update))
           );
           updateInfo.username = update.username;
