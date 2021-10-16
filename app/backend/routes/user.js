@@ -4,7 +4,8 @@ const jwt = require('jsonwebtoken');
 
 const User = require("../models/user");
 const checkAuth = require("../middleware/check-auth");
-const CryptoJS = require("../controllers/encryption")
+const CryptoJS = require("../controllers/encryption");
+const user = require("../models/user");
 
 const router = express.Router();
 const jsonParser = express.json();
@@ -128,7 +129,7 @@ router.get("/get/report", checkAuth, (req, res, next) => {
                 };
                 res.status(201).json({
                     message: 'Post fetched successfully!',
-                    posts: userinfo        // transform of data at guide 54
+                    posts: JSON.stringify(userinfo)
                 });
             })
             .catch(error => {
@@ -143,38 +144,6 @@ router.get("/get/report", checkAuth, (req, res, next) => {
             message: "Unauthorised access to this feature!"
         })
     };
-});
-
-// Temporary route to display database 
-// TODO: remove route after testing
-router.get("/get", (req, res, next) => {
-    User.find().sort({ last_login: -1 })
-        .then(userinfo => {
-            for (let i = 0; i < userinfo.length; i++) {
-                userinfo[i].useremail = CryptoJS.decrypt(userinfo[i].useremail)
-                userinfo[i].username = CryptoJS.decrypt(userinfo[i].username)
-                userinfo[i].contact = CryptoJS.decrypt(userinfo[i].contact)
-            };
-            res.status(201).json({
-                message: 'Post fetched successfully!',
-                posts: userinfo        // transform of data at guide 54
-            });
-        })
-        .catch(error => {
-            console.log(error)
-        })
-});
-router.get("/get/raw", (req, res, next) => {
-    User.find().sort({ last_login: -1 })
-        .then(userinfo => {
-            res.status(201).json({
-                message: 'Post fetched successfully!',
-                posts: userinfo        // transform of data at guide 54
-            });
-        })
-        .catch(error => {
-            console.log(error)
-        })
 });
 
 // Forgot password reset request
@@ -202,23 +171,21 @@ router.put("/update/forgot", jsonParser, (req, res, next) => {
                 })
             }
             else {
-                let hashpwd = null;
                 // hash replaced password
                 bcrypt.hash(req.body.password, 10).then(hash => {
-                    hashpwd = hash;
+                    // update password for user
+                    User.updateOne({ useremail: CryptoJS.encrypt(req.body.useremail) }, { $set: { password: hash } })
+                        .then(output => {
+                            return res.status(200).json({
+                                message: "Password reset completed"
+                            });
+                        })
+                        .catch(error => {
+                            return res.status(401).json({
+                                message: `Failed to update password for ${req.body.useremail}`
+                            });
+                        })
                 });
-                // update password for user
-                User.updateOne({ useremail: CryptoJS.encrypt(req.body.useremail) }, { $set: { password: hashpwd } })
-                    .then(output => {
-                        return res.status(200).json({
-                            message: "Password reset completed"
-                        });
-                    })
-                    .catch(error => {
-                        return res.status(401).json({
-                            message: `Failed to update password for ${req.body.useremail}`
-                        });
-                    })
             }
         }).catch(error => {
             return res.status(401).json({

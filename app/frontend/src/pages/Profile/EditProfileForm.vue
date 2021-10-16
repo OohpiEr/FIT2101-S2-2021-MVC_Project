@@ -139,7 +139,6 @@ export default {
           username: this.model.username,
           contact: this.model.phone,
         };
-        console.log(update);
         const response = await axios.put(
           "http://localhost:3000/api/user/update/info",
           update,
@@ -149,9 +148,11 @@ export default {
             },
           }
         );
-        console.log(response);
         if (response.status === 200) {
-          localStorage.setItem("userdata", JSON.stringify(update));
+          updateInfo = JSON.parse(localStorage.getItem("userdata", JSON.stringify(update)));
+          updateInfo.username = update.username;
+          updateInfo.contact = update.contact;
+          localStorage.setItem("userdata", JSON.stringify(updateInfo));
         }
       }
     },
@@ -182,7 +183,6 @@ export default {
           newpassword: this.model.newpassword,
           oldpassword: this.model.password,
         };
-        console.log(update_password);
 
         if (this.model.newpassword == this.model.confirmpassword) {
           this.newPasswordValidationFail = false;
@@ -195,7 +195,6 @@ export default {
               },
             }
           );
-          console.log(response_password);
           if (response_password.status === 200) {
             localStorage.setItem("userdata", JSON.stringify(update_password));
           }

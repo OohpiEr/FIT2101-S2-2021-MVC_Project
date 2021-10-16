@@ -14,7 +14,7 @@
         <div class="row white_text">
           <div class="col-md-12">
             <div class="form-group">
-              <label for="user.email">Email</label>
+              <label>Email</label>
               <input
                 class="input_white_background"
                 type="email"
@@ -32,7 +32,7 @@
         <div class="row white_text">
           <div class="col-md-12">
             <div class="form-group">
-              <label for="user.email">Password</label>
+              <label>Password</label>
               <input
                 class="input_white_background"
                 type="password"
@@ -51,66 +51,7 @@
         <div class="forgot_password">
           <a href="#" id="myBtn" @click = "modal" data-toggle="myModal">Forgot Password</a>
         </div>
-        <!-- The Modal -->
-        <div id="myModal" class="modal">
 
-          <!-- Modal content -->
-          <div class="modal-content"  style="background: black; width: 300px; text-align: center">
-            <span class="close">&times;</span>
-            <form role="form">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label  class="white-label">Enter your PIN.</label>
-              <input
-                          type="password"
-                          placeholder="PIN"
-                          required
-                          maxlength="4"
-                          class="modal-pin">
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label class="white-label">Password</label>
-                    <input
-                      type="password"
-                      v-model="user.password"
-                      required
-                      class="modal-password"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label class="white-label">Confirm Password</label>
-                    <input
-                      type="password"
-                      v-model="user.confirmPassword"
-                      required
-                      class="modal-password"
-                    />
-                    <div class="invalid-feedback">
-                      Confirm password must be the same as password
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="text-center">
-                <base-button type="primary" class="my-4">Submit</base-button>
-              </div>
-
-
-
-            </form>
-          </div>
-        </div>
 
         <div class="row">
           <div class="col text-center button">
@@ -118,6 +59,98 @@
           </div>
         </div>
       </form>
+
+      <!-- The Modal -->
+      <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content"  style="background: black; width: 300px; text-align: center">
+          <span class="close">&times;</span>
+
+          <form role="form" @submit.prevent="handleSubmitPin">
+            <base-alert v-if="resetError" type="warning">
+              Invalid PIN, email address or password.
+            </base-alert>
+            <base-alert v-if="resetSuccess" type="success">
+              Password reset successful!
+            </base-alert>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label  class="white-label">Enter your PIN.</label>
+                  <input
+                    type="password"
+                    placeholder="PIN"
+                    required
+                    v-model="model.PIN"
+                    maxlength="4"
+                    class="modal-pin">
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="white-label">Email</label>
+                  <input
+                    type="email"
+                    placeholder="mike123@gmail.com"
+                    required
+                    v-model="model.email"
+                    class="modal-email"
+                  />
+                  <div class="invalid-feedback">Email already exist</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="white-label">Enter a new Password</label>
+                  <input
+                    type="password"
+                    v-model="model.password"
+                    required
+                    class="modal-password"
+                    v-bind:class="{
+                  'is-invalid': !confirmPassword(),
+                    }"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="white-label">Confirm Password</label>
+                  <input
+                    type="password"
+                    class="modal-password"
+                    v-model="model.confirmPassword"
+                    v-bind:class="{
+                      'is-invalid': !confirmPassword(),
+                    }"
+                    required
+                  />
+                  <div class="invalid-feedback">
+                    Confirm password must be the same as password
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center">
+              <button class="btn my-4" slot="footer" id="submit_pin">Submit</button>
+            </div>
+
+
+
+          </form>
+        </div>
+      </div>
 
 
 
@@ -146,8 +179,16 @@ export default {
         email: "",
         password: "",
       },
+      model: {
+        PIN: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      },
       loginFail: false,
       loginSuccess: false,
+      resetError: false,
+      resetSuccess: false
     };
   },
   methods: {
@@ -177,6 +218,46 @@ export default {
             this.loginFail = true;
           }
         });
+    },
+    handleSubmitPin() {
+      if (this.confirmPassword()) {
+        this.submit_pin();
+      } else {
+        console.log("form denied");
+        this.resetError = true;
+      }
+    },
+    async submit_pin(){
+      const postinfo = {
+        useremail: this.model.email,
+        password: this.model.password,
+        PIN: this.model.PIN
+      };
+      console.log(postinfo);
+      axios
+        .put("http://localhost:3000/api/user/update/forgot", postinfo)
+        .then((response) => {
+          this.resetError = false;
+          this.resetSuccess = true;
+          // localStorage.setItem("token", response.data.token);
+          // localStorage.setItem("userdata", JSON.stringify(response.data));
+          // store.user.username = response.data.username;
+          // store.user.email = response.data.useremail;
+          // store.token = response.data.token;
+          // console.log(response.data);
+          console.log(response);
+          let modal = document.getElementById("myModal");
+          modal.style.display = "none";
+        })
+        .catch((error) => {
+          console.log(error.message);
+          if (!this.resetError) {
+            this.resetError = true;
+          }
+        });
+    },
+    confirmPassword: function () {
+      return this.model.password == this.model.confirmPassword;
     },
     modal: function(){
       // Get the modal
@@ -223,7 +304,7 @@ export default {
   font-size: 13px;
 }
 .input_white_background{
-  background: white;
+  color: white;
 }
 
 .modal-pin{
@@ -232,6 +313,10 @@ export default {
 
 .modal-password{
   border-radius: 5px; padding-left:10px; padding-right:10px; font-size:20px; width: 200px; outline: none;
+}
+
+.modal-email{
+  border-radius: 5px; padding-left:10px; padding-right:10px; font-size:15px; width: 200px; outline: none; height: 40px;
 }
 
 .white-label{
