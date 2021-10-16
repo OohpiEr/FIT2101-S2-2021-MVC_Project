@@ -11,6 +11,11 @@ MongoDB - Cloud Database Access
 username: Administrator
 password: yc8tiYg6KffJembQ
 
+## Superaccount Info
+useremail: superaccount@gmail.com
+password: 1
+PIN: 0000
+
 ## Backend IP Access List: 
 Route | Function | HTTP Request Type
 ------------ | ------------ | ------------

@@ -44,7 +44,7 @@ router.post("/signup", jsonParser, (req, res, next) => {
         hashpwd = hash;
     });
     // TODO: replace hashpin with req.body.PIN after PIN have been added to signup
-    bcrypt.hash(req.body.PIN, 10).then(hash => {
+    bcrypt.hash(req.body.pin, 10).then(hash => {
         const user = new User({
             useremail: CryptoJS.encrypt(req.body.useremail),
             username: CryptoJS.encrypt(req.body.username),
