@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 const User = require("../models/user");
 const checkAuth = require("../middleware/check-auth");
 const CryptoJS = require("../controllers/encryption");
-const user = require("../models/user");
 
 const router = express.Router();
 const jsonParser = express.json();
