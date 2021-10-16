@@ -55,7 +55,6 @@
             v-model="model.password"
             placeholder="Old Password"
             type="password"
-            disabled
           >
           </base-input>
         </div>
@@ -68,7 +67,6 @@
             v-model="model.newpassword"
             placeholder="New Password"
             type="password"
-            disabled
           >
           </base-input>
         </div>
@@ -81,7 +79,6 @@
             v-model="model.confirmpassword"
             placeholder="Confirm Password"
             type="password"
-            disabled
           >
           </base-input>
         </div>
@@ -94,6 +91,15 @@
         style="color: red"
       >
         Confirm password must be the same as new password!
+      </base-alert>
+
+      <base-alert
+        id="password_validation_success"
+        v-if="newPasswordValidationSuccess"
+        type="warning"
+        style="color: lightgreen"
+      >
+        Password has been changed successfully!
       </base-alert>
 
       <base-button
@@ -120,6 +126,7 @@ export default {
       },
     },
     newPasswordValidationFail: false,
+    newPasswordValidationSuccess: false,
   },
   methods: {
     async modify_button() {
@@ -149,7 +156,9 @@ export default {
           }
         );
         if (response.status === 200) {
-          updateInfo = JSON.parse(localStorage.getItem("userdata", JSON.stringify(update)));
+          updateInfo = JSON.parse(
+            localStorage.getItem("userdata", JSON.stringify(update))
+          );
           updateInfo.username = update.username;
           updateInfo.contact = update.contact;
           localStorage.setItem("userdata", JSON.stringify(updateInfo));
@@ -159,48 +168,36 @@ export default {
 
     async modify_password() {
       let change_button = document.getElementById("edit_change_password_btn");
-
       let old_password = document.getElementById("old_password");
       let new_password = document.getElementById("new_password");
       let confirm_password = document.getElementById("confirm_password");
 
-      if (change_button.innerText === "Change Password") {
-        change_button.innerText = "Save Password";
-        old_password.removeAttribute("disabled");
-        new_password.removeAttribute("disabled");
-        confirm_password.removeAttribute("disabled");
-        old_password.value = "";
-        new_password.value = "";
-        confirm_password.value = "";
-      } else {
-        change_button.innerText = "Change Password";
-        old_password.disabled = "true";
-        new_password.disabled = "true";
-        confirm_password.disabled = "true";
+      const update_password = {
+        useremail: this.model.email,
+        newpassword: this.model.newpassword,
+        oldpassword: this.model.password,
+      };
 
-        const update_password = {
-          useremail: this.model.email,
-          newpassword: this.model.newpassword,
-          oldpassword: this.model.password,
-        };
-
-        if (this.model.newpassword == this.model.confirmpassword) {
-          this.newPasswordValidationFail = false;
-          const response_password = await axios.put(
-            "http://localhost:3000/api/user/update/pwd",
-            update_password,
-            {
-              headers: {
-                Authorization: localStorage.getItem("token"),
-              },
-            }
-          );
-          if (response_password.status === 200) {
-            localStorage.setItem("userdata", JSON.stringify(update_password));
+      if (this.model.newpassword == this.model.confirmpassword) {
+        this.newPasswordValidationFail = false;
+        const response_password = await axios.put(
+          "http://localhost:3000/api/user/update/pwd",
+          update_password,
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
           }
-        } else if (this.model.newpassword != this.model.confirmpassword) {
-          this.newPasswordValidationFail = true;
+        );
+        if (response_password.status === 200) {
+          this.newPasswordValidationSuccess = true;
+          this.model.password = "";
+          this.model.newpassword = "";
+          this.model.confirmpassword = "";
         }
+      } else if (this.model.newpassword != this.model.confirmpassword) {
+        this.newPasswordValidationSuccess = false;
+        this.newPasswordValidationFail = true;
       }
     },
   },
