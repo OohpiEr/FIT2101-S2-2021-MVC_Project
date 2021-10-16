@@ -154,47 +154,46 @@ router.put("/update/forgot", jsonParser, (req, res, next) => {
      * - password
      * - PIN
      */
-     let fetchedUser;
-     let requestUseremail = CryptoJS.encrypt(req.body.useremail);
-     User.findOne({ useremail: requestUseremail })
-         .then(user => {
-             if (!user) {
-                 return false;
-             }
-             else {
-                 fetchedUser = user;
-                 return checkuser(req.body.PIN, user.PIN);
-             }
-         })
-         .then(result => {
-             if (!result) {
-                 return res.status(401).json({
-                     message: "Incorrect PIN"
-                 })
-             }
-             else {
-                 // hash replaced password
-                 bcrypt.hash(req.body.password, 10).then(hash => {
-                     // update password for user
-                     User.updateOne({ useremail: requestUseremail }, { $set: { password: hash } })
-                         .then(output => {
-                             return res.status(200).json({
-                                 message: "Password reset completed"
-                             });
-                         })
-                         .catch(error => {
-                             return res.status(401).json({
-                                 message: `Failed to update password for ${req.body.useremail}`
-                             });
-                         })
-                 });
-             }
-         }).catch(error => {
-             return res.status(401).json({
-                 message: "Authentication failed (useremail doesn't exist)"
-             });
-         });
- 
+    let fetchedUser;
+    let requestUseremail = CryptoJS.encrypt(req.body.useremail);
+    User.findOne({ useremail: requestUseremail })
+        .then(user => {
+            if (!user) {
+                return false;
+            }
+            else {
+                fetchedUser = user;
+                return checkuser(req.body.PIN, user.PIN);
+            }
+        })
+        .then(result => {
+            if (!result) {
+                return res.status(401).json({
+                    message: "Incorrect PIN"
+                })
+            }
+            else {
+                // hash replaced password
+                bcrypt.hash(req.body.password, 10).then(hash => {
+                    // update password for user
+                    User.updateOne({ useremail: requestUseremail }, { $set: { password: hash } })
+                        .then(output => {
+                            return res.status(200).json({
+                                message: "Password reset completed"
+                            });
+                        })
+                        .catch(error => {
+                            return res.status(401).json({
+                                message: `Failed to update password for ${req.body.useremail}`
+                            });
+                        })
+                });
+            }
+        }).catch(error => {
+            return res.status(401).json({
+                message: "Authentication failed (useremail doesn't exist)"
+            });
+        });
 });
 
 // Update personal info
