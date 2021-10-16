@@ -32,13 +32,20 @@ async function checkuser(password1, password2) {
 
 // Signup route for user
 router.post("/signup", jsonParser, (req, res, next) => {
+    /**
+     * req.body element needed 
+     * - useremail
+     * - username
+     * - contact
+     * - password
+     * - PIN
+     */
     let hashpwd = null;
-    let hashpin = "1234";
     bcrypt.hash(req.body.password, 10).then(hash => {
         hashpwd = hash;
     });
     // TODO: replace hashpin with req.body.PIN after PIN have been added to signup
-    bcrypt.hash(hashpin, 10).then(hash => {
+    bcrypt.hash(req.body.PIN, 10).then(hash => {
         const user = new User({
             useremail: CryptoJS.encrypt(req.body.useremail),
             username: CryptoJS.encrypt(req.body.username),
@@ -63,6 +70,11 @@ router.post("/signup", jsonParser, (req, res, next) => {
 
 // Login route for user
 router.post("/login", jsonParser, (req, res, next) => {
+    /**
+     * req.body element needed 
+     * - useremail
+     * - password
+     */
     let fetchedUser;
     let requestUseremail = CryptoJS.encrypt(req.body.useremail);
     User.findOne({ useremail: requestUseremail })
@@ -116,6 +128,10 @@ router.post("/login", jsonParser, (req, res, next) => {
 
 // Return report for superaccount 
 router.get("/get/report", checkAuth, (req, res, next) => {
+    /**
+     * req.headers element needed 
+     * - authorization
+     */
     const token = req.headers.authorization;   // try to check if user action was authorised
     const verifiedJwt = jwt.verify(token, SECRET_KEY);
     if (verifiedJwt.class == "superaccount") {

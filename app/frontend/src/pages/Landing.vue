@@ -26,7 +26,7 @@
           <p class="margin-top-40px">
             <tr>
               <td>Monthly Price</td>
-              <td class="center-align">RM 200</td>
+              <td class="center-align">RM 0</td>
             </tr>
           </p>
         </tbody>

@@ -13,7 +13,7 @@ mongoose.connect("mongodb+srv://Administrator:yc8tiYg6KffJembQ@fit2101project.0m
     console.log("Connection failed");
 });
 
-// Guide 38 - To Be Removed
+// Set Header for the HTTP request
 app.use((req,res,next)=>{
     res.setHeader(
         "Access-Control-Allow-Origin",
