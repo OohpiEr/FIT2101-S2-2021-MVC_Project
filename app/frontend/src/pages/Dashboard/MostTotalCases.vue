@@ -71,7 +71,7 @@ export default {
     let most_cases_api = await covid_api.sortedByTotalCases(); // will comes in array of objects
     let mostCases = most_cases_api.slice(0, 5); // only take top 5
 
-    let countryNames = mostCases.map((object) => object.Country);
+    let countryNames = mostCases.map((object) => object.CountryCode);
     let countryCases = mostCases.map((object) => object.TotalConfirmed);
     let totalCases = countryCases.reduce((acc, x) => acc + x, 0);
 

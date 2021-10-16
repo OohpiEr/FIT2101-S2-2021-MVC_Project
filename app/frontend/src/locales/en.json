@@ -7,6 +7,7 @@
     "totalCovidCases": "Total Covid Cases",
     "mostTotalCases": "Most Total Cases (By Country)",
     "newCases": "New Cases",
+    "dailyCases": "New Covid cases",
     "totalDeaths": "Countries with the most total deaths",
     "mostNewDeaths": "Most New Deaths",
     "chartCategories": [
